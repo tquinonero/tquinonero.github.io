@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/base.astro';
+import paisaje from '../paisaje.jpg';
+import Card from '../components/card.astro';
+import TextSection from '../components/textSection.astro';
+import Hero from '../components/hero.astro';
+import CTASection from '../components/ctaSection.astro';
+import StatsCounter from '../components/StatsCounter.astro';
+const stats = [
+  { label: 'Projects completed', value: 42 },
+  { label: 'Clients helped', value: 10 },
+];
+---
+		<Layout>
+			<Hero 
+				backgroundImage={paisaje}
+				title="Website Development"
+				subtitle="Everything web, here."
+			/>
+
+			<div class="p-4 w-4/5 mx-auto">
+			<section class="py-8 bg-grey-100">
+				<h2 class="text-3xl font-bold mb-6 text-center">My Services</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+					<Card 
+						title="WordPress Maintenance" 
+						subtitle="WordPress Maintenance Plans" 
+						content="Forget about updates, backups, and security. My WordPress maintenance plans ensure your site runs smoothly, stays secure, and performs at its best. Focus on your content while I handle the technical details."
+					/>
+					<Card 
+						title="Fix Hacked WordPress" 
+						subtitle="WordPress Security Fixes" 
+						content="If your WordPress site has been compromised, I can help you clean it up and secure it against future attacks."
+					/>
+					<Card 
+						title="WordPress Consulting" 
+						subtitle="WordPress Consulting Services" 
+						content="WordPress consulting focused on building reliable, scalable, and standards-compliant solutions. My work is grounded in WordPress core principles, long-term maintainability, and performance-driven architecture."
+					/>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+					<Card 
+						title="WordPress Admin Lessons" 
+						subtitle="Get the Most Out of WordPress, One Lesson at a Time" 
+						content="WordPress lessons focused on practical, real-world use. Sessions cover core concepts, Gutenberg, e-commerce, and structured workflows to help you build maintainable projects with confidence."
+					/>
+					<Card 
+						title="Ecommerce Development" 
+						subtitle="Ecommerce Development Services" 
+						content="I build custom e-commerce solutions tailored to your business needs. From product catalogs to payment integrations, I ensure seamless shopping experiences that drive conversions."
+					/>
+					<Card 
+						title="Membership Sites" 
+						subtitle="Membership Site Development Services" 
+						content="I build custom membership sites that provide secure, scalable access to exclusive content and services. From user registration to subscription management, I ensure seamless experiences for your members."
+					/>
+
+				</div>
+			</section>
+
+			<section class="py-8 bg-white">
+				<h2 class="text-3xl font-bold mb-6 text-center">Things I have done</h2>
+				<StatsCounter stats={stats} />	
+			</section>
+			
+			<TextSection 
+				heading="Code Snippets for WordPress."
+				paragraph="Discover a collection of practical code snippets for WordPress development. From custom functions to performance optimizations, these snippets are designed to help you build better WordPress sites with ease."
+			/>
+			
+			</div>
+
+			<CTASection 
+				title="Get in Touch"
+				content="send an email to tquinonero.web@gmail.com"
+			/>
+
+		</Layout>
