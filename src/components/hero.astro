@@ -1,66 +1,43 @@
 ---
 interface Props {
-  backgroundImage: any;
+  backgroundImage?: any;
   title?: string;
   subtitle?: string;
+  ctaText?: string;
+  ctaHref?: string;
 }
-const { backgroundImage, title, subtitle } = Astro.props;
+
+const { 
+  backgroundImage, 
+  title = "Welcome to Our Awesome Website", 
+  subtitle = "Discover amazing features and services that await you.",
+  ctaText = "Get Started",
+  ctaHref = "#"
+} = Astro.props;
+
+const imageUrl = backgroundImage?.src || "https://images.unsplash.com/photo-1522252234503-e356532cafd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw2fHxjb2RlfGVufDB8MHx8fDE2OTQwOTg0MTZ8MA&ixlib=rb-4.0.3&q=80&w=1080";
 ---
 
-<section
-  class="relative h-[40vh] flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden"
-  style={`background-image: url(${backgroundImage.src});`}
->
-  <!-- Overlay -->
-  <div class="absolute inset-0 bg-black/40 animate-overlay"></div>
-
-  <!-- Content -->
-  <div class="relative z-10 text-center text-white">
-    {title && <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-slide-up">{title}</h1>}
-    {subtitle && <p class="text-lg md:text-xl animate-slide-up animation-delay-200">{subtitle}</p>}
+<section class="relative bg-gradient-to-r from-purple-600 to-blue-600 h-screen text-white overflow-hidden">
+  <div class="absolute inset-0">
+    <img 
+      src={imageUrl} 
+      alt="Background Image" 
+      class="object-cover object-center w-full h-full"
+    />
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+  </div>
+  
+  <div class="relative z-10 flex flex-col justify-center items-center h-full text-center px-4">
+    {title && <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">{title}</h1>}
+    {subtitle && <p class="text-lg md:text-xl text-gray-300 mb-8">{subtitle}</p>}
+    {ctaText && (
+      <a 
+        href={ctaHref} 
+        class="bg-yellow-400 text-gray-900 hover:bg-yellow-300 py-2 px-6 rounded-full text-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+      >
+        {ctaText}
+      </a>
+    )}
   </div>
 </section>
-
-<style>
-  /* Overlay fades in */
-  @keyframes overlayFadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  /* Content slides up and fades in */
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(28px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Subtle background zoom */
-  section {
-    animation: bgZoom 8s ease-out forwards;
-  }
-
-  @keyframes bgZoom {
-    from { background-size: 110%; }
-    to   { background-size: 100%; }
-  }
-
-  .animate-overlay {
-    animation: overlayFadeIn 1s ease-out forwards;
-  }
-
-  .animate-slide-up {
-    opacity: 0;
-    animation: slideUp 0.8s ease-out forwards;
-    animation-delay: 0.3s;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 0.55s;
-  }
-</style>
