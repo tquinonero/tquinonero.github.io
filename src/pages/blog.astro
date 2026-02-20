@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/base.astro';
+import Hero from '../components/hero.astro';
+import CTASection from '../components/ctaSection.astro';
+import city from '../city.jpg';
+
+const posts = Object.values(import.meta.glob('./posts/*.md', { eager: true }));
+posts.sort((a, b) => 
+  new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf()
+);
+---
+<Layout title="Blog">
+<Hero backgroundImage={city} title="Blog" subtitle="Insights and stories from the web." />
+<div class="p-8 max-w-4xl mx-auto">
+  <h1 class="text-4xl font-bold mb-4">Latest Articles</h1>
+  <div class="grid gap-6 mt-6">
+    {posts.map(post => (
+      <a href={post.url} class="block border rounded-xl p-6 hover:shadow-md transition">
+        <h2 class="text-2xl font-semibold mb-2">{post.frontmatter.title}</h2>
+        {post.frontmatter.date && (
+          <p class="text-sm text-gray-500 mb-2">
+            {new Date(post.frontmatter.date).toLocaleDateString()}
+          </p>
+        )}
+        {post.frontmatter.description && (
+          <p class="text-gray-700">{post.frontmatter.description}</p>
+        )}
+      </a>
+    ))}
+  </div>
+</div>
+<CTASection 
+title="Get in Touch"
+content="Call us to +11 111 111 111"
+/>
+</Layout>

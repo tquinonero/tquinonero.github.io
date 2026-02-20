@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/base.astro';
+import Hero from '../components/hero.astro';
+import CTASection from '../components/ctaSection.astro';
+import paisaje from '../paisaje.jpg';
+---
+
+<Layout title="About">
+  <Hero backgroundImage={paisaje} title="About" subtitle="Learn more about my mission and values" />
+  
+  <div class="p-8 max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold mb-4">About me</h1>
+    <p class="text-lg text-gray-700 whitespace-pre-line">
+      I am a Web Developer focused on building maintainable, scalable, and standards-compliant solutions with WordPress.
+
+I develop custom functionality with a strong emphasis on clean architecture, performance, and long-term maintainability. My workflow prioritizes security-first development and extensibility.
+
+I work leveraging modern development approaches while ensuring full compatibility with WordPress core principles: solutions that integrate cleanly into existing ecosystems without introducing technical debt.
+
+I approach projects with a systems mindset, focusing on clarity, documentation, and sustainable development practices that support long-term growth and collaboration. All my work is GDPR compliant by default.
+    </p>
+  </div>
+
+  <CTASection 
+    title="Get in Touch"
+    content="Call us to +11 111 111 111"
+  />
+</Layout>
