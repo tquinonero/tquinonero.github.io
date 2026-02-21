@@ -51,6 +51,17 @@ const { currentPage } = Astro.props;
         >
           Blog
         </a>
+
+        <a
+          href="/frontmatter-generator"
+          class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+            currentPage === 'frontmatter-generator'
+              ? 'bg-blue-600 text-white'
+              : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+          }`}
+        >
+          Frontmatter
+        </a>
       </div>
     </div>
   </div>
