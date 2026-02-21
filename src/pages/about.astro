@@ -2,27 +2,24 @@
 import Layout from '../layouts/base.astro';
 import Hero from '../components/hero.astro';
 import CTASection from '../components/ctaSection.astro';
-import paisaje from '../paisaje.jpg';
 ---
 
 <Layout title="About">
-  <Hero backgroundImage={paisaje} title="About" subtitle="Learn some things about me" />
+  <Hero title="About" subtitle="Learn some things about me" />
   
-  <div class="p-8 max-w-4xl mx-auto">
-    <h1 class="text-4xl font-bold mb-4">About me</h1>
-    <p class="text-lg text-gray-700 whitespace-pre-line">
-      I am a full stack Web Developer focused on building maintainable, scalable, and standards-compliant solutions.
+  <div class="p-10 max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold mb-6">Who I am</h2>
+    <p class="text-lg text-gray-700 mb-4">
+      I am a full stack Web Developer focused on building maintainable, scalable, and standards-compliant solutions.</p>
 
-I develop custom functionality with a strong emphasis on clean architecture, performance, and long-term maintainability. My workflow prioritizes security-first development and extensibility.
+<p class="text-lg text-gray-700 mb-4">
+I work leveraging modern development approaches while ensuring full compatibility with WordPress core principles: solutions that integrate cleanly into existing ecosystems without introducing technical debt.</p>
 
-I work leveraging modern development approaches while ensuring full compatibility with WordPress core principles: solutions that integrate cleanly into existing ecosystems without introducing technical debt.
-
-I approach projects with a systems mindset, focusing on clarity, documentation, and sustainable development practices that support long-term growth and collaboration. All my work is GDPR compliant by default.
-    </p>
+<p class="text-lg text-gray-700 mb-4">
+I approach projects with a systems mindset, focusing on clarity, documentation, and sustainable development practices that support long-term growth and collaboration. All my work is GDPR compliant by default.</p>
   </div>
-
   <CTASection 
     title="Get in Touch"
-    content="Call us to +11 111 111 111"
+    content="send me an email to tquinonero.web@gmail.com"
   />
 </Layout>
