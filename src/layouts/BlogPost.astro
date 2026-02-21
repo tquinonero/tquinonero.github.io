@@ -4,6 +4,16 @@ import Hero from '../components/hero.astro';
 import CtaSection from '../components/ctaSection.astro';
 import Navbar from '../components/navbar.astro';
 
+interface Props {
+  frontmatter: {
+    title: string;
+    date: Date;
+    author?: string;
+    description?: string;
+    tags?: string[];
+  };
+}
+
 const { frontmatter } = Astro.props;
 const { title, date, author, tags = [] } = frontmatter;
 

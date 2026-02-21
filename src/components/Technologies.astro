@@ -1,0 +1,47 @@
+---
+interface Props {
+  heading?: string;
+  technologies?: string[];
+}
+
+const {
+  heading = 'Technologies I use',
+  technologies = ['PHP', 'HTML5', 'CSS3', 'JavaScript', 'WordPress', 'Astro']
+} = Astro.props;
+
+const accent: Record<string, string> = {
+  PHP: '#777BB4',
+  HTML5: '#E34F26',
+  CSS3: '#1572B6',
+  JavaScript: '#F7DF1E',
+  WordPress: '#21759B',
+  Astro: '#FF5D01'
+};
+---
+
+<section class="py-14 px-6 bg-gray-100">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-gray-900 mb-10">{heading}</h2>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 list-none p-0 m-0">
+      {technologies.map((tech) => {
+        const color = accent[tech] ?? '#6B7280';
+        return (
+          <li>
+            <div
+              class="group relative bg-gray-800 rounded-lg border border-gray-600 p-5 text-center transition-all duration-300 hover:border-gray-500 hover:scale-[1.03] hover:shadow-xl"
+              style={`border-left-width: 4px; border-left-color: ${color}; --glow: ${color}40;`}
+            >
+              <div
+                class="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                style={`box-shadow: inset 0 0 20px var(--glow);`}
+              />
+              <span class="relative text-base font-semibold text-gray-200 group-hover:text-white tracking-tight">
+                {tech}
+              </span>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>

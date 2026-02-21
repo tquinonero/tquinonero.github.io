@@ -1,10 +1,10 @@
 ---
-layout: ../../layouts/BlogPost.astro
 title: "First Experience with Astro.build"
 date: 2026-02-20
 author: "Toni Q."
 description: "Discover how Astro's blazing-fast performance can transform your web development workflow."
 tags: ["astro", "web development", "productivity"]
+slug: first-experience-with-astro-build
 ---
 
 # I Just Tried Astro and It's Way Easier Than I Expected

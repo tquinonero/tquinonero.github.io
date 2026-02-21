@@ -1,10 +1,10 @@
 ---
-layout: ../../layouts/BlogPost.astro
 title: "WordPress Released a new AI Agent Skill"
 date: 2026-02-21
 author: "Toni Q."
 description: "WordPress released a new skill for AI coding agents"
 tags: ["wordpress", "web development", "productivity", "AI", "vibe coding"]
+slug: wordpress-released-a-new-ai-agent-skill
 ---
 # WordPress Just Made AI-Assisted Plugin Development a Lot Less Painful
 

@@ -1,10 +1,10 @@
 ---
-layout: ../../layouts/BlogPost.astro
 title: "Building Faster with AI: Astro + Opencode in 2026"
 date: 2026-02-20
 author: "Toni Q."
 description: "Discover how combining Astro's blazing-fast performance with AI-assisted development through Opencode can transform your web development workflow."
 tags: ["astro", "ai", "opencode", "web development", "productivity"]
+slug: building-faster-with-ai-astro-opencode-in-2026
 ---
 
 The web development landscape is shifting rapidly, and two tools are making waves in very different ways: Astro, the static site generator that's redefining performance, and Opencode, an AI-powered CLI that's bringing intelligent assistance directly into your terminal. Together, they represent a powerful combination for developers who want to ship faster without sacrificing quality.

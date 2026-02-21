@@ -1,10 +1,10 @@
 ---
-layout: ../../layouts/BlogPost.astro
 title: "WordPress in 2026: Still the King or Showing Its Age?"
 date: 2026-02-20
 author: "Toni Q"
 description: "WordPress powers over 40% of the web, but is it still the best choice for your next project? We take an honest look at where WordPress shines and where it struggles."
 tags: ["wordpress", "cms", "web development"]
+slug: wordpress-in-2026-still-the-king-or-showing-its-age
 ---
 
 WordPress powers over 40% of the internet. That's an almost absurd statistic when you think about it — one piece of software, originally built as a blogging tool in 2003, now underpins everything from personal diaries to Fortune 500 company websites. But does dominance mean it's the right choice for *you*? Let's take an honest, unfiltered look at WordPress in 2026.
