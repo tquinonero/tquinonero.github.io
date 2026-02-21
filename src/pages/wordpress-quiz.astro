@@ -1,0 +1,462 @@
+---
+import BaseLayout from '../layouts/base.astro';
+---
+
+<BaseLayout title="WordPress Admin Quiz">
+  <main class="min-h-screen bg-zinc-950 text-zinc-100 px-4 py-16">
+
+    <!-- Header -->
+    <div class="max-w-3xl mx-auto mb-16 text-center">
+      <div class="inline-flex items-center gap-2 bg-zinc-800 border border-zinc-700 rounded-full px-4 py-1.5 text-xs font-mono text-emerald-400 mb-6 tracking-widest uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        WordPress Admin Reference
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        Test Your WP Knowledge
+      </h1>
+      <p class="text-zinc-400 text-lg max-w-xl mx-auto">
+        Read each question, write your answer, then reveal the explanation. Track your progress as you go.
+      </p>
+
+      <!-- Progress bar -->
+      <div class="mt-10 max-w-sm mx-auto">
+        <div class="flex justify-between text-xs font-mono text-zinc-500 mb-2">
+          <span>Progress</span>
+          <span><span id="revealed-count">0</span> / <span id="total-count">0</span> revealed</span>
+        </div>
+        <div class="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section tabs -->
+    <div class="max-w-3xl mx-auto mb-8 flex flex-wrap gap-2 justify-center" id="section-tabs">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Questions container -->
+    <div class="max-w-3xl mx-auto space-y-4" id="questions-container">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- All revealed message -->
+    <div id="completion-msg" class="hidden max-w-3xl mx-auto mt-16 text-center">
+      <div class="bg-emerald-950/50 border border-emerald-800/50 rounded-2xl p-10">
+        <div class="text-4xl mb-4">🎉</div>
+        <h2 class="text-2xl font-bold text-emerald-400 mb-2">All done!</h2>
+        <p class="text-zinc-400">You've reviewed all WordPress admin questions. Nice work.</p>
+        <button onclick="resetAll()" class="mt-6 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-xl transition-colors">
+          Start Over
+        </button>
+      </div>
+    </div>
+
+  </main>
+</BaseLayout>
+
+<style>
+  .reveal-btn {
+    transition: all 0.2s ease;
+  }
+  .card {
+    transition: border-color 0.2s ease;
+  }
+  .card.revealed {
+    border-color: rgba(52, 211, 153, 0.25);
+  }
+  .user-answer {
+    resize: vertical;
+    min-height: 80px;
+  }
+  .user-answer:focus {
+    outline: none;
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  const qaData = [
+    {
+      section: "Admin Dashboard",
+      color: "blue",
+      items: [
+        {
+          q: "How do I access the WordPress admin dashboard?",
+          a: "Navigate to yoursite.com/wp-admin in your browser. Enter your admin username and password to log in. You can also use yoursite.com/wp-login.php as an alternative URL."
+        },
+        {
+          q: "What is the difference between an Administrator and an Editor role?",
+          a: "An Administrator has full access to all WordPress settings, plugins, themes, and user management. An Editor can manage and publish posts and pages by any user, but cannot access settings, install plugins, or manage users."
+        },
+        {
+          q: "How do I add a new admin user in WordPress?",
+          a: "Go to Users > Add New in the admin panel. Fill in the username, email, and password fields, then set the Role dropdown to 'Administrator'. Click 'Add New User' to save. The new user will receive a welcome email."
+        },
+        {
+          q: "What does the 'Screen Options' tab do?",
+          a: "The Screen Options tab (top-right corner of most admin pages) lets you show or hide columns, boxes, and elements on that specific admin screen. It is per-page and per-user, allowing each admin to customize their own view."
+        },
+        {
+          q: "How do I enable or disable comments site-wide?",
+          a: "Go to Settings > Discussion. Uncheck 'Allow people to submit comments on new posts' to disable comments globally. Note that individual posts can still override this setting under their own Discussion meta box."
+        }
+      ]
+    },
+    {
+      section: "Files & Directory Structure",
+      color: "violet",
+      items: [
+        {
+          q: "What are the main folders in a WordPress installation?",
+          a: "A WordPress install has three main directories: wp-admin (admin interface files), wp-includes (core libraries and functions), and wp-content (your themes, plugins, and uploaded media). Never edit wp-admin or wp-includes directly."
+        },
+        {
+          q: "What is wp-config.php and what does it contain?",
+          a: "wp-config.php is the main WordPress configuration file in the root directory. It contains your database credentials (name, user, password, host), database table prefix, secret keys and salts, debug settings, and other core configuration constants. This file should be secured and never exposed publicly."
+        },
+        {
+          q: "What is .htaccess used for in WordPress?",
+          a: ".htaccess is an Apache server configuration file in the WordPress root directory. WordPress uses it primarily to control permalink URL rewriting. It can also be used to add security rules, enable gzip compression, set caching headers, and restrict access to sensitive files."
+        },
+        {
+          q: "Where are uploaded media files stored?",
+          a: "Uploaded files are stored in wp-content/uploads/. By default, WordPress organizes them into subdirectories by year and month (e.g., wp-content/uploads/2024/11/). You can change the upload path in Settings > Media."
+        },
+        {
+          q: "What is the functions.php file in a theme?",
+          a: "functions.php is a theme file located in your active theme's folder (e.g., wp-content/themes/your-theme/functions.php). It acts like a plugin — you can add custom functions, register menus and sidebars, enqueue scripts and styles, and extend WordPress functionality specific to that theme."
+        },
+        {
+          q: "What files make up a WordPress theme?",
+          a: "A minimal theme requires just style.css (with theme header metadata) and index.php. A full theme typically includes header.php, footer.php, sidebar.php, single.php, page.php, archive.php, search.php, 404.php, functions.php, and a screenshot.png for the admin theme preview."
+        }
+      ]
+    },
+    {
+      section: "Plugins & Themes",
+      color: "amber",
+      items: [
+        {
+          q: "How do I install a plugin?",
+          a: "Go to Plugins > Add New. Search the WordPress plugin directory and click 'Install Now', or upload a .zip file via the 'Upload Plugin' button. After installation, click 'Activate'. Alternatively, upload plugin files via FTP to wp-content/plugins/."
+        },
+        {
+          q: "How do I safely update plugins and themes?",
+          a: "Before updating, back up your site database and files. Then go to Dashboard > Updates to see available updates. You can update items individually or all at once. Test updates on a staging site first, especially for major version changes."
+        },
+        {
+          q: "How do I deactivate all plugins without admin access?",
+          a: "Connect via FTP or file manager and navigate to wp-content/plugins/. Rename the plugins folder to something like plugins_disabled. WordPress will deactivate all plugins since it can't find the folder. Rename it back when done."
+        },
+        {
+          q: "What is a child theme and why should I use one?",
+          a: "A child theme inherits all functionality and styling from its parent theme but lets you make customizations safely. When the parent theme is updated, your child theme customizations are preserved. Without a child theme, any edits to theme files are overwritten on update."
+        }
+      ]
+    },
+    {
+      section: "Database & Maintenance",
+      color: "rose",
+      items: [
+        {
+          q: "How do I back up a WordPress site?",
+          a: "A complete backup includes both the database and all files. For files, use FTP/SFTP or your host's file manager to download the entire WordPress directory. For the database, use phpMyAdmin to export all tables, or use a plugin like UpdraftPlus or All-in-One WP Migration to automate both."
+        },
+        {
+          q: "How do I change the WordPress site URL in the database?",
+          a: "The safest method is WP-CLI: wp search-replace 'http://oldsite.com' 'https://newsite.com' --all-tables. Alternatively, update the siteurl and home options in wp_options via phpMyAdmin, then run a search-replace for all other URL references in the database."
+        },
+        {
+          q: "How do I reset a WordPress admin password?",
+          a: "You can reset it via the login page using 'Lost your password?', from the Users screen in wp-admin, via phpMyAdmin by updating the user_pass field in wp_users with an MD5-hashed password, or using WP-CLI: wp user update USERNAME --user_pass=newpassword."
+        },
+        {
+          q: "What is the wp_options table used for?",
+          a: "wp_options is a core WordPress database table that stores site-wide settings as key-value pairs. It contains the site URL, admin email, active theme, active plugins, widget settings, and plugin options. Autoloaded options are loaded on every page request, so keeping it lean matters for performance."
+        },
+        {
+          q: "How do I optimize the WordPress database?",
+          a: "Delete post revisions, spam/trash comments, unused transients, and orphaned metadata. Use a plugin like WP-Optimize or Advanced Database Cleaner, or run OPTIMIZE TABLE in phpMyAdmin. You can also limit revisions by adding define('WP_POST_REVISIONS', 3) to wp-config.php."
+        }
+      ]
+    },
+    {
+      section: "Security & Performance",
+      color: "cyan",
+      items: [
+        {
+          q: "How do I enable WordPress debug mode?",
+          a: "Add these constants to wp-config.php: define('WP_DEBUG', true) to enable debug mode, define('WP_DEBUG_LOG', true) to log errors to wp-content/debug.log, and define('WP_DEBUG_DISPLAY', false) to hide errors from the front end. Only enable this on development or staging — never on production."
+        },
+        {
+          q: "How do I protect the wp-admin directory?",
+          a: "Add password protection via cPanel > Password Protect Directories, or add HTTP auth rules in .htaccess. You can also restrict access by IP using .htaccess (order deny,allow / deny from all / allow from YOUR.IP). Security plugins like Wordfence also provide brute-force protection."
+        },
+        {
+          q: "What is the wp-cron system?",
+          a: "wp-cron is WordPress's built-in pseudo-cron system that handles scheduled tasks like publishing scheduled posts and checking for updates. It triggers on page loads rather than at exact times. On high-traffic sites, disable wp-cron in wp-config.php (define('DISABLE_WP_CRON', true)) and set up a real server cron job instead."
+        },
+        {
+          q: "How do I allow more file upload types in WordPress?",
+          a: "Add a filter in functions.php: add_filter('upload_mimes', function($mimes) { $mimes['svg'] = 'image/svg+xml'; return $mimes; }); Be cautious — SVG files can contain malicious scripts. Always sanitize SVG uploads using a plugin like Safe SVG."
+        }
+      ]
+    },
+    {
+      section: "Common Admin Tasks",
+      color: "emerald",
+      items: [
+        {
+          q: "How do I create a custom menu in WordPress?",
+          a: "Go to Appearance > Menus. Click 'Create a new menu', name it, and save. Add pages, posts, custom links, or categories from the left panel. Arrange items via drag and drop to create hierarchy. Assign the menu to a theme location (e.g., Primary Menu) in Menu Settings and save."
+        },
+        {
+          q: "How do I redirect a page in WordPress without a plugin?",
+          a: "Add a redirect rule in .htaccess: Redirect 301 /old-page/ https://yoursite.com/new-page/. You can also use PHP in functions.php with add_action('template_redirect', ...) and wp_redirect(). For managing many redirects, the Redirection plugin is recommended."
+        },
+        {
+          q: "How do I add Google Analytics to WordPress?",
+          a: "Use a plugin like Site Kit by Google, MonsterInsights, or Insert Headers and Footers. To add it manually, paste the GA script tag in header.php before </head>, or use a wp_head hook in functions.php. Using a plugin is preferred as it survives theme updates."
+        },
+        {
+          q: "How do I set a static front page in WordPress?",
+          a: "Go to Settings > Reading. Under 'Your homepage displays', select 'A static page'. Choose a page for 'Homepage' and a separate page for 'Posts page'. Make sure those pages have been created under Pages > Add New beforehand."
+        },
+        {
+          q: "How do I export and import WordPress content?",
+          a: "Go to Tools > Export to download an XML (WXR) file of your posts, pages, media, and comments. On the destination site, go to Tools > Import, install the WordPress importer, and upload the XML. For full site migration including plugin data, use Duplicator or All-in-One WP Migration."
+        }
+      ]
+    }
+  ];
+
+  const colorMap = {
+    blue:    { tab: 'bg-blue-950 text-blue-300 border-blue-800 hover:bg-blue-900', dot: 'bg-blue-400', badge: 'bg-blue-950/60 text-blue-400 border-blue-800/50' },
+    violet:  { tab: 'bg-violet-950 text-violet-300 border-violet-800 hover:bg-violet-900', dot: 'bg-violet-400', badge: 'bg-violet-950/60 text-violet-400 border-violet-800/50' },
+    amber:   { tab: 'bg-amber-950 text-amber-300 border-amber-800 hover:bg-amber-900', dot: 'bg-amber-400', badge: 'bg-amber-950/60 text-amber-400 border-amber-800/50' },
+    rose:    { tab: 'bg-rose-950 text-rose-300 border-rose-800 hover:bg-rose-900', dot: 'bg-rose-400', badge: 'bg-rose-950/60 text-rose-400 border-rose-800/50' },
+    cyan:    { tab: 'bg-cyan-950 text-cyan-300 border-cyan-800 hover:bg-cyan-900', dot: 'bg-cyan-400', badge: 'bg-cyan-950/60 text-cyan-400 border-cyan-800/50' },
+    emerald: { tab: 'bg-emerald-950 text-emerald-300 border-emerald-800 hover:bg-emerald-900', dot: 'bg-emerald-400', badge: 'bg-emerald-950/60 text-emerald-400 border-emerald-800/50' },
+  };
+
+  let revealed = new Set();
+  let activeSection = 'all';
+  let totalQuestions = 0;
+
+  function getAllQuestions() {
+    const all = [];
+    qaData.forEach((section, si) => {
+      section.items.forEach((item, qi) => {
+        all.push({ ...item, section: section.section, color: section.color, id: `q-${si}-${qi}` });
+      });
+    });
+    return all;
+  }
+
+  function updateProgress() {
+    const total = totalQuestions;
+    const count = revealed.size;
+    document.getElementById('revealed-count').textContent = count;
+    document.getElementById('total-count').textContent = total;
+    const pct = total > 0 ? (count / total) * 100 : 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+
+    if (count === total && total > 0) {
+      document.getElementById('completion-msg').classList.remove('hidden');
+    } else {
+      document.getElementById('completion-msg').classList.add('hidden');
+    }
+  }
+
+  function toggleReveal(id) {
+    const card = document.getElementById(id);
+    const body = card.querySelector('.answer-body');
+    const btn = card.querySelector('.reveal-btn');
+
+    if (!revealed.has(id)) {
+      revealed.add(id);
+      body.style.display = 'block';
+      card.classList.add('revealed');
+      btn.innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 4.411m0 0L21 21" /></svg>
+        Hide answer
+      `;
+      btn.classList.remove('bg-zinc-800', 'hover:bg-zinc-700', 'text-zinc-300');
+      btn.classList.add('bg-emerald-900/50', 'hover:bg-emerald-900', 'text-emerald-400', 'border-emerald-800/50');
+    } else {
+      revealed.delete(id);
+      body.style.display = 'none';
+      card.classList.remove('revealed');
+      btn.innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+        Reveal answer
+      `;
+      btn.classList.add('bg-zinc-800', 'hover:bg-zinc-700', 'text-zinc-300');
+      btn.classList.remove('bg-emerald-900/50', 'hover:bg-emerald-900', 'text-emerald-400', 'border-emerald-800/50');
+    }
+
+    updateProgress();
+  }
+
+  function buildTabs() {
+    const container = document.getElementById('section-tabs');
+    const allBtn = document.createElement('button');
+    allBtn.id = 'tab-all';
+    allBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold border transition-all bg-zinc-100 text-zinc-900 border-zinc-300';
+    allBtn.textContent = 'All';
+    allBtn.onclick = () => filterSection('all');
+    container.appendChild(allBtn);
+
+    qaData.forEach((section, si) => {
+      const c = colorMap[section.color];
+      const btn = document.createElement('button');
+      btn.id = `tab-${si}`;
+      btn.className = `px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${c.tab}`;
+      btn.textContent = section.section;
+      btn.onclick = () => filterSection(si);
+      container.appendChild(btn);
+    });
+  }
+
+  function filterSection(sectionIdx) {
+    activeSection = sectionIdx;
+
+    // Update tab styles
+    document.getElementById('tab-all').className =
+      sectionIdx === 'all'
+        ? 'px-4 py-1.5 rounded-full text-xs font-semibold border transition-all bg-zinc-100 text-zinc-900 border-zinc-300'
+        : 'px-4 py-1.5 rounded-full text-xs font-semibold border transition-all bg-zinc-900 text-zinc-400 border-zinc-700 hover:bg-zinc-800';
+
+    qaData.forEach((section, si) => {
+      const c = colorMap[section.color];
+      const btn = document.getElementById(`tab-${si}`);
+      btn.className = si === sectionIdx
+        ? `px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${c.tab} ring-2 ring-offset-1 ring-offset-zinc-950`
+        : `px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${c.tab} opacity-60`;
+    });
+
+    // Show/hide cards
+    document.querySelectorAll('.q-card-wrapper').forEach(el => {
+      const si = parseInt(el.dataset.section);
+      if (sectionIdx === 'all' || si === sectionIdx) {
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  }
+
+  function buildQuestions() {
+    const container = document.getElementById('questions-container');
+    let qNum = 0;
+
+    qaData.forEach((section, si) => {
+      const c = colorMap[section.color];
+
+      section.items.forEach((item, qi) => {
+        qNum++;
+        const id = `q-${si}-${qi}`;
+        totalQuestions++;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'q-card-wrapper';
+        wrapper.dataset.section = si;
+
+        wrapper.innerHTML = `
+          <div id="${id}" class="card group bg-zinc-900 border border-zinc-800 rounded-2xl">
+            <div class="p-6">
+              <div class="flex items-start gap-4">
+                <div class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-mono font-bold ${c.badge} border mt-0.5">
+                  ${String(qNum).padStart(2, '0')}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium ${c.badge} border rounded-full px-2.5 py-0.5">
+                      <span class="w-1 h-1 rounded-full ${c.dot}"></span>
+                      ${section.section}
+                    </span>
+                  </div>
+                  <p class="text-zinc-100 font-semibold text-base leading-snug">${item.q}</p>
+                </div>
+              </div>
+
+              <div class="mt-5">
+                <label class="block text-xs font-mono text-zinc-500 mb-1.5 tracking-wide">Your answer</label>
+                <textarea
+                  id="${id}-ta"
+                  class="user-answer w-full bg-zinc-950/60 border border-zinc-700/50 rounded-xl px-4 py-3 text-sm text-zinc-200 placeholder-zinc-600 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-600"
+                  placeholder="Write your answer here before revealing..."
+                  oninput="onTextareaInput('${id}')"
+                ></textarea>
+              </div>
+
+              <div class="mt-3 flex justify-end">
+                <button
+                  class="reveal-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold border border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-all"
+                  onclick="toggleReveal('${id}')"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                  Reveal answer
+                </button>
+              </div>
+            </div>
+
+            <div class="answer-body" style="display:none;">
+              <div class="px-6 pb-6">
+                <div class="border-t border-zinc-800 pt-5">
+                  <div class="flex items-start gap-3">
+                    <div class="shrink-0 w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mt-0.5">
+                      <svg class="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    <p class="text-zinc-300 text-sm leading-relaxed">${item.a}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(wrapper);
+      });
+    });
+  }
+
+  function resetAll() {
+    revealed.clear();
+    document.querySelectorAll('.card').forEach(card => {
+      card.classList.remove('revealed');
+      const body = card.querySelector('.answer-body');
+      body.style.display = 'none';
+      const btn = card.querySelector('.reveal-btn');
+      btn.innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+        Reveal answer
+      `;
+      btn.classList.add('bg-zinc-800', 'hover:bg-zinc-700', 'text-zinc-300');
+      btn.classList.remove('bg-emerald-900/50', 'hover:bg-emerald-900', 'text-emerald-400', 'border-emerald-800/50');
+      const ta = card.querySelector('.user-answer');
+      if (ta) { ta.value = ''; ta.classList.remove('has-content'); }
+    });
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Expose resetAll globally
+  window.resetAll = resetAll;
+  window.toggleReveal = toggleReveal;
+  window.onTextareaInput = function(id) {
+    const ta = document.getElementById(`${id}-ta`);
+    if (ta.value.trim().length > 0) {
+      ta.classList.add('has-content');
+    } else {
+      ta.classList.remove('has-content');
+    }
+  };
+
+  // Init
+  buildTabs();
+  buildQuestions();
+  document.getElementById('total-count').textContent = totalQuestions;
+  updateProgress();
+</script>
