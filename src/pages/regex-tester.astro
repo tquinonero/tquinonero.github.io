@@ -1,0 +1,463 @@
+---
+import BaseLayout from '../layouts/base.astro';
+---
+
+<BaseLayout title="Regex Tester">
+  <main class="min-h-screen bg-zinc-950 text-zinc-100 px-4 py-12">
+
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Header -->
+      <div class="mb-10">
+        <div class="inline-flex items-center gap-2 text-xs font-mono text-zinc-500 mb-3 tracking-widest uppercase">
+          <span class="text-amber-400">~/</span>tools<span class="text-zinc-600">/</span>regex-tester
+        </div>
+        <h1 class="text-3xl font-bold tracking-tight font-mono">
+          <span class="text-amber-400">/</span>regex<span class="text-zinc-500">-tester</span>
+        </h1>
+        <p class="text-zinc-500 text-sm mt-2 font-mono">Real-time pattern matching. Results update as you type.</p>
+      </div>
+
+      <!-- Main tool card -->
+      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
+
+        <!-- Title bar -->
+        <div class="flex items-center gap-2 px-4 py-3 bg-zinc-800/60 border-b border-zinc-700/50">
+          <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
+          <span class="ml-3 text-xs font-mono text-zinc-500">regex-tester.js</span>
+          <div class="ml-auto flex items-center gap-1.5">
+            <span id="status-dot" class="w-2 h-2 rounded-full bg-zinc-600"></span>
+            <span id="status-text" class="text-xs font-mono text-zinc-500">idle</span>
+          </div>
+        </div>
+
+        <div class="p-6 space-y-5">
+
+          <!-- Pattern input -->
+          <div>
+            <label class="block text-xs font-mono text-zinc-400 mb-2 tracking-wide">
+              <span class="text-amber-400">01</span> — Pattern
+            </label>
+            <div class="flex items-stretch gap-0 rounded-xl overflow-hidden border border-zinc-700 focus-within:border-amber-500/60 transition-colors">
+              <span class="flex items-center px-3 text-amber-400 font-mono text-lg bg-zinc-800 border-r border-zinc-700 select-none">/</span>
+              <input
+                id="pattern-input"
+                type="text"
+                placeholder="[a-z]+"
+                class="flex-1 bg-zinc-800/50 px-3 py-3 font-mono text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none"
+                spellcheck="false"
+                autocomplete="off"
+              />
+              <span class="flex items-center px-3 text-amber-400 font-mono text-lg bg-zinc-800 border-l border-zinc-700 select-none">/</span>
+              <!-- Flags -->
+              <div class="flex items-center gap-1 px-3 bg-zinc-800 border-l border-zinc-700">
+                <button id="flag-g" data-flag="g" class="flag-btn active font-mono text-xs px-1.5 py-0.5 rounded transition-all text-amber-400 bg-amber-400/10">g</button>
+                <button id="flag-i" data-flag="i" class="flag-btn font-mono text-xs px-1.5 py-0.5 rounded transition-all text-zinc-500 hover:text-zinc-300">i</button>
+                <button id="flag-m" data-flag="m" class="flag-btn font-mono text-xs px-1.5 py-0.5 rounded transition-all text-zinc-500 hover:text-zinc-300">m</button>
+                <button id="flag-s" data-flag="s" class="flag-btn font-mono text-xs px-1.5 py-0.5 rounded transition-all text-zinc-500 hover:text-zinc-300">s</button>
+              </div>
+            </div>
+            <!-- Error message -->
+            <div id="pattern-error" style="display:none;" class="mt-2 text-xs font-mono text-red-400 flex items-center gap-1.5">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span id="pattern-error-text"></span>
+            </div>
+          </div>
+
+          <!-- Test string -->
+          <div>
+            <label class="block text-xs font-mono text-zinc-400 mb-2 tracking-wide">
+              <span class="text-amber-400">02</span> — Test string
+            </label>
+            <textarea
+              id="test-input"
+              rows="5"
+              placeholder="Paste or type your test string here..."
+              class="w-full bg-zinc-800/50 border border-zinc-700 focus:border-amber-500/60 rounded-xl px-4 py-3 font-mono text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none transition-colors resize-y"
+              spellcheck="false"
+            ></textarea>
+          </div>
+
+          <!-- Stats bar -->
+          <div class="flex items-center gap-4 flex-wrap">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono text-zinc-500">matches</span>
+              <span id="match-count" class="text-sm font-mono font-bold text-amber-400">0</span>
+            </div>
+            <div class="w-px h-4 bg-zinc-700"></div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono text-zinc-500">groups</span>
+              <span id="group-count" class="text-sm font-mono font-bold text-blue-400">0</span>
+            </div>
+            <div class="w-px h-4 bg-zinc-700"></div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono text-zinc-500">flags</span>
+              <span id="active-flags" class="text-sm font-mono font-bold text-zinc-300">g</span>
+            </div>
+            <div class="ml-auto">
+              <button id="clear-btn" class="text-xs font-mono text-zinc-600 hover:text-zinc-400 transition-colors">clear all</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Highlighted output -->
+        <div class="border-t border-zinc-800">
+          <div class="flex items-center justify-between px-6 py-3 bg-zinc-800/30">
+            <span class="text-xs font-mono text-zinc-500 tracking-wide uppercase">
+              <span class="text-amber-400">03</span> — Highlighted matches
+            </span>
+          </div>
+          <div class="px-6 pb-4">
+            <div
+              id="highlighted-output"
+              class="min-h-16 font-mono text-sm leading-relaxed text-zinc-400 whitespace-pre-wrap break-words p-4 bg-zinc-800/30 rounded-xl border border-zinc-700/50"
+            >
+              <span class="text-zinc-600 italic">Matches will be highlighted here...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Match details -->
+        <div class="border-t border-zinc-800">
+          <div class="flex items-center justify-between px-6 py-3 bg-zinc-800/30">
+            <span class="text-xs font-mono text-zinc-500 tracking-wide uppercase">
+              <span class="text-amber-400">04</span> — Match details
+            </span>
+          </div>
+          <div id="match-details" class="px-6 pb-6">
+            <p class="text-xs font-mono text-zinc-600 italic">No matches yet.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick reference -->
+      <div class="mt-6 bg-zinc-900/50 border border-zinc-800/50 rounded-2xl p-6">
+        <h2 class="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-4">Quick reference</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div id="ref-items"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .match-highlight {
+    background-color: rgba(251, 191, 36, 0.25);
+    color: #fbbf24;
+    border-radius: 3px;
+    padding: 1px 0;
+    outline: 1px solid rgba(251, 191, 36, 0.4);
+  }
+  .flag-btn.active {
+    color: #fbbf24;
+    background-color: rgba(251, 191, 36, 0.1);
+  }
+  .match-card {
+    background: rgba(251, 191, 36, 0.05);
+    border: 1px solid rgba(251, 191, 36, 0.15);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: monospace;
+    font-size: 12px;
+  }
+  .group-pill {
+    display: inline-block;
+    background: rgba(96, 165, 250, 0.1);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #93c5fd;
+    font-size: 11px;
+    margin: 2px 2px 2px 0;
+  }
+  .ref-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+
+  const COLORS = [
+    'rgba(251,191,36,0.25)',
+    'rgba(52,211,153,0.2)',
+    'rgba(96,165,250,0.2)',
+    'rgba(248,113,113,0.2)',
+    'rgba(167,139,250,0.2)',
+    'rgba(251,146,60,0.2)',
+  ];
+  const TEXT_COLORS = ['#fbbf24','#34d399','#60a5fa','#f87171','#a78bfa','#fb923c'];
+  const OUTLINE_COLORS = [
+    'rgba(251,191,36,0.5)',
+    'rgba(52,211,153,0.4)',
+    'rgba(96,165,250,0.4)',
+    'rgba(248,113,113,0.4)',
+    'rgba(167,139,250,0.4)',
+    'rgba(251,146,60,0.4)',
+  ];
+
+  const REF_ITEMS = [
+    { pattern: '.', desc: 'Any character' },
+    { pattern: '\\d', desc: 'Digit [0-9]' },
+    { pattern: '\\w', desc: 'Word char' },
+    { pattern: '\\s', desc: 'Whitespace' },
+    { pattern: '^', desc: 'Start of line' },
+    { pattern: '$', desc: 'End of line' },
+    { pattern: '+', desc: 'One or more' },
+    { pattern: '*', desc: 'Zero or more' },
+    { pattern: '?', desc: 'Zero or one' },
+    { pattern: '{n,m}', desc: 'Between n and m' },
+    { pattern: '[abc]', desc: 'Character class' },
+    { pattern: '(abc)', desc: 'Capture group' },
+    { pattern: '(?:abc)', desc: 'Non-capturing' },
+    { pattern: 'a|b', desc: 'Alternation' },
+    { pattern: '\\b', desc: 'Word boundary' },
+    { pattern: '(?=abc)', desc: 'Lookahead' },
+  ];
+
+  // State
+  let activeFlags = new Set(['g']);
+  let currentPattern = '';
+  let currentTest = '';
+
+  // Elements
+  const patternInput = document.getElementById('pattern-input');
+  const testInput = document.getElementById('test-input');
+  const highlightedOutput = document.getElementById('highlighted-output');
+  const matchDetails = document.getElementById('match-details');
+  const matchCount = document.getElementById('match-count');
+  const groupCount = document.getElementById('group-count');
+  const activeFlagsEl = document.getElementById('active-flags');
+  const statusDot = document.getElementById('status-dot');
+  const statusText = document.getElementById('status-text');
+  const patternError = document.getElementById('pattern-error');
+  const patternErrorText = document.getElementById('pattern-error-text');
+
+  // Build quick reference
+  const refContainer = document.getElementById('ref-items');
+  refContainer.parentElement.innerHTML = '';
+  const grid = document.createElement('div');
+  grid.className = 'grid grid-cols-2 md:grid-cols-4 gap-3';
+  REF_ITEMS.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'ref-item cursor-pointer hover:border-amber-500/30 transition-colors';
+    el.innerHTML = `<span class="text-amber-400 font-mono text-xs block">${escapeHtml(item.pattern)}</span><span class="text-zinc-500 text-xs">${item.desc}</span>`;
+    el.addEventListener('click', () => {
+      patternInput.value = item.pattern;
+      patternInput.dispatchEvent(new Event('input'));
+      patternInput.focus();
+    });
+    grid.appendChild(el);
+  });
+  document.querySelector('.mt-6 .grid') && document.querySelector('.mt-6 .grid').replaceWith(grid);
+  // Append fresh grid to ref section
+  document.querySelector('.mt-6.bg-zinc-900\\/50').appendChild(grid);
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function setStatus(state) {
+    // state: idle | match | nomatch | error
+    const configs = {
+      idle:    { dot: '#52525b', text: 'idle' },
+      match:   { dot: '#fbbf24', text: 'matching' },
+      nomatch: { dot: '#6b7280', text: 'no match' },
+      error:   { dot: '#f87171', text: 'error' },
+    };
+    const c = configs[state] || configs.idle;
+    statusDot.style.backgroundColor = c.dot;
+    statusText.textContent = c.text;
+  }
+
+  function getFlags() {
+    return Array.from(activeFlags).join('');
+  }
+
+  function evaluate() {
+    const pattern = patternInput.value;
+    const test = testInput.value;
+
+    patternError.style.display = 'none';
+
+    if (!pattern) {
+      highlightedOutput.innerHTML = test
+        ? '<span style="color:#71717a">' + escapeHtml(test) + '</span>'
+        : '<span style="color:#52525b;font-style:italic">Matches will be highlighted here...</span>';
+      matchCount.textContent = '0';
+      groupCount.textContent = '0';
+      activeFlagsEl.textContent = getFlags() || 'none';
+      matchDetails.innerHTML = '<p style="font-size:12px;font-family:monospace;color:#52525b;font-style:italic">No matches yet.</p>';
+      setStatus('idle');
+      return;
+    }
+
+    let regex;
+    try {
+      regex = new RegExp(pattern, getFlags());
+    } catch (e) {
+      patternErrorText.textContent = e.message;
+      patternError.style.display = 'flex';
+      highlightedOutput.innerHTML = test
+        ? '<span style="color:#71717a">' + escapeHtml(test) + '</span>'
+        : '<span style="color:#52525b;font-style:italic">Fix the pattern error above.</span>';
+      matchCount.textContent = '0';
+      groupCount.textContent = '0';
+      matchDetails.innerHTML = '<p style="font-size:12px;font-family:monospace;color:#f87171">Invalid pattern.</p>';
+      setStatus('error');
+      return;
+    }
+
+    if (!test) {
+      highlightedOutput.innerHTML = '<span style="color:#52525b;font-style:italic">Enter a test string above...</span>';
+      matchCount.textContent = '0';
+      groupCount.textContent = '0';
+      activeFlagsEl.textContent = getFlags() || 'none';
+      matchDetails.innerHTML = '<p style="font-size:12px;font-family:monospace;color:#52525b;font-style:italic">No test string provided.</p>';
+      setStatus('idle');
+      return;
+    }
+
+    // Collect all matches
+    const matches = [];
+    if (activeFlags.has('g')) {
+      let m;
+      const gRegex = new RegExp(pattern, getFlags());
+      while ((m = gRegex.exec(test)) !== null) {
+        matches.push({ index: m.index, match: m[0], groups: Array.from(m).slice(1), namedGroups: m.groups || {} });
+        if (m[0].length === 0) gRegex.lastIndex++; // prevent infinite loop on zero-width match
+      }
+    } else {
+      const m = regex.exec(test);
+      if (m) {
+        matches.push({ index: m.index, match: m[0], groups: Array.from(m).slice(1), namedGroups: m.groups || {} });
+      }
+    }
+
+    activeFlagsEl.textContent = getFlags() || 'none';
+    matchCount.textContent = matches.length;
+
+    const maxGroups = matches.reduce((max, m) => Math.max(max, m.groups.length), 0);
+    groupCount.textContent = maxGroups;
+
+    if (matches.length === 0) {
+      highlightedOutput.innerHTML = '<span style="color:#71717a">' + escapeHtml(test) + '</span>';
+      matchDetails.innerHTML = '<p style="font-size:12px;font-family:monospace;color:#6b7280;font-style:italic">Pattern found no matches.</p>';
+      setStatus('nomatch');
+      return;
+    }
+
+    setStatus('match');
+
+    // Build highlighted output
+    let html = '';
+    let lastIndex = 0;
+    matches.forEach((m, i) => {
+      const colorIdx = i % COLORS.length;
+      // Text before match
+      if (m.index > lastIndex) {
+        html += '<span style="color:#a1a1aa">' + escapeHtml(test.slice(lastIndex, m.index)) + '</span>';
+      }
+      html += `<span class="match-highlight" style="background:${COLORS[colorIdx]};color:${TEXT_COLORS[colorIdx]};outline-color:${OUTLINE_COLORS[colorIdx]}" title="Match ${i+1}: ${escapeHtml(m.match)}">${escapeHtml(m.match)}</span>`;
+      lastIndex = m.index + m.match.length;
+    });
+    if (lastIndex < test.length) {
+      html += '<span style="color:#a1a1aa">' + escapeHtml(test.slice(lastIndex)) + '</span>';
+    }
+    highlightedOutput.innerHTML = html;
+
+    // Build match details
+    let detailHtml = '<div style="display:flex;flex-direction:column;gap:8px;">';
+    matches.forEach((m, i) => {
+      const colorIdx = i % COLORS.length;
+      detailHtml += `
+        <div class="match-card" style="border-color:${OUTLINE_COLORS[colorIdx]}">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:${m.groups.length > 0 ? '8px' : '0'}">
+            <span style="color:${TEXT_COLORS[colorIdx]};font-size:11px;background:${COLORS[colorIdx]};padding:1px 7px;border-radius:4px;">
+              #${i + 1}
+            </span>
+            <span style="color:#e4e4e7;font-size:13px;">"${escapeHtml(m.match)}"</span>
+            <span style="margin-left:auto;color:#71717a;font-size:11px;">index ${m.index}–${m.index + m.match.length}</span>
+          </div>
+      `;
+      if (m.groups.length > 0) {
+        detailHtml += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
+        m.groups.forEach((g, gi) => {
+          detailHtml += `<span class="group-pill">group ${gi + 1}: ${g !== undefined ? '"' + escapeHtml(g) + '"' : '<em>undefined</em>'}</span>`;
+        });
+        detailHtml += '</div>';
+      }
+      // Named groups
+      const namedKeys = Object.keys(m.namedGroups);
+      if (namedKeys.length > 0) {
+        detailHtml += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">';
+        namedKeys.forEach(k => {
+          detailHtml += `<span class="group-pill" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.2);color:#c4b5fd;">${escapeHtml(k)}: "${escapeHtml(m.namedGroups[k])}"</span>`;
+        });
+        detailHtml += '</div>';
+      }
+      detailHtml += '</div>';
+    });
+    detailHtml += '</div>';
+    matchDetails.innerHTML = detailHtml;
+  }
+
+  // Flag toggle
+  document.querySelectorAll('.flag-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const flag = btn.dataset.flag;
+      if (activeFlags.has(flag)) {
+        activeFlags.delete(flag);
+        btn.classList.remove('active');
+        btn.style.color = '';
+        btn.style.backgroundColor = '';
+      } else {
+        activeFlags.add(flag);
+        btn.classList.add('active');
+      }
+      evaluate();
+    });
+  });
+
+  patternInput.addEventListener('input', evaluate);
+  testInput.addEventListener('input', evaluate);
+
+  // Clear
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    patternInput.value = '';
+    testInput.value = '';
+    evaluate();
+  });
+
+  // Build quick reference properly
+  const refSection = document.querySelector('.mt-6.bg-zinc-900\\/50 .grid');
+  if (refSection) {
+    refSection.innerHTML = '';
+    REF_ITEMS.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'ref-item cursor-pointer';
+      el.style.cssText = 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 12px;cursor:pointer;transition:border-color 0.2s;';
+      el.innerHTML = `<span style="color:#fbbf24;font-family:monospace;font-size:12px;display:block;">${escapeHtml(item.pattern)}</span><span style="color:#71717a;font-size:12px;">${item.desc}</span>`;
+      el.addEventListener('mouseenter', () => el.style.borderColor = 'rgba(251,191,36,0.3)');
+      el.addEventListener('mouseleave', () => el.style.borderColor = 'rgba(255,255,255,0.06)');
+      el.addEventListener('click', () => {
+        patternInput.value = item.pattern;
+        patternInput.dispatchEvent(new Event('input'));
+        patternInput.focus();
+      });
+      refSection.appendChild(el);
+    });
+  }
+
+  // Initial state
+  evaluate();
+</script>
+</BaseLayout>

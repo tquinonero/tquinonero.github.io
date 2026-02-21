@@ -74,6 +74,16 @@ const { currentPage } = Astro.props;
         >
           WordPress Quiz
         </a>
+        
+        <a
+          href="/regex-tester"
+          class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+            currentPage === 'regex-tester'
+              ? 'bg-blue-600 text-white'
+              : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+          }`} >
+          Regex Tester
+        </a>
       </div>
     </div>
   </div>
