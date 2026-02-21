@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import defaultBg from '../city.jpg';
+import Button from './Button.astro';
 
 interface Props {
   backgroundImage?: any;
@@ -37,6 +38,7 @@ const {
   <div class="relative z-10 flex flex-col justify-center items-center h-full text-center px-4">
     {title && <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">{title}</h1>}
     {subtitle && <p class="text-lg md:text-xl text-gray-300 mb-8">{subtitle}</p>}
+    <Button text="Have a project? Let's go" href="mailto:tquinonero.web@gmail.com" />
     {ctaText && (
       <a
         href={ctaHref}
