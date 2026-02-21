@@ -6,7 +6,6 @@ description: "WordPress released a new skill for AI coding agents"
 tags: ["wordpress", "web development", "productivity", "AI", "vibe coding"]
 slug: wordpress-released-a-new-ai-agent-skill
 ---
-# WordPress Just Made AI-Assisted Plugin Development a Lot Less Painful
 
 If you've been using AI coding agents to build WordPress plugins or themes, you know the drill: the code generation part is getting surprisingly good, but then you're stuck manually spinning up a test environment, checking if things actually work, fixing stuff and repeating the whole cycle. It's tedious.
 

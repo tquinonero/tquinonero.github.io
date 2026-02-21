@@ -1,0 +1,421 @@
+---
+// src/pages/tools/frontmatter.astro
+import Layout from '../layouts/base.astro';
+
+const pageTitle = "Frontmatter Generator";
+---
+
+<Layout title={pageTitle}>
+  <div class="bg-gray-50 min-h-screen py-12">
+    <div class="container-page grid lg:grid-cols-[440px_minmax(0,1fr)] gap-12">
+
+      <!-- LEFT: Inputs -->
+      <aside class="space-y-8">
+
+        <!-- Collection Type -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Collection type</h2>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-2">
+              <button data-type="blog" class="type-btn btn-secondary active">blog</button>
+              <button data-type="docs" class="type-btn btn-secondary">docs</button>
+              <button data-type="portfolio" class="type-btn btn-secondary">portfolio</button>
+              <button data-type="changelog" class="type-btn btn-secondary">changelog</button>
+              <button data-type="authors" class="type-btn btn-secondary">authors</button>
+              <button data-type="custom" class="type-btn btn-secondary">custom</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Core Fields -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Core fields</h2>
+
+            <div class="space-y-4 mt-4">
+              <div>
+                <label class="text-sm text-gray-700 flex justify-between">Title <span class="text-red-500">required</span></label>
+                <input id="f-title" type="text" placeholder="My awesome post" class="form-input mt-1" />
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-700 flex justify-between">Description <span class="text-gray-400">optional</span></label>
+                <textarea id="f-description" rows="3" placeholder="A short summary for SEO and previews..." class="form-input mt-1 resize-y"></textarea>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="text-sm text-gray-700 flex justify-between">pubDate <span class="text-red-500">required</span></label>
+                  <input id="f-pubdate" type="date" class="form-input mt-1" />
+                </div>
+                <div>
+                  <label class="text-sm text-gray-700 flex justify-between">updatedDate <span class="text-gray-400">optional</span></label>
+                  <input id="f-updateddate" type="date" class="form-input mt-1" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Author & Tags -->
+        <div class="card" id="author-section">
+          <div class="card-body">
+            <h2 class="section-title">Authoring</h2>
+
+            <div class="space-y-4 mt-4">
+              <div>
+                <label class="text-sm text-gray-700">Author</label>
+                <input id="f-author" type="text" placeholder="Jane Doe" class="form-input mt-1" />
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-700">Tags</label>
+                <div id="tags-wrapper" class="flex flex-wrap gap-1.5 items-center form-input cursor-text">
+                  <input type="text" id="f-tags-input" class="tag-bare" placeholder="type + Enter to add…" />
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Press Enter or comma to add · Backspace to remove last</p>
+              </div>
+
+              <div>
+                <label class="text-sm text-gray-700">Category</label>
+                <input id="f-category" type="text" placeholder="tutorials" class="form-input mt-1" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Media -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Media</h2>
+
+            <div class="space-y-4 mt-4">
+              <div>
+                <label class="text-sm text-gray-700">heroImage</label>
+                <input id="f-heroimage" type="text" placeholder="./hero.png or /images/hero.jpg" class="form-input mt-1" />
+              </div>
+              <div>
+                <label class="text-sm text-gray-700">heroAlt</label>
+                <input id="f-heroalt" type="text" placeholder="Descriptive alt text for the image" class="form-input mt-1" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flags -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Flags</h2>
+
+            <div class="space-y-3 mt-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-900">Draft</p>
+                  <p class="text-xs text-gray-500">Exclude from production builds</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="f-draft" class="sr-only peer" />
+                  <div class="w-9 h-5 bg-gray-300 peer-checked:bg-gray-900 rounded-full relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-4"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-900">Featured</p>
+                  <p class="text-xs text-gray-500">Mark as featured content</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="f-featured" class="sr-only peer" />
+                  <div class="w-9 h-5 bg-gray-300 peer-checked:bg-gray-900 rounded-full relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-4"></div>
+                </label>
+              </div>
+
+              <div id="toc-row" class="hidden flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-900">Table of Contents</p>
+                  <p class="text-xs text-gray-500">Show TOC on this page</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="f-toc" class="sr-only peer" />
+                  <div class="w-9 h-5 bg-gray-300 peer-checked:bg-gray-900 rounded-full relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-4"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Fields -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Custom fields</h2>
+            <div id="custom-fields-list" class="space-y-2 mt-4"></div>
+            <button id="add-custom-field" class="btn-secondary w-full text-center">+ Add custom field</button>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- RIGHT: Output & Preview -->
+      <main class="space-y-8 sticky top-10 self-start">
+
+        <!-- YAML Output -->
+        <div class="card overflow-hidden">
+          <div class="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
+            <span class="text-sm font-medium text-gray-900">YAML Output</span>
+            <div class="flex gap-2">
+              <button id="btn-reset" class="btn-secondary">Reset</button>
+              <button id="btn-copy" class="btn-primary">Copy</button>
+            </div>
+          </div>
+          <pre class="p-6 text-sm bg-gray-950 text-gray-100 overflow-x-auto min-h-[12rem]"><code id="output-code"></code></pre>
+        </div>
+
+        <!-- Post Preview -->
+        <div class="card">
+          <div class="card-body">
+            <p class="text-xs text-gray-500 font-medium">Post Preview</p>
+            <h2 id="preview-title" class="text-lg font-bold text-gray-900 mt-1">Untitled post</h2>
+            <div class="flex flex-wrap gap-3 text-xs text-gray-500 mt-1">
+              <span id="preview-date">—</span>
+              <span id="preview-author"></span>
+              <span id="preview-draft" class="text-red-500 hidden">DRAFT</span>
+            </div>
+            <div id="preview-tags" class="flex flex-wrap gap-1.5 mt-2"></div>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-white border border-gray-900 text-gray-900 text-sm px-4 py-2 rounded shadow-lg opacity-0 translate-y-4 transition-all duration-200 pointer-events-none">
+    Copied to clipboard!
+  </div>
+
+  <script type="module">
+    // ── State & Helpers
+    const state = {
+      tags: [],
+      customFields: [],
+      currentType: 'blog'
+    };
+
+    const typeConfig = {
+      blog:      { file: 'src/content/blog/my-post.md',            author: true,  toc: false },
+      docs:      { file: 'src/content/docs/getting-started.md',    author: false, toc: true  },
+      portfolio: { file: 'src/content/portfolio/my-project.md',    author: false, toc: false },
+      changelog: { file: 'src/content/changelog/v1-0-0.md',        author: true,  toc: false },
+      authors:   { file: 'src/content/authors/jane-doe.md',        author: false, toc: false },
+      custom:    { file: 'src/content/collection/my-entry.md',     author: true,  toc: true  },
+    };
+
+    const getInput = (id) => document.getElementById(id);
+    const getEl    = (id) => document.getElementById(id);
+    const v        = (id) => getInput(id).value.trim();
+    const b        = (id) => getInput(id).checked;
+
+    // ── Type Switcher
+    document.querySelectorAll('.type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('bg-gray-900', 'text-white', 'border', 'active'));
+        btn.classList.add('bg-gray-900', 'text-white', 'active');
+        state.currentType = btn.dataset.type;
+        const cfg = typeConfig[state.currentType];
+        getEl('toc-row').style.display    = cfg.toc    ? 'flex'  : 'none';
+        getEl('author-section').style.display = cfg.author ? 'block' : 'none';
+        generate();
+      });
+    });
+
+    // ── Tag Input
+    const tagsInput   = getInput('f-tags-input');
+    const tagsWrapper = getEl('tags-wrapper');
+
+    tagsWrapper.addEventListener('click', () => tagsInput.focus());
+
+    tagsInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        const val = tagsInput.value.trim().replace(/,$/, '');
+        if (val && !state.tags.includes(val)) {
+          state.tags.push(val);
+          renderTags();
+          generate();
+        }
+        tagsInput.value = '';
+      } else if (e.key === 'Backspace' && !tagsInput.value && state.tags.length) {
+        state.tags.pop();
+        renderTags();
+        generate();
+      }
+    });
+
+    function renderTags() {
+      tagsWrapper.querySelectorAll('.rendered-tag').forEach(t => t.remove());
+      state.tags.forEach((tag, i) => {
+        const el = document.createElement('span');
+        el.className = 'tag rendered-tag flex items-center gap-1';
+        el.innerHTML = `${tag}<button type="button" data-i="${i}" class="text-gray-400 hover:text-gray-900 ml-1">×</button>`;
+        tagsWrapper.insertBefore(el, tagsInput);
+      });
+      tagsWrapper.querySelectorAll('.tag button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.tags.splice(Number(btn.dataset.i || 0), 1);
+          renderTags();
+          generate();
+        });
+      });
+    }
+
+    // ── Custom Fields
+    getEl('add-custom-field').addEventListener('click', () => {
+      state.customFields.push({ key: '', value: '' });
+      renderCustomFields();
+    });
+
+    function renderCustomFields() {
+      const list = getEl('custom-fields-list');
+      list.innerHTML = '';
+      state.customFields.forEach((f, i) => {
+        const row = document.createElement('div');
+        row.className = 'grid gap-2 items-center';
+        row.style.gridTemplateColumns = '1fr 1fr auto';
+        row.innerHTML = `
+          <input type="text" placeholder="key"   value="${f.key}"   data-i="${i}" data-part="key"   class="form-input text-xs" />
+          <input type="text" placeholder="value" value="${f.value}" data-i="${i}" data-part="value" class="form-input text-xs" />
+          <button data-i="${i}" class="btn-secondary w-8 h-8">×</button>`;
+        list.appendChild(row);
+      });
+
+      list.querySelectorAll('.form-input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const idx  = Number(inp.dataset.i);
+          const part = inp.dataset.part;
+          state.customFields[idx][part] = inp.value;
+          generate();
+        });
+      });
+
+      list.querySelectorAll('.btn-secondary').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.customFields.splice(Number(btn.dataset.i || 0), 1);
+          renderCustomFields();
+          generate();
+        });
+      });
+    }
+
+    // ── Generate
+    function generate() {
+      const title      = v('f-title');
+      const desc       = v('f-description');
+      const pubDate    = v('f-pubdate');
+      const updDate    = v('f-updateddate');
+      const author     = v('f-author');
+      const category   = v('f-category');
+      const heroImage  = v('f-heroimage');
+      const heroAlt    = v('f-heroalt');
+      const draft      = b('f-draft');
+      const featured   = b('f-featured');
+      const toc        = b('f-toc');
+
+      const lines = ['---'];
+      lines.push(`title: "${title || 'Untitled'}"`);
+      if (desc) lines.push(
+        desc.includes('\n')
+          ? `description: |\n${desc.split('\n').map(l => '  ' + l).join('\n')}`
+          : `description: "${desc}"`
+      );
+      if (pubDate)   lines.push(`pubDate: ${pubDate}`);
+      if (updDate)   lines.push(`updatedDate: ${updDate}`);
+      if (author)    lines.push(`author: "${author}"`);
+      if (category)  lines.push(`category: "${category}"`);
+      if (state.tags.length) lines.push(`tags:\n${state.tags.map(t => '  - "' + t + '"').join('\n')}`);
+      if (heroImage) lines.push(`heroImage: "${heroImage}"`);
+      if (heroAlt)   lines.push(`heroAlt: "${heroAlt}"`);
+      if (draft)     lines.push('draft: true');
+      if (featured)  lines.push('featured: true');
+      if (toc)       lines.push('tableOfContents: true');
+      state.customFields.forEach(f => {
+        if (f.key.trim()) lines.push(`${f.key.trim()}: "${f.value}"`);
+      });
+      lines.push('---');
+
+      getEl('output-code').textContent = lines.join('\n');
+
+      // Preview
+      getEl('preview-title').textContent  = title || 'Untitled post';
+      getEl('preview-date').textContent   = pubDate
+        ? new Date(pubDate + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        : '—';
+      getEl('preview-author').textContent = author ? `by ${author}` : '';
+      getEl('preview-draft').classList.toggle('hidden', !draft);
+
+      const tagsEl = getEl('preview-tags');
+      tagsEl.innerHTML = '';
+      state.tags.forEach(t => {
+        const el = document.createElement('span');
+        el.className   = 'tag';
+        el.textContent = t;
+        tagsEl.appendChild(el);
+      });
+    }
+
+    // ── Copy
+    getEl('btn-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(getEl('output-code').textContent || '').then(() => {
+        const btn   = getEl('btn-copy');
+        btn.textContent = 'Copied!';
+        const toast = getEl('toast');
+        toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+          toast.classList.remove('opacity-100', 'translate-y-0');
+        }, 2000);
+      });
+    });
+
+    // ── Reset
+    getEl('btn-reset').addEventListener('click', () => {
+      ['f-title', 'f-description', 'f-updateddate', 'f-author', 'f-category', 'f-heroimage', 'f-heroalt']
+        .forEach(id => getInput(id).value = '');
+      ['f-draft', 'f-featured', 'f-toc']
+        .forEach(id => getInput(id).checked = false);
+      getInput('f-pubdate').value = new Date().toISOString().split('T')[0];
+      state.tags         = [];
+      state.customFields = [];
+      renderTags();
+      renderCustomFields();
+      generate();
+    });
+
+    // ── Input Listeners
+    ['f-title', 'f-description', 'f-pubdate', 'f-updateddate', 'f-author', 'f-category', 'f-heroimage', 'f-heroalt']
+      .forEach(id => getEl(id).addEventListener('input', generate));
+    ['f-draft', 'f-featured', 'f-toc']
+      .forEach(id => getEl(id).addEventListener('change', generate));
+
+    // ── Init
+    getInput('f-pubdate').value = new Date().toISOString().split('T')[0];
+    generate();
+  </script>
+
+  <style>
+    /* Layout helpers */
+    .container-page { max-width: 7xl; margin-inline: auto; padding-inline: 1rem; }
+    .card { background: white; border: 1px solid #e5e7eb; border-radius: .5rem; }
+    .card-body { padding: 1rem; }
+    .section-title { text-transform: uppercase; font-size: .65rem; font-weight: 600; letter-spacing: .1em; color: #2563eb; }
+    .form-input { width: 100%; border: 1px solid #d1d5db; border-radius: .375rem; padding: .5rem .75rem; font-size: .875rem; outline: none; transition: all .2s; }
+    .form-input:focus { border-color: #2563eb; }
+    .tag { background: #bfdbfe; border: 1px solid #93c5fd; padding: 2px 6px; border-radius: .25rem; font-size: .75rem; display: inline-flex; align-items: center; gap: 2px; }
+    .btn-primary { border: 1px solid #2563eb; background: #2563eb; color: white; padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem; cursor: pointer; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-secondary { border: 1px solid #d1d5db; background: white; color: #374151; padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem; cursor: pointer; }
+    .btn-secondary:hover { border-color: #2563eb; color: #2563eb; }
+    .tag-bare { border: none; outline: none; background: transparent; font-size: .875rem; min-width: 10rem; }
+  </style>
+</Layout>
