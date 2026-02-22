@@ -7,8 +7,8 @@ interface Props {
 const { title, content } = Astro.props;
 ---
 
-<section class="py-12 px-8 text-white" style="background-color: #111827;">
-  <div class="max-w-4xl mx-auto text-center" style="background-color: #111827;">
+<section class="py-12 px-8 text-white bg-gray-900">
+  <div class="max-w-4xl mx-auto text-center">
     {title && <h2 class="text-3xl font-bold mb-4">{title}</h2>}
     <p class="text-lg">{content}</p>
   </div>

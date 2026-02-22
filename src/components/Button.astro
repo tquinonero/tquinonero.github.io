@@ -1,10 +1,12 @@
 ---
+import { SITE_CONFIG } from '../config';
+
 interface Props {
   text: string;
-  href: string;
+  href?: string;
 }
 
-const { text, href } = Astro.props;
+const { text, href = `mailto:${SITE_CONFIG.email}` } = Astro.props;
 ---
 
 <a

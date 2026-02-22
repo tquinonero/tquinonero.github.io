@@ -1,6 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-
 interface Props {
   currentPage?: string;
 }
@@ -52,38 +50,55 @@ const { currentPage } = Astro.props;
           Blog
         </a>
 
-        <a
-          href="/frontmatter-generator"
-          class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-            currentPage === 'frontmatter-generator'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-          }`}
-        >
-          Frontmatter
-        </a>
+        <!-- Tools Dropdown -->
+        <div class="group relative">
+          <button
+            class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-1 ${
+              ['frontmatter-generator', 'wordpress-quiz', 'regex-tester'].includes(currentPage || '')
+                ? 'bg-blue-600 text-white'
+                : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+            }`}
+          >
+            Tools
+            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+          </button>
 
-
-        <a
-          href="/wordpress-quiz"
-          class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-            currentPage === 'wordpress-quiz'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-          }`}
-        >
-          WordPress Quiz
-        </a>
-        
-        <a
-          href="/regex-tester"
-          class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-            currentPage === 'regex-tester'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-          }`} >
-          Regex Tester
-        </a>
+          <!-- Dropdown Menu -->
+          <div class="absolute left-0 mt-0 w-48 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-2 z-50">
+            <a
+              href="/frontmatter-generator"
+              class={`block px-4 py-2 font-medium transition-colors duration-200 ${
+                currentPage === 'frontmatter-generator'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              Frontmatter Generator
+            </a>
+            <a
+              href="/wordpress-quiz"
+              class={`block px-4 py-2 font-medium transition-colors duration-200 ${
+                currentPage === 'wordpress-quiz'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              WordPress Quiz
+            </a>
+            <a
+              href="/regex-tester"
+              class={`block px-4 py-2 font-medium transition-colors duration-200 ${
+                currentPage === 'regex-tester'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              Regex Tester
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

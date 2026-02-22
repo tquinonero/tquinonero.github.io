@@ -1,7 +1,8 @@
 ---
 import { Image } from 'astro:assets';
-import defaultBg from '../city.jpg';
+import defaultBg from '../codioful-formerly-gradienta-unsplash.jpg';
 import Button from './Button.astro';
+import { SITE_CONFIG } from '../config';
 
 interface Props {
   backgroundImage?: any;
@@ -16,7 +17,7 @@ const {
   title,
   subtitle,
   ctaText,
-  ctaHref = "#"
+  ctaHref = `mailto:${SITE_CONFIG.email}`
 } = Astro.props;
 ---
 
