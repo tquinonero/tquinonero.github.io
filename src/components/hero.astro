@@ -36,6 +36,14 @@ const {
     <div class="absolute inset-0 bg-black opacity-50"></div>
   </div>
 
+  <!-- Particles canvas: sits between the overlay and the content -->
+  <canvas id="hero-particles" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:2;"></canvas>
+
+  <!-- Three.js wireframe icosahedron — right side -->
+  <div class="absolute inset-y-0 right-0 w-1/2 pointer-events-none hidden sm:block" style="z-index:3;">
+    <canvas id="hero-three" class="w-full h-full"></canvas>
+  </div>
+
   <div class="relative z-10 flex flex-col justify-center items-center h-full text-center px-4">
     {title && <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">{title}</h1>}
     {subtitle && <p class="text-lg md:text-xl text-gray-300 mb-8">{subtitle}</p>}
@@ -50,3 +58,197 @@ const {
     )}
   </div>
 </section>
+
+<script>
+  function initParticles() {
+    const canvas = document.getElementById('hero-particles') as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // ── Config ────────────────────────────────────────────────────
+    const COUNT    = 55;    // number of particles
+    const MAX_DIST = 130;   // max px distance to draw a connecting line
+    const SPEED    = 0.35;  // base movement speed
+    const R        = 1.5;   // dot radius
+
+    type Particle = { x: number; y: number; vx: number; vy: number; alpha: number };
+
+    let W = 0, H = 0;
+    let particles: Particle[] = [];
+    const state = { animId: 0 };
+
+    function resize() {
+      W = canvas!.width  = canvas!.offsetWidth;
+      H = canvas!.height = canvas!.offsetHeight;
+    }
+
+    function makeParticle(): Particle {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = SPEED * (0.5 + Math.random() * 0.5);
+      return {
+        x:     Math.random() * W,
+        y:     Math.random() * H,
+        vx:    Math.cos(angle) * speed,
+        vy:    Math.sin(angle) * speed,
+        alpha: 0.25 + Math.random() * 0.45,
+      };
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, W, H);
+
+      // Move & bounce
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      }
+
+      // Lines first (underneath dots)
+      ctx!.lineWidth = 0.7;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const d  = Math.sqrt(dx * dx + dy * dy);
+          if (d < MAX_DIST) {
+            ctx!.beginPath();
+            ctx!.moveTo(particles[i].x, particles[i].y);
+            ctx!.lineTo(particles[j].x, particles[j].y);
+            ctx!.strokeStyle = `rgba(255,255,255,${(1 - d / MAX_DIST) * 0.2})`;
+            ctx!.stroke();
+          }
+        }
+      }
+
+      // Dots
+      for (const p of particles) {
+        ctx!.beginPath();
+        ctx!.arc(p.x, p.y, R, 0, Math.PI * 2);
+        ctx!.fillStyle = `rgba(255,255,255,${p.alpha})`;
+        ctx!.fill();
+      }
+
+      state.animId = requestAnimationFrame(draw);
+    }
+
+    // Re-init on resize
+    const ro = new ResizeObserver(() => {
+      resize();
+      particles = Array.from({ length: COUNT }, makeParticle);
+    });
+    ro.observe(canvas);
+
+    // Kick off
+    resize();
+    particles = Array.from({ length: COUNT }, makeParticle);
+    draw();
+
+    // Clean up before Astro navigates away (view transitions)
+    document.addEventListener('astro:before-preparation', () => {
+      cancelAnimationFrame(state.animId);
+      ro.disconnect();
+    }, { once: true });
+  }
+
+  // Run on first load and after every view-transition navigation
+  document.addEventListener('astro:page-load', initParticles);
+</script>
+
+<script>
+  async function initThree() {
+    const canvas = document.getElementById('hero-three') as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    // Dynamically import so Three.js is code-split and doesn't block render
+    const THREE = await import('three');
+
+    const W = canvas.offsetWidth;
+    const H = canvas.offsetHeight;
+    if (!W || !H) return;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0); // fully transparent background
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
+    camera.position.z = 5;
+
+    // ── Geometry: icosahedron detail=1 → geodesic-sphere look ────
+    const geo   = new THREE.IcosahedronGeometry(1.5, 1);
+    const edges = new THREE.EdgesGeometry(geo);
+
+    // Main wireframe — blue-400
+    const mainMat = new THREE.LineBasicMaterial({
+      color:       0x60a5fa,
+      transparent: true,
+      opacity:     0.75,
+    });
+    const mainMesh = new THREE.LineSegments(edges, mainMat);
+    scene.add(mainMesh);
+
+    // Glow layer 1 — slightly larger, lower opacity, lighter blue
+    const glow1Mat = new THREE.LineBasicMaterial({
+      color:       0x93c5fd,
+      transparent: true,
+      opacity:     0.2,
+    });
+    const glow1 = new THREE.LineSegments(edges, glow1Mat);
+    glow1.scale.setScalar(1.10);
+    scene.add(glow1);
+
+    // Glow layer 2 — even larger, very faint halo
+    const glow2Mat = new THREE.LineBasicMaterial({
+      color:       0xbfdbfe,
+      transparent: true,
+      opacity:     0.07,
+    });
+    const glow2 = new THREE.LineSegments(edges, glow2Mat);
+    glow2.scale.setScalar(1.22);
+    scene.add(glow2);
+
+    const state = { animId: 0 };
+
+    function animate() {
+      state.animId = requestAnimationFrame(animate);
+
+      // Slow, axis-tilted rotation for depth
+      mainMesh.rotation.x += 0.0025;
+      mainMesh.rotation.y += 0.004;
+
+      glow1.rotation.x = mainMesh.rotation.x;
+      glow1.rotation.y = mainMesh.rotation.y;
+      glow2.rotation.x = mainMesh.rotation.x;
+      glow2.rotation.y = mainMesh.rotation.y;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle canvas resize
+    const ro = new ResizeObserver(() => {
+      const w = canvas!.offsetWidth;
+      const h = canvas!.offsetHeight;
+      if (!w || !h) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    });
+    ro.observe(canvas);
+
+    // Clean up on view-transition navigation
+    document.addEventListener('astro:before-preparation', () => {
+      cancelAnimationFrame(state.animId);
+      ro.disconnect();
+      renderer.dispose();
+    }, { once: true });
+  }
+
+  document.addEventListener('astro:page-load', initThree);
+</script>

@@ -54,19 +54,22 @@ const { currentPage } = Astro.props;
         <div class="group relative">
           <button
             class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-1 ${
-              ['frontmatter-generator', 'wordpress-quiz', 'regex-tester', 'color-palette-generator'].includes(currentPage || '')
+              ['frontmatter-generator', 'wordpress-quiz', 'regex-tester', 'color-palette-generator', 'cron-expression-builder'].includes(currentPage || '')
                 ? 'bg-blue-600 text-white'
                 : 'text-gray-300 hover:bg-gray-800 hover:text-white'
             }`}
           >
-            Tools
-            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />
+            </svg>
+            Free Tools
+            <svg class="w-3.5 h-3.5 shrink-0 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
           <!-- Dropdown Menu -->
-          <div class="absolute left-0 mt-0 w-48 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-2 z-50">
+          <div class="absolute left-0 mt-0 w-56 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-2 z-50">
             <a
               href="/frontmatter-generator"
               class={`block px-4 py-2 font-medium transition-colors duration-200 ${
@@ -106,6 +109,16 @@ const { currentPage } = Astro.props;
               }`}
             >
               Color Palette Generator
+            </a>
+            <a
+              href="/cron-expression-builder"
+              class={`block px-4 py-2 font-medium transition-colors duration-200 ${
+                currentPage === 'cron-expression-builder'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              Cron Expression Builder
             </a>
           </div>
         </div>

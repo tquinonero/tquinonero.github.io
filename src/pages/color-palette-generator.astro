@@ -4,38 +4,42 @@ import CTASection from '../components/ctaSection.astro';
 ---
 
 <BaseLayout title="Color Palette Generator">
-  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-12">
+  <main class="min-h-screen bg-zinc-950 text-zinc-100 px-4 py-12">
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <div class="mb-12 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-3">Color Palette Generator</h1>
-        <p class="text-lg text-slate-600">Generate beautiful, harmonious color palettes with one click</p>
+        <div class="inline-flex items-center gap-2 bg-zinc-800 border border-zinc-700 rounded-full px-4 py-1.5 text-xs font-mono text-violet-400 mb-6 tracking-widest uppercase">
+          <span class="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse"></span>
+          Design Tool
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Color Palette Generator</h1>
+        <p class="text-zinc-400 text-lg max-w-xl mx-auto">Generate beautiful, harmonious color palettes with one click</p>
       </div>
 
       <!-- Main Container -->
       <div class="grid lg:grid-cols-3 gap-8">
         <!-- Left: Controls -->
         <div class="lg:col-span-1">
-          <div class="bg-white rounded-2xl shadow-lg p-6 space-y-6">
+          <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6">
             <!-- Base Color Picker -->
             <div>
-              <label class="block text-sm font-semibold text-slate-900 mb-3">Base Color</label>
+              <label class="block text-sm font-semibold text-zinc-300 mb-3">Base Color</label>
               <div class="flex items-center gap-3">
                 <input
                   id="baseColorPicker"
                   type="color"
                   value="#6366f1"
-                  class="w-12 h-10 rounded-lg border border-slate-300 cursor-pointer p-1 bg-white"
+                  class="w-12 h-10 rounded-lg border border-zinc-600 cursor-pointer p-1 bg-zinc-800"
                 />
-                <span id="baseColorHex" class="font-mono text-sm text-slate-700 flex-1">#6366F1</span>
+                <span id="baseColorHex" class="font-mono text-sm text-zinc-300 flex-1">#6366F1</span>
                 <button id="randomBaseBtn" title="Randomize base color" class="text-slate-400 hover:text-slate-700 transition-colors text-lg">🎲</button>
               </div>
             </div>
 
             <!-- Mode Selection -->
             <div>
-              <label class="block text-sm font-semibold text-slate-900 mb-3">Harmony Mode</label>
-              <select id="harmonyMode" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900">
+              <label class="block text-sm font-semibold text-zinc-300 mb-3">Harmony Mode</label>
+              <select id="harmonyMode" class="w-full px-4 py-2 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-zinc-800 text-zinc-100">
                 <option value="random">Random</option>
                 <option value="complementary">Complementary</option>
                 <option value="analogous">Analogous</option>
@@ -47,20 +51,20 @@ import CTASection from '../components/ctaSection.astro';
 
             <!-- Action Buttons -->
             <div class="space-y-2">
-              <button id="generateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+              <button id="generateBtn" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
                 🎨 Generate Palette
               </button>
-              <button id="lockAllBtn" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+              <button id="lockAllBtn" class="w-full bg-zinc-700 hover:bg-zinc-600 text-zinc-100 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
                 🔒 Lock All
               </button>
-              <button id="unlockAllBtn" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+              <button id="unlockAllBtn" class="w-full bg-zinc-700 hover:bg-zinc-600 text-zinc-100 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
                 🔓 Unlock All
               </button>
             </div>
 
             <!-- Export Options -->
             <div>
-              <label class="block text-sm font-semibold text-slate-900 mb-3">Export</label>
+              <label class="block text-sm font-semibold text-zinc-300 mb-3">Export</label>
               <div class="space-y-2">
                 <button id="exportCSS" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
                   📋 Copy CSS Variables
@@ -75,9 +79,9 @@ import CTASection from '../components/ctaSection.astro';
             </div>
 
             <!-- Info -->
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p class="text-xs text-slate-600">
-                <span class="font-semibold text-blue-900">Tip:</span> Click colors to copy hex code. Click the lock icon to freeze colors while generating.
+            <div class="bg-zinc-800/60 border border-zinc-700 rounded-lg p-4">
+              <p class="text-xs text-zinc-400">
+                <span class="font-semibold text-violet-400">Tip:</span> Click colors to copy hex code. Click the lock icon to freeze colors while generating.
               </p>
             </div>
           </div>
@@ -92,7 +96,7 @@ import CTASection from '../components/ctaSection.astro';
       </div>
 
       <!-- Toast Notification -->
-      <div id="toast" class="fixed bottom-6 right-6 z-50 bg-white text-slate-900 px-6 py-3 rounded-lg shadow-lg opacity-0 translate-y-4 transition-all duration-200 pointer-events-none border border-slate-200">
+      <div id="toast" class="fixed bottom-6 right-6 z-50 bg-zinc-800 text-zinc-100 px-6 py-3 rounded-lg shadow-lg opacity-0 translate-y-4 transition-all duration-200 pointer-events-none border border-zinc-700">
         Copied to clipboard!
       </div>
     </div>
@@ -248,10 +252,10 @@ import CTASection from '../components/ctaSection.astro';
           ${state.locked[idx] ? '🔒' : '🔓'}
         </button>
         <div class="color-info">
-          <div class="font-semibold text-slate-900">${getColorName(color)}</div>
+          <div class="font-semibold text-white">${getColorName(color)}</div>
           <div class="color-value">${color}</div>
-          <div class="color-value text-slate-500">${getHSL(color)}</div>
-          <button onclick="copyToClipboard('${color}', ${idx})" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors mt-2">
+          <div class="color-value text-zinc-500">${getHSL(color)}</div>
+          <button onclick="copyToClipboard('${color}', ${idx})" class="text-xs bg-zinc-100 hover:bg-zinc-200 text-zinc-700 px-2 py-1 rounded transition-colors mt-2">
             📋 Copy Hex
           </button>
         </div>
