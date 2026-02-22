@@ -1,0 +1,364 @@
+---
+import BaseLayout from '../layouts/base.astro';
+import CTASection from '../components/ctaSection.astro';
+---
+
+<BaseLayout title="Color Palette Generator">
+  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-12">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-3">Color Palette Generator</h1>
+        <p class="text-lg text-slate-600">Generate beautiful, harmonious color palettes with one click</p>
+      </div>
+
+      <!-- Main Container -->
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Left: Controls -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-2xl shadow-lg p-6 space-y-6">
+            <!-- Base Color Picker -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-3">Base Color</label>
+              <div class="flex items-center gap-3">
+                <input
+                  id="baseColorPicker"
+                  type="color"
+                  value="#6366f1"
+                  class="w-12 h-10 rounded-lg border border-slate-300 cursor-pointer p-1 bg-white"
+                />
+                <span id="baseColorHex" class="font-mono text-sm text-slate-700 flex-1">#6366F1</span>
+                <button id="randomBaseBtn" title="Randomize base color" class="text-slate-400 hover:text-slate-700 transition-colors text-lg">🎲</button>
+              </div>
+            </div>
+
+            <!-- Mode Selection -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-3">Harmony Mode</label>
+              <select id="harmonyMode" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900">
+                <option value="random">Random</option>
+                <option value="complementary">Complementary</option>
+                <option value="analogous">Analogous</option>
+                <option value="triadic">Triadic</option>
+                <option value="monochromatic">Monochromatic</option>
+                <option value="split-complementary">Split Complementary</option>
+              </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-2">
+              <button id="generateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                🎨 Generate Palette
+              </button>
+              <button id="lockAllBtn" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                🔒 Lock All
+              </button>
+              <button id="unlockAllBtn" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                🔓 Unlock All
+              </button>
+            </div>
+
+            <!-- Export Options -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-900 mb-3">Export</label>
+              <div class="space-y-2">
+                <button id="exportCSS" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                  📋 Copy CSS Variables
+                </button>
+                <button id="exportTailwind" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                  🎯 Copy Tailwind Config
+                </button>
+                <button id="exportJSON" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                  {} Copy JSON
+                </button>
+              </div>
+            </div>
+
+            <!-- Info -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p class="text-xs text-slate-600">
+                <span class="font-semibold text-blue-900">Tip:</span> Click colors to copy hex code. Click the lock icon to freeze colors while generating.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Palette Display -->
+        <div class="lg:col-span-2">
+          <div id="paletteContainer" class="space-y-3">
+            <!-- Color cards will be generated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Notification -->
+      <div id="toast" class="fixed bottom-6 right-6 z-50 bg-white text-slate-900 px-6 py-3 rounded-lg shadow-lg opacity-0 translate-y-4 transition-all duration-200 pointer-events-none border border-slate-200">
+        Copied to clipboard!
+      </div>
+    </div>
+  </main>
+
+  <style>
+    @reference "../styles/global.css";
+
+    .color-card {
+      @apply bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow;
+    }
+    
+    .color-swatch {
+      @apply h-32 w-full cursor-pointer transition-transform hover:scale-105;
+    }
+
+    .color-info {
+      @apply p-4 space-y-2;
+    }
+
+    .color-value {
+      @apply font-mono text-sm text-slate-600;
+    }
+
+    .lock-btn {
+      @apply absolute top-2 right-2 p-2 bg-white/80 hover:bg-white rounded-lg transition-all opacity-0 group-hover:opacity-100;
+    }
+  </style>
+
+  <CTASection
+    title="Need More Design Tools?"
+    content="Check back soon for more useful utilities for designers and developers."
+  />
+</BaseLayout>
+
+<script is:inline>
+  // Color utility functions
+  function hexToHSL(hex) {
+    let r = parseInt(hex.slice(1, 3), 16) / 255;
+    let g = parseInt(hex.slice(3, 5), 16) / 255;
+    let b = parseInt(hex.slice(5, 7), 16) / 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+
+    return [h * 360, s * 100, l * 100];
+  }
+
+  function hslToHex(h, s, l) {
+    s /= 100;
+    l /= 100;
+    const k = n => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return "#" + [f(0), f(8), f(4)].map(x => {
+      const hex = Math.round(255 * x).toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
+    }).join("").toUpperCase();
+  }
+
+  function randomHex() {
+    return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0").toUpperCase();
+  }
+
+  // State
+  const state = {
+    colors: [],
+    locked: [false, false, false, false, false],
+  };
+
+  const elements = {
+    generateBtn: document.getElementById("generateBtn"),
+    harmonyMode: document.getElementById("harmonyMode"),
+    paletteContainer: document.getElementById("paletteContainer"),
+    toast: document.getElementById("toast"),
+    lockAllBtn: document.getElementById("lockAllBtn"),
+    unlockAllBtn: document.getElementById("unlockAllBtn"),
+    exportCSS: document.getElementById("exportCSS"),
+    exportTailwind: document.getElementById("exportTailwind"),
+    exportJSON: document.getElementById("exportJSON"),
+    baseColorPicker: document.getElementById("baseColorPicker"),
+    baseColorHex: document.getElementById("baseColorHex"),
+    randomBaseBtn: document.getElementById("randomBaseBtn"),
+  };
+
+  function generatePalette() {
+    const mode = elements.harmonyMode?.value || 'random';
+    const pickerColor = (elements.baseColorPicker?.value || '#6366f1').toUpperCase();
+    const baseColor = state.locked[0] ? (state.colors[0] || pickerColor) : pickerColor;
+    const [h, s, l] = hexToHSL(baseColor);
+    const newColors = [];
+
+    // Generate base color
+    newColors.push(baseColor);
+    // Sync picker display
+    if (elements.baseColorPicker) elements.baseColorPicker.value = baseColor;
+    if (elements.baseColorHex) elements.baseColorHex.textContent = baseColor;
+
+    // Generate harmony colors
+    const angles = {
+      random: [60, 120, 180, 240],
+      complementary: [180, 90, 270, 45],
+      analogous: [30, 60, 330, 300],
+      triadic: [120, 240, 60, 180],
+      monochromatic: [0, 0, 0, 0],
+      "split-complementary": [150, 210, 30, 60],
+    };
+
+    let colorAngles = angles[mode] || angles.random;
+
+    for (let i = 0; i < 4; i++) {
+      if (state.locked[i + 1]) {
+        newColors.push(state.colors[i + 1] || baseColor);
+      } else {
+        let newH = (h + colorAngles[i]) % 360;
+        let newS = s;
+        let newL = l;
+
+        if (mode === "monochromatic") {
+          newL = l + (i - 1.5) * 15;
+          newL = Math.max(20, Math.min(80, newL));
+        }
+
+        newColors.push(hslToHex(newH, newS, newL));
+      }
+    }
+
+    state.colors = newColors;
+    renderPalette();
+  }
+
+  function renderPalette() {
+    if (!elements.paletteContainer) return;
+    
+    elements.paletteContainer.innerHTML = state.colors.map((color, idx) => `
+      <div class="color-card group relative">
+        <div class="color-swatch" style="background-color: ${color}" onclick="copyToClipboard('${color}', ${idx})"></div>
+        <button class="lock-btn" onclick="toggleLock(${idx})" title="${state.locked[idx] ? 'Unlock' : 'Lock'}">
+          ${state.locked[idx] ? '🔒' : '🔓'}
+        </button>
+        <div class="color-info">
+          <div class="font-semibold text-slate-900">${getColorName(color)}</div>
+          <div class="color-value">${color}</div>
+          <div class="color-value text-slate-500">${getHSL(color)}</div>
+          <button onclick="copyToClipboard('${color}', ${idx})" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors mt-2">
+            📋 Copy Hex
+          </button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function getColorName(hex) {
+    const [h, s, l] = hexToHSL(hex);
+    
+    if (s < 10) return "Grayscale";
+    if (l > 80) return "Light";
+    if (l < 20) return "Dark";
+    
+    const hueNames = {
+      0: "Red", 30: "Orange", 60: "Yellow", 120: "Green",
+      180: "Cyan", 240: "Blue", 300: "Magenta"
+    };
+    
+    let closest = Object.keys(hueNames).reduce((a, b) => 
+      Math.abs(h - parseInt(a)) < Math.abs(h - parseInt(b)) ? a : b
+    );
+    return hueNames[closest] || "Color";
+  }
+
+  function getHSL(hex) {
+    const [h, s, l] = hexToHSL(hex);
+    return `hsl(${Math.round(h)}, ${Math.round(s)}%, ${Math.round(l)}%)`;
+  }
+
+  function copyToClipboard(text, idx) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast();
+    });
+  }
+
+  function toggleLock(idx) {
+    state.locked[idx] = !state.locked[idx];
+    renderPalette();
+  }
+
+  function showToast() {
+    if (!elements.toast) return;
+    elements.toast.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
+    elements.toast.classList.add("opacity-100", "translate-y-0");
+    setTimeout(() => {
+      if (elements.toast) {
+        elements.toast.classList.add("opacity-0", "translate-y-4", "pointer-events-none");
+        elements.toast.classList.remove("opacity-100", "translate-y-0");
+      }
+    }, 2000);
+  }
+
+  function exportAs(format) {
+    let content = "";
+
+    if (format === "css") {
+      content = `:root {\n${state.colors.map((c, i) => `  --color-${i + 1}: ${c};`).join("\n")}\n}`;
+    } else if (format === "tailwind") {
+      content = `theme: {\n  colors: {\n${state.colors.map((c, i) => `    color${i + 1}: '${c}',`).join("\n")}\n  }\n}`;
+    } else if (format === "json") {
+      content = JSON.stringify({ palette: state.colors }, null, 2);
+    }
+
+    navigator.clipboard.writeText(content).then(() => {
+      showToast();
+    });
+  }
+
+  // Sync hex label as user picks a color
+  elements.baseColorPicker?.addEventListener("input", () => {
+    if (elements.baseColorHex && elements.baseColorPicker) {
+      elements.baseColorHex.textContent = elements.baseColorPicker.value.toUpperCase();
+    }
+  });
+
+  // Regenerate when picker is released
+  elements.baseColorPicker?.addEventListener("change", generatePalette);
+
+  // Randomize base color button
+  elements.randomBaseBtn?.addEventListener("click", () => {
+    const hex = randomHex();
+    if (elements.baseColorPicker) elements.baseColorPicker.value = hex;
+    if (elements.baseColorHex) elements.baseColorHex.textContent = hex;
+    state.locked[0] = false;
+    generatePalette();
+  });
+
+  // Event listeners
+  elements.generateBtn?.addEventListener("click", generatePalette);
+  elements.harmonyMode?.addEventListener("change", generatePalette);
+  elements.lockAllBtn?.addEventListener("click", () => {
+    state.locked = [true, true, true, true, true];
+    renderPalette();
+  });
+  elements.unlockAllBtn?.addEventListener("click", () => {
+    state.locked = [false, false, false, false, false];
+    renderPalette();
+  });
+  elements.exportCSS?.addEventListener("click", () => exportAs("css"));
+  elements.exportTailwind?.addEventListener("click", () => exportAs("tailwind"));
+  elements.exportJSON?.addEventListener("click", () => exportAs("json"));
+
+  // Expose globally for onclick handlers
+  window.copyToClipboard = copyToClipboard;
+  window.toggleLock = toggleLock;
+
+  // Initialize
+  generatePalette();
+</script>

@@ -54,7 +54,7 @@ const { currentPage } = Astro.props;
         <div class="group relative">
           <button
             class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-1 ${
-              ['frontmatter-generator', 'wordpress-quiz', 'regex-tester'].includes(currentPage || '')
+              ['frontmatter-generator', 'wordpress-quiz', 'regex-tester', 'color-palette-generator'].includes(currentPage || '')
                 ? 'bg-blue-600 text-white'
                 : 'text-gray-300 hover:bg-gray-800 hover:text-white'
             }`}
@@ -96,6 +96,16 @@ const { currentPage } = Astro.props;
               }`}
             >
               Regex Tester
+            </a>
+            <a
+              href="/color-palette-generator"
+              class={`block px-4 py-2 font-medium transition-colors duration-200 ${
+                currentPage === 'color-palette-generator'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              Color Palette Generator
             </a>
           </div>
         </div>
