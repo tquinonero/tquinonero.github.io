@@ -1,0 +1,459 @@
+---
+import Layout from '../layouts/base.astro';
+import CTASection from '../components/ctaSection.astro';
+
+const pageTitle = "Robots.txt Generator";
+---
+
+<Layout title={pageTitle}>
+  <div class="bg-zinc-950 text-zinc-100 min-h-screen py-12">
+
+    <!-- Header -->
+    <div class="text-center mb-12 px-4">
+      <div class="inline-flex items-center gap-2 bg-zinc-800 border border-zinc-700 rounded-full px-4 py-1.5 text-xs font-mono text-rose-400 mb-6 tracking-widest uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"></span>
+        SEO Tool
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Robots.txt Generator</h1>
+      <p class="text-zinc-400 text-lg max-w-xl mx-auto">Block AI scrapers, protect admin paths, and declare your sitemap — in seconds.</p>
+    </div>
+
+    <div class="container-page grid lg:grid-cols-[440px_minmax(0,1fr)] gap-12">
+
+      <!-- ─── LEFT: Controls ──────────────────────────────────────────── -->
+      <aside aria-label="Generator controls" class="space-y-6">
+
+        <!-- Quick Presets -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Quick Presets</h2>
+            <div class="grid grid-cols-2 gap-2 mt-3">
+              <button type="button" class="preset-btn btn-secondary" data-preset="wordpress">WordPress site</button>
+              <button type="button" class="preset-btn btn-secondary" data-preset="blog">Blog / Static</button>
+              <button type="button" class="preset-btn btn-secondary" data-preset="block-ai">Block all AI</button>
+              <button type="button" class="preset-btn btn-secondary" data-preset="reset">Clear all</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Bots -->
+        <div class="card">
+          <div class="card-body">
+            <div class="flex items-baseline justify-between">
+              <h2 class="section-title">AI & LLM Crawlers</h2>
+              <button type="button" id="toggle-all-ai" aria-pressed="false" class="text-xs text-rose-600 font-semibold hover:underline">Block all</button>
+            </div>
+            <p class="text-xs text-gray-600 mt-1 mb-3">Each blocked bot gets its own <code class="bg-gray-100 px-1 rounded font-mono">Disallow: /</code> rule.</p>
+            <div id="ai-bots-grid" class="space-y-1.5"></div>
+          </div>
+        </div>
+
+        <!-- SEO Crawlers -->
+        <div class="card">
+          <div class="card-body">
+            <div class="flex items-baseline justify-between">
+              <h2 class="section-title">SEO & Commercial Crawlers</h2>
+              <button type="button" id="toggle-all-seo" aria-pressed="false" class="text-xs text-rose-600 font-semibold hover:underline">Block all</button>
+            </div>
+            <p class="text-xs text-gray-600 mt-1 mb-3">Block paid SEO tools from crawling your content.</p>
+            <div id="seo-bots-grid" class="space-y-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Paths -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Restrict Paths</h2>
+            <p class="text-xs text-gray-600 mt-1 mb-4">Applied to <code class="bg-gray-100 px-1 rounded font-mono">User-agent: *</code></p>
+
+            <p class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">WordPress</p>
+            <div id="wp-paths-list" class="space-y-1.5 mb-4"></div>
+
+            <p class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">General</p>
+            <div id="general-paths-list" class="space-y-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Sitemap & Options -->
+        <div class="card">
+          <div class="card-body space-y-4">
+            <h2 class="section-title">Sitemap & Options</h2>
+            <div>
+              <label for="sitemap-url" class="text-xs text-gray-600">Sitemap URL</label>
+              <input id="sitemap-url" type="url" placeholder="https://yourdomain.com/sitemap.xml" class="form-input mt-1" />
+            </div>
+            <div>
+              <label for="crawl-delay" class="text-xs text-gray-600">Crawl-delay in seconds (optional)</label>
+              <input id="crawl-delay" type="number" min="0" max="60" placeholder="e.g. 10" class="form-input mt-1" />
+              <p class="text-xs text-gray-600 mt-1">Not honoured by all crawlers. Use sparingly.</p>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- ─── RIGHT: Output ───────────────────────────────────────────── -->
+      <div class="space-y-6 sticky top-10 self-start">
+
+        <!-- Output -->
+        <div class="card overflow-hidden">
+          <div class="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
+            <span class="text-sm font-medium text-gray-900 font-mono">robots.txt</span>
+            <div class="flex gap-2">
+              <button type="button" id="btn-reset" class="btn-secondary">Reset</button>
+              <button type="button" id="btn-copy" class="btn-primary">Copy</button>
+            </div>
+          </div>
+          <pre id="output" aria-label="Generated robots.txt content" aria-live="polite" class="p-6 text-xs bg-gray-950 text-gray-100 overflow-x-auto leading-relaxed font-mono whitespace-pre min-h-48"></pre>
+        </div>
+
+        <!-- Notes -->
+        <div class="card">
+          <div class="card-body">
+            <h2 class="section-title">Good to know</h2>
+            <ul class="mt-3 space-y-2.5 text-xs text-gray-600 leading-relaxed">
+              <li><span class="font-bold text-rose-500">robots.txt is advisory</span> — well-behaved bots respect it. Malicious scrapers won't. It is not a security measure.</li>
+              <li><span class="font-semibold text-gray-700">Google-Extended</span> — blocks your content from being used to train Gemini AI, while still allowing normal Google search indexing. Recommended for most sites.</li>
+              <li><span class="font-semibold text-gray-700">CCBot</span> — Common Crawl is the dataset most open-source LLMs (LLaMA, Mistral…) were trained on. Blocking it is now widely recommended.</li>
+              <li><span class="font-semibold text-gray-700">WordPress tip</span> — always pair <code class="bg-gray-100 px-1 rounded">Disallow: /wp-admin/</code> with <code class="bg-gray-100 px-1 rounded">Allow: /wp-admin/admin-ajax.php</code> or front-end AJAX calls will break.</li>
+              <li><span class="font-semibold text-gray-700">Sitemap</span> — declaring it in robots.txt helps search engines discover it faster than waiting for manual submission.</li>
+            </ul>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <p class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">Official documentation</p>
+              <ul class="space-y-1.5 text-xs">
+                <li><a href="https://wordpress.org/documentation/article/search-engine-optimization/#robots-txt-optimization" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:underline font-medium">WordPress: Robots.txt & SEO ↗</a> — official guidance on robots.txt for WordPress sites</li>
+                <li><a href="https://developer.wordpress.org/advanced-administration/security/hardening/#securing-wp-admin" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:underline font-medium">WordPress: Hardening — Securing wp-admin ↗</a> — why admin-ajax.php must stay accessible</li>
+                <li><a href="https://developers.google.com/search/docs/crawling-indexing/robots/intro" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:underline font-medium">Google: robots.txt introduction ↗</a> — how Google interprets the spec</li>
+                <li><a href="https://www.rfc-editor.org/rfc/rfc9309" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:underline font-medium">RFC 9309 — Robots Exclusion Protocol ↗</a> — the formal specification</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" role="status" aria-live="polite" aria-atomic="true" class="fixed bottom-6 right-6 z-50 bg-zinc-800 border border-zinc-600 text-zinc-100 text-sm px-4 py-2 rounded shadow-lg opacity-0 translate-y-4 transition-all duration-200 pointer-events-none">
+    Copied!
+  </div>
+
+  <CTASection
+    title="Get in Touch"
+    content="send an email to tquinonero.web@gmail.com"
+  />
+
+  <script type="module">
+    // ── Data ──────────────────────────────────────────────────────────────────
+    const AI_BOTS = [
+      { ua: 'GPTBot',            desc: 'OpenAI — training'         },
+      { ua: 'ChatGPT-User',      desc: 'OpenAI — browsing'         },
+      { ua: 'OAI-SearchBot',     desc: 'OpenAI — search'           },
+      { ua: 'Claude-Web',        desc: 'Anthropic'                 },
+      { ua: 'anthropic-ai',      desc: 'Anthropic'                 },
+      { ua: 'CCBot',             desc: 'Common Crawl / LLM data'   },
+      { ua: 'Google-Extended',   desc: 'Google — AI training only' },
+      { ua: 'Applebot-Extended', desc: 'Apple AI'                  },
+      { ua: 'PerplexityBot',     desc: 'Perplexity'                },
+      { ua: 'Bytespider',        desc: 'ByteDance / TikTok'        },
+      { ua: 'Amazonbot',         desc: 'Amazon AI'                 },
+      { ua: 'FacebookBot',       desc: 'Meta AI'                   },
+      { ua: 'Diffbot',           desc: 'Diffbot'                   },
+      { ua: 'omgili',            desc: 'Omgili'                    },
+      { ua: 'PetalBot',          desc: 'Huawei'                    },
+      { ua: 'YouBot',            desc: 'You.com'                   },
+    ];
+
+    const SEO_BOTS = [
+      { ua: 'AhrefsBot',     desc: 'Ahrefs'      },
+      { ua: 'SemrushBot',    desc: 'Semrush'     },
+      { ua: 'MJ12bot',       desc: 'Majestic'    },
+      { ua: 'DotBot',        desc: 'Moz'         },
+      { ua: 'BLEXBot',       desc: 'WebMeUp'     },
+      { ua: 'DataForSeoBot', desc: 'DataForSEO'  },
+      { ua: 'Baiduspider',   desc: 'Baidu'       },
+      { ua: 'YandexBot',     desc: 'Yandex'      },
+    ];
+
+    const WP_PATHS = [
+      { path: '/wp-admin/',    label: '/wp-admin/'            },
+      { path: '/wp-login.php', label: '/wp-login.php'         },
+      { path: '/wp-includes/', label: '/wp-includes/'         },
+      { path: '/xmlrpc.php',   label: '/xmlrpc.php'           },
+      { path: '/wp-json/',     label: '/wp-json/'             },
+      { path: '/?s=',          label: '/?s=  (search)'        },
+      { path: '/trackback/',   label: '/trackback/'           },
+      { path: '/feed/',        label: '/feed/'                },
+    ];
+
+    const GENERAL_PATHS = [
+      { path: '/admin/',   label: '/admin/'   },
+      { path: '/login/',   label: '/login/'   },
+      { path: '/private/', label: '/private/' },
+      { path: '/cgi-bin/', label: '/cgi-bin/' },
+      { path: '/.git/',    label: '/.git/'    },
+      { path: '/tmp/',     label: '/tmp/'     },
+      { path: '/search/',  label: '/search/'  },
+    ];
+
+    // ── State ─────────────────────────────────────────────────────────────────
+    const state = {
+      blockedBots:     new Set(),
+      disallowedPaths: new Set(),
+      sitemapUrl:      '',
+      crawlDelay:      '',
+    };
+
+    // ── Generate ──────────────────────────────────────────────────────────────
+    function generate() {
+      const lines = ['# Generated by tquinonero.dev — Robots.txt Generator'];
+
+      if (state.blockedBots.size > 0) {
+        lines.push('');
+        lines.push('# ── Blocked Crawlers ──────────────────────────────────────────────');
+        for (const ua of state.blockedBots) {
+          lines.push(`User-agent: ${ua}`);
+          lines.push('Disallow: /');
+          lines.push('');
+        }
+      }
+
+      lines.push('# ── General Rules ─────────────────────────────────────────────────');
+      lines.push('User-agent: *');
+
+      if (state.disallowedPaths.size === 0) {
+        lines.push('Disallow:');
+      } else {
+        for (const p of state.disallowedPaths) {
+          lines.push(`Disallow: ${p}`);
+          if (p === '/wp-admin/') {
+            lines.push('Allow: /wp-admin/admin-ajax.php');
+          }
+        }
+      }
+
+      if (state.crawlDelay) {
+        lines.push(`Crawl-delay: ${state.crawlDelay}`);
+      }
+
+      if (state.sitemapUrl.trim()) {
+        lines.push('');
+        lines.push(`Sitemap: ${state.sitemapUrl.trim()}`);
+      }
+
+      return lines.join('\n');
+    }
+
+    function refresh() {
+      document.getElementById('output').textContent = generate();
+    }
+
+    // ── Checkbox row builder ──────────────────────────────────────────────────
+    function makeCheckboxRow(id, label, desc, checked, onChange) {
+      const div = document.createElement('div');
+      div.className = 'checkbox-row';
+      div.innerHTML = `
+        <input type="checkbox" id="${id}" class="checkbox-input" ${checked ? 'checked' : ''} />
+        <label for="${id}" class="checkbox-label">
+          <span class="checkbox-ua">${label}</span>
+          ${desc ? `<span class="checkbox-desc">${desc}</span>` : ''}
+        </label>`;
+      div.querySelector('input').addEventListener('change', e => onChange(e.target.checked));
+      return div;
+    }
+
+    function safeId(str) {
+      return str.replace(/[^a-zA-Z0-9]/g, '-');
+    }
+
+    function renderBotGrid(containerId, bots) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      bots.forEach(bot => {
+        container.appendChild(makeCheckboxRow(
+          `bot-${safeId(bot.ua)}`, bot.ua, bot.desc,
+          state.blockedBots.has(bot.ua),
+          checked => { checked ? state.blockedBots.add(bot.ua) : state.blockedBots.delete(bot.ua); refresh(); }
+        ));
+      });
+    }
+
+    function renderPathList(containerId, paths) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      paths.forEach(p => {
+        container.appendChild(makeCheckboxRow(
+          `path-${safeId(p.path)}`, p.label, '',
+          state.disallowedPaths.has(p.path),
+          checked => { checked ? state.disallowedPaths.add(p.path) : state.disallowedPaths.delete(p.path); refresh(); }
+        ));
+      });
+    }
+
+    function rerenderAll() {
+      renderBotGrid('ai-bots-grid',       AI_BOTS);
+      renderBotGrid('seo-bots-grid',      SEO_BOTS);
+      renderPathList('wp-paths-list',      WP_PATHS);
+      renderPathList('general-paths-list', GENERAL_PATHS);
+      updateToggleLabel('toggle-all-ai',  AI_BOTS);
+      updateToggleLabel('toggle-all-seo', SEO_BOTS);
+      refresh();
+    }
+
+    // ── Presets ───────────────────────────────────────────────────────────────
+    const PRESETS = {
+      wordpress: {
+        bots:  [],
+        paths: ['/wp-admin/', '/wp-login.php', '/wp-includes/', '/xmlrpc.php', '/?s='],
+      },
+      blog: {
+        bots:  [],
+        paths: ['/admin/', '/login/', '/private/'],
+      },
+      'block-ai': {
+        bots:  AI_BOTS.map(b => b.ua),
+        paths: [],
+      },
+      reset: { bots: [], paths: [] },
+    };
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = PRESETS[btn.dataset.preset];
+        if (!p) return;
+        state.blockedBots.clear();
+        state.disallowedPaths.clear();
+        p.bots.forEach(ua => state.blockedBots.add(ua));
+        p.paths.forEach(path => state.disallowedPaths.add(path));
+        rerenderAll();
+      });
+    });
+
+    // ── Toggle all ────────────────────────────────────────────────────────────
+    function updateToggleLabel(btnId, bots) {
+      const allOn = bots.every(b => state.blockedBots.has(b.ua));
+      const btn = document.getElementById(btnId);
+      btn.textContent = allOn ? 'Unblock all' : 'Block all';
+      btn.setAttribute('aria-pressed', String(allOn));
+    }
+
+    document.getElementById('toggle-all-ai').addEventListener('click', () => {
+      const allOn = AI_BOTS.every(b => state.blockedBots.has(b.ua));
+      if (allOn) AI_BOTS.forEach(b => state.blockedBots.delete(b.ua));
+      else       AI_BOTS.forEach(b => state.blockedBots.add(b.ua));
+      rerenderAll();
+    });
+
+    document.getElementById('toggle-all-seo').addEventListener('click', () => {
+      const allOn = SEO_BOTS.every(b => state.blockedBots.has(b.ua));
+      if (allOn) SEO_BOTS.forEach(b => state.blockedBots.delete(b.ua));
+      else       SEO_BOTS.forEach(b => state.blockedBots.add(b.ua));
+      rerenderAll();
+    });
+
+    // ── Sitemap & delay ───────────────────────────────────────────────────────
+    document.getElementById('sitemap-url').addEventListener('input', e => {
+      state.sitemapUrl = e.target.value;
+      refresh();
+    });
+
+    document.getElementById('crawl-delay').addEventListener('input', e => {
+      state.crawlDelay = e.target.value;
+      refresh();
+    });
+
+    // ── Reset ─────────────────────────────────────────────────────────────────
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      state.blockedBots.clear();
+      state.disallowedPaths.clear();
+      state.sitemapUrl = '';
+      state.crawlDelay = '';
+      document.getElementById('sitemap-url').value = '';
+      document.getElementById('crawl-delay').value = '';
+      rerenderAll();
+    });
+
+    // ── Copy ──────────────────────────────────────────────────────────────────
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(generate()).then(() => {
+        const btn   = document.getElementById('btn-copy');
+        const toast = document.getElementById('toast');
+        const orig  = btn.textContent;
+        btn.textContent = 'Copied!';
+        toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          btn.textContent = orig;
+          toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+          toast.classList.remove('opacity-100', 'translate-y-0');
+        }, 2000);
+      });
+    });
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    rerenderAll();
+  </script>
+
+  <style is:global>
+    .container-page {
+      max-width: 80rem;
+      margin-inline: auto;
+      padding-inline: 1rem;
+    }
+
+    .card { background: white; border: 1px solid #e5e7eb; border-radius: .5rem; }
+    .card-body { padding: 1rem; }
+    .section-title {
+      text-transform: uppercase; font-size: .65rem; font-weight: 600;
+      letter-spacing: .1em; color: #e11d48;
+    }
+
+    .form-input {
+      width: 100%; border: 1px solid #d1d5db; border-radius: .375rem;
+      padding: .5rem .75rem; font-size: .875rem; outline: none;
+      transition: border-color .2s; color: #111827; background: white;
+    }
+    .form-input:focus { border-color: #e11d48; }
+
+    .btn-primary {
+      border: 1px solid #e11d48; background: #e11d48; color: white;
+      padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem;
+      font-weight: 500; cursor: pointer;
+    }
+    .btn-primary:hover { background: #be123c; border-color: #be123c; }
+
+    .btn-secondary {
+      border: 1px solid #d1d5db; background: white; color: #374151;
+      padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem;
+      font-weight: 500; cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: #e11d48; color: #e11d48; }
+
+    /* Checkbox rows */
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .checkbox-input {
+      width: 1rem; height: 1rem;
+      accent-color: #e11d48;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .checkbox-label {
+      display: flex;
+      flex-direction: column;
+      gap: .05rem;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .checkbox-ua {
+      font-size: .75rem; font-family: monospace;
+      font-weight: 600; color: #111827;
+    }
+    .checkbox-desc {
+      font-size: .65rem; color: #4b5563;
+    }
+  </style>
+</Layout>
