@@ -12,62 +12,68 @@ const stats = [
 ---
 		<Layout>
 			<Hero 
-				title="Welcome to my Portfolio"
-				subtitle="EVERYTHING WEB"
+				title="WordPress & Astro Web Developer"
+				subtitle="Maintenance plans, security fixes, WordPress & Astro sites, and free tools for developers."
 			/>
 
-			<div class="mt-4 mb-4 p-4 w-4/5 mx-auto">
-			<section class="py-8 bg-grey-100">
-				<h2 class="text-3xl font-bold mb-6 text-center">My Services</h2>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-					<Card 
-						title="Maintenance for WordPress Sites" 
-						subtitle="Maintenance Plans for WordPress" 
-						content="Forget about updates, backups, and security. My WordPress maintenance plans ensure your site runs smoothly, stays secure, and performs at its best. Focus on your content while I handle the technical details."
-					/>
-					<Card 
-						title="Fix Hacked WordPress" 
-						subtitle="WordPress Security Fixes" 
-						content="If your WordPress site has been compromised, I can help you clean it up and secure it against future attacks."
-					/>
-					<Card 
-						title="Web Consulting" 
-						subtitle="Web Consulting Services" 
-						content="Web consulting focused on building reliable, scalable, and standards-compliant solutions. My work is grounded in web core principles, long-term maintainability, and performance-driven architecture."
-					/>
-				</div>
-
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-					<Card 
-						title="Admin Lessons for WordPress Beginners" 
-						subtitle="Get the Most Out of WordPress, One Lesson at a Time" 
-						content="WordPress lessons focused on practical, real-world use. Sessions cover core concepts, Gutenberg, e-commerce, and structured workflows to help you build maintainable projects with confidence."
-					/>
-					<Card 
-						title="Ecommerce Development" 
-						subtitle="Ecommerce Development Services" 
-						content="I build custom e-commerce solutions tailored to your business needs. From product catalogs to payment integrations, I ensure seamless shopping experiences that drive conversions."
-					/>
-					<Card 
-						title="Membership Sites" 
-						subtitle="Membership Site Development Services" 
-						content="I build custom membership sites that provide secure, scalable access to exclusive content and services. From user registration to subscription management, I ensure seamless experiences for your members."
-					/>
-
+			<!-- Services — full width with dark background -->
+			<section class="py-14 bg-gray-950">
+				<div class="max-w-7xl mx-auto px-6">
+					<h2 class="text-3xl font-bold mb-10 text-center text-white">My Services</h2>
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+						<Card 
+							title="Maintenance for WordPress Sites" 
+							subtitle="Maintenance Plans for WordPress" 
+							content="Forget about updates, backups, and security. My WordPress maintenance plans ensure your site runs smoothly, stays secure, and performs at its best. Focus on your content while I handle the technical details."
+						/>
+						<Card 
+							title="Fix Hacked WordPress" 
+							subtitle="WordPress Security Fixes" 
+							content="If your WordPress site has been compromised, I can help you clean it up and secure it against future attacks."
+						/>
+						<Card 
+							title="Web Consulting" 
+							subtitle="Web Consulting Services" 
+							content="Web consulting focused on building reliable, scalable, and standards-compliant solutions. My work is grounded in web core principles, long-term maintainability, and performance-driven architecture."
+						/>
+					</div>
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+						<Card 
+							title="Admin Lessons for WordPress Beginners" 
+							subtitle="Get the Most Out of WordPress, One Lesson at a Time" 
+							content="WordPress lessons focused on practical, real-world use. Sessions cover core concepts, Gutenberg, e-commerce, and structured workflows to help you build maintainable projects with confidence."
+						/>
+						<Card 
+							title="Ecommerce Development" 
+							subtitle="Ecommerce Development Services" 
+							content="I build custom e-commerce solutions tailored to your business needs. From product catalogs to payment integrations, I ensure seamless shopping experiences that drive conversions."
+						/>
+						<Card 
+							title="Membership Sites" 
+							subtitle="Membership Site Development Services" 
+							content="I build custom membership sites that provide secure, scalable access to exclusive content and services. From user registration to subscription management, I ensure seamless experiences for your members."
+						/>
+					</div>
 				</div>
 			</section>
 
-			<section class="py-8 bg-white">
-				<h2 class="text-3xl font-bold mb-6 text-center">Things I have done</h2>
-				<StatsCounter stats={stats} />	
+			<!-- Stats -->
+			<section class="py-14 bg-gray-950">
+				<div class="max-w-5xl mx-auto px-6">
+					<h2 class="text-3xl font-bold mb-10 text-center text-white">Things I Have Done</h2>
+					<StatsCounter stats={stats} />
+				</div>
 			</section>
-			
-			<TextSection 
-				heading="Code Snippets for WordPress."
-				paragraph="Discover a collection of practical code snippets for development in WordPress. From custom functions to performance optimizations, these snippets are designed to help you build better WordPress sites with ease."
-			/>
-			
-			</div>
+
+			<!-- Code Snippets callout -->
+			<section class="bg-gray-950">
+				<div class="max-w-5xl mx-auto px-6">
+					<TextSection 
+						heading="Code Snippets for WordPress."
+						paragraph="Discover a collection of practical code snippets for development in WordPress. From custom functions to performance optimizations, these snippets are designed to help you build better WordPress sites with ease."
+					/>
+				</div>
+			</section>
 
 			<CTASection 
 				title="Get in Touch"

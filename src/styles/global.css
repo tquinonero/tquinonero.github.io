@@ -2,28 +2,32 @@
 @plugin "@tailwindcss/typography";
 
 /* View Transitions - Page Navigation */
-@keyframes fadeIn {
+@keyframes pageFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes pageFadeIn {
   from {
     opacity: 0;
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-::view-transition-old(root) {
-  animation: fadeOut 0.3s ease-in-out forwards;
-}
-
+/* Don't animate the root (avoids moving the navbar) */
+::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: fadeIn 0.3s ease-in-out forwards;
+  animation: none;
+}
+
+::view-transition-old(page-content) {
+  animation: pageFadeOut 0.15s ease-out forwards;
+}
+
+::view-transition-new(page-content) {
+  animation: pageFadeIn 0.25s ease-out forwards;
 }

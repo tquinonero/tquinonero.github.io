@@ -26,7 +26,9 @@ const currentPage = getPageName(Astro.url.pathname);
 	</head>
 
     <body>
-        <Navbar currentPage={currentPage} />
-        <slot />
+        <Navbar transition:persist currentPage={currentPage} />
+        <main transition:animate="none" style="view-transition-name: page-content;">
+          <slot />
+        </main>
     </body>
 </html> 

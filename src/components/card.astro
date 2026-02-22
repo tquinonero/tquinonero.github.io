@@ -1,7 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import maintenance from '../maintenance.jpg';
-
 interface Props {
   title: string;
   subtitle: string;
@@ -11,14 +8,14 @@ interface Props {
 const { title, subtitle, content } = Astro.props;
 ---
 
-<div class="bg-white border border-black shadow-lg p-6 rounded-lg relative overflow-hidden group">
-  <!-- Background Image -->
-  <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-15 group-hover:opacity-10 transition-opacity duration-300" style={`background-image: url(${maintenance.src}); background-size: cover; background-position: center;`}></div>
-  
+<div class="relative bg-gray-900 border border-gray-700 border-l-4 border-l-blue-500 rounded-lg p-6 overflow-hidden group transition-all duration-300 hover:border-gray-600 hover:shadow-xl hover:-translate-y-0.5">
+  <!-- Subtle radial glow texture -->
+  <div class="absolute -top-8 -left-8 w-36 h-36 rounded-full bg-blue-600/10 blur-2xl pointer-events-none group-hover:bg-blue-500/20 transition-opacity duration-300"></div>
+
   <!-- Content -->
   <div class="relative z-10">
-    <h2 class="text-black text-2xl font-bold mb-2">{title}</h2>
-    <h3 class="text-black text-lg font-semibold mb-4">{subtitle}</h3>
-    <p class="text-black">{content}</p>
+    <h2 class="text-white text-xl font-bold mb-1">{title}</h2>
+    <h3 class="text-blue-400 text-sm font-semibold uppercase tracking-wide mb-3">{subtitle}</h3>
+    <p class="text-gray-400 text-sm leading-relaxed">{content}</p>
   </div>
 </div>
