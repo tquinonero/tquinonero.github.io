@@ -12,7 +12,7 @@ interface Props {
 const { stats } = Astro.props as Props;
 ---
 
-<div class="grid grid-cols-3 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
   {stats.map((stat: Stat, index: number) => (
     <div class="text-center">
       <span

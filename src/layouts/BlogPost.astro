@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './base.astro';
 import Hero from '../components/hero.astro';
-import CtaSection from '../components/ctaSection.astro';
 import { SITE_CONFIG } from '../config';
 
 interface Props {
@@ -52,8 +51,4 @@ const formattedDate = new Date(date).toLocaleDateString('en-GB', {
       <slot />
     </article>
   </main>
-  <CtaSection
-    title="Enjoyed the post? Let's Connect!"
-    content="If you found this post helpful, consider subscribing to my newsletter for more insights and tips on WordPress development. Stay updated with the latest trends and best practices in the web development world."
-  />
 </BaseLayout>

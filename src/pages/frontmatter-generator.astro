@@ -1,7 +1,6 @@
 ---
 // src/pages/tools/frontmatter.astro
 import Layout from '../layouts/base.astro';
-import CTASection from '../components/ctaSection.astro';
 
 const pageTitle = "Frontmatter Generator";
 ---
@@ -412,10 +411,6 @@ const pageTitle = "Frontmatter Generator";
     getInput('f-pubdate').value = new Date().toISOString().split('T')[0];
     generate();
   </script>
-  <CTASection 
-				title="Get in Touch"
-				content="send an email to tquinonero.web@gmail.com"
-			/>
 
   <style>
     /* Layout helpers */

@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/base.astro';
 import Hero from '../../components/hero.astro';
-import CTASection from '../../components/ctaSection.astro';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('posts');
@@ -66,8 +65,4 @@ const { posts } = Astro.props;
     </div>
   </section>
 
-  <CTASection 
-    title="Have a project in mind?"
-    content="send an email to tquinonero.web@gmail.com"
-  />
 </Layout>
