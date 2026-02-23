@@ -26,7 +26,7 @@ const pageTitle = "Frontmatter Generator";
         <div class="card">
           <div class="card-body">
             <h2 class="section-title">Collection type</h2>
-            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-2">
+            <div class="grid grid-cols-3 gap-2 mt-2">
               <button data-type="blog" class="type-btn btn-secondary active">blog</button>
               <button data-type="docs" class="type-btn btn-secondary">docs</button>
               <button data-type="portfolio" class="type-btn btn-secondary">portfolio</button>
@@ -428,8 +428,9 @@ const pageTitle = "Frontmatter Generator";
     .tag { background: #bfdbfe; border: 1px solid #93c5fd; padding: 2px 6px; border-radius: .25rem; font-size: .75rem; display: inline-flex; align-items: center; gap: 2px; }
     .btn-primary { border: 1px solid #2563eb; background: #2563eb; color: white; padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem; cursor: pointer; }
     .btn-primary:hover { background: #1e40af; }
-    .btn-secondary { border: 1px solid #d1d5db; background: white; color: #374151; padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem; cursor: pointer; }
+    .btn-secondary { border: 1px solid #d1d5db; background: white; color: #374151; padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem; cursor: pointer; text-align: center; width: 100%; }
     .btn-secondary:hover { border-color: #2563eb; color: #2563eb; }
+    .btn-secondary.active { background: #111827; color: white; border-color: #111827; }
     .tag-bare { border: none; outline: none; background: transparent; font-size: .875rem; min-width: 10rem; color: #111827; }
   </style>
 </Layout>
