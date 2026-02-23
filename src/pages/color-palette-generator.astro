@@ -51,8 +51,8 @@ import CTASection from '../components/ctaSection.astro';
 
             <!-- Action Buttons -->
             <div class="space-y-2">
-              <button id="generateBtn" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
-                🎨 Generate Palette
+              <button id="randomizeBtn" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                🎲 Randomize All
               </button>
               <button id="lockAllBtn" class="w-full bg-zinc-700 hover:bg-zinc-600 text-zinc-100 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
                 🔒 Lock All
@@ -89,7 +89,7 @@ import CTASection from '../components/ctaSection.astro';
 
         <!-- Right: Palette Display -->
         <div class="lg:col-span-2">
-          <div id="paletteContainer" class="space-y-3">
+          <div id="paletteContainer" class="flex gap-3" style="height:420px">
             <!-- Color cards will be generated here -->
           </div>
         </div>
@@ -99,31 +99,135 @@ import CTASection from '../components/ctaSection.astro';
       <div id="toast" class="fixed bottom-6 right-6 z-50 bg-zinc-800 text-zinc-100 px-6 py-3 rounded-lg shadow-lg opacity-0 translate-y-4 transition-all duration-200 pointer-events-none border border-zinc-700">
         Copied to clipboard!
       </div>
+
+      <!-- How to use -->
+      <div class="mt-16 border-t border-zinc-800 pt-12">
+        <h2 class="text-2xl font-bold tracking-tight mb-8 text-zinc-100">How to use this tool</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-2">
+            <div class="text-violet-400 text-xl mb-3">🎨</div>
+            <h3 class="font-semibold text-zinc-100">Pick a base color</h3>
+            <p class="text-sm text-zinc-400">Use the color picker or type a hex code directly. This is the starting point — all other colors in the palette are derived from it. Click 🎲 to pick a random base color instantly.</p>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-2">
+            <div class="text-violet-400 text-xl mb-3">⚖️</div>
+            <h3 class="font-semibold text-zinc-100">Choose a harmony mode</h3>
+            <p class="text-sm text-zinc-400">The harmony mode controls how the other colors are chosen relative to the base:</p>
+            <ul class="text-sm text-zinc-400 space-y-1 mt-2">
+              <li><span class="text-zinc-200 font-medium">Complementary</span> — opposite hues, high contrast</li>
+              <li><span class="text-zinc-200 font-medium">Analogous</span> — neighboring hues, cohesive feel</li>
+              <li><span class="text-zinc-200 font-medium">Triadic</span> — three evenly spaced hues, vibrant</li>
+              <li><span class="text-zinc-200 font-medium">Monochromatic</span> — same hue, varying lightness</li>
+              <li><span class="text-zinc-200 font-medium">Split-complementary</span> — softer version of complementary</li>
+              <li><span class="text-zinc-200 font-medium">Random</span> — well-spread hues, good for exploration</li>
+            </ul>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-2">
+            <div class="text-violet-400 text-xl mb-3">🔒</div>
+            <h3 class="font-semibold text-zinc-100">Lock colors you like</h3>
+            <p class="text-sm text-zinc-400">Hover a color card and click the lock icon to freeze that color. Locked colors are kept when you change the base color or harmony mode — useful for iterating around one or two colors you already like. Use <em>Lock All</em> / <em>Unlock All</em> for bulk control. <em>Randomize All</em> clears all locks and picks a fresh random base color.</p>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-2">
+            <div class="text-violet-400 text-xl mb-3">📋</div>
+            <h3 class="font-semibold text-zinc-100">Copy individual colors</h3>
+            <p class="text-sm text-zinc-400">Click anywhere on a color swatch or press <em>Copy Hex</em> on a card to copy that color's hex code to your clipboard.</p>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-2">
+            <div class="text-violet-400 text-xl mb-3">📤</div>
+            <h3 class="font-semibold text-zinc-100">Export the full palette</h3>
+            <p class="text-sm text-zinc-400">Use the export buttons to copy the entire palette in your preferred format:</p>
+            <ul class="text-sm text-zinc-400 space-y-1 mt-2">
+              <li><span class="text-zinc-200 font-medium">CSS Variables</span> — ready to paste into any stylesheet</li>
+              <li><span class="text-zinc-200 font-medium">Tailwind Config</span> — drop into your <code class="text-violet-400">tailwind.config</code></li>
+              <li><span class="text-zinc-200 font-medium">JSON</span> — for design tokens or custom tooling</li>
+            </ul>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-2">
+            <div class="text-violet-400 text-xl mb-3">✓</div>
+            <h3 class="font-semibold text-zinc-100">Check contrast</h3>
+            <p class="text-sm text-zinc-400">Each color card shows its contrast ratio against both white and black text. A ratio of <span class="text-zinc-200 font-medium">4.5:1 or higher</span> passes the WCAG AA standard for readable body text — the minimum required for accessible interfaces.</p>
+          </div>
+
+        </div>
+
+        <div class="mt-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+          <p class="text-sm text-zinc-400">
+            <span class="text-violet-400 font-semibold">Under the hood:</span> colors are generated in the <span class="text-zinc-200">OKLCH</span> color space rather than the more common HSL. OKLCH is perceptually uniform — colors with the same lightness value genuinely look the same brightness to the human eye, regardless of hue. This produces more balanced, professional-looking palettes compared to tools that work in HSL.
+          </p>
+        </div>
+      </div>
     </div>
   </main>
 
   <style>
     @reference "../styles/global.css";
 
-    .color-card {
-      @apply bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow;
+    :global(.color-card) {
+      display: flex; flex-direction: column; flex: 1; min-width: 0;
+      height: 100%;
+      border-radius: .875rem; overflow: hidden;
+      border: 1px solid #3f3f46;
+      transition: box-shadow .2s, transform .15s;
     }
-    
-    .color-swatch {
-      @apply h-32 w-full cursor-pointer transition-transform hover:scale-105;
+    :global(.color-card:hover) { box-shadow: 0 8px 24px rgba(0,0,0,.5); transform: translateY(-2px); }
+
+    :global(.color-swatch) {
+      height: 150px; width: 100%; cursor: pointer; flex-shrink: 0;
+      transition: filter .2s;
+    }
+    :global(.color-swatch:hover) { filter: brightness(1.08); }
+
+    :global(.color-info) {
+      padding: .75rem; display: flex; flex-direction: column; gap: .6rem;
+      background: #18181b; border-top: 1px solid #3f3f46;
     }
 
-    .color-info {
-      @apply p-4 space-y-2;
+    :global(.color-name) {
+      font-size: .6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: #71717a;
     }
 
-    .color-value {
-      @apply font-mono text-sm text-slate-600;
+    :global(.color-hex-input) {
+      width: 100%; font-family: monospace; font-size: .85rem; font-weight: 700;
+      color: #f4f4f5; background: #27272a; border: 1px solid #3f3f46;
+      border-radius: .375rem; padding: 5px 8px; outline: none; transition: border-color .15s;
     }
+    :global(.color-hex-input:focus) { border-color: #7c3aed; background: #1c1c1f; }
 
-    .lock-btn {
-      @apply absolute top-2 right-2 p-2 bg-white/80 hover:bg-white rounded-lg transition-all opacity-0 group-hover:opacity-100;
+    :global(.lock-btn) {
+      position: absolute; top: .5rem; right: .5rem;
+      padding: .35rem .45rem; background: rgba(0,0,0,.5);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: .5rem; font-size: .95rem; cursor: pointer;
+      transition: background .15s; line-height: 1;
     }
+    :global(.lock-btn:hover) { background: rgba(0,0,0,.75); }
+
+    :global(.copy-btn) {
+      width: 100%; font-size: .7rem; font-weight: 600; padding: 5px 0;
+      border-radius: .375rem; border: 1px solid #3f3f46;
+      background: #27272a; color: #a1a1aa; cursor: pointer; transition: all .15s;
+    }
+    :global(.copy-btn:hover) { background: #3f3f46; color: #f4f4f5; }
+
+    :global(.contrast-block) { display: flex; flex-direction: column; gap: .25rem; }
+    :global(.contrast-title) { font-size: .55rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: #71717a; margin-bottom: .1rem; }
+    :global(.contrast-row)   { display: flex; flex-direction: column; gap: .15rem; }
+    :global(.contrast-label) { font-size: .6rem; font-family: monospace; padding: 2px 4px;
+      border-radius: .25rem; white-space: nowrap; }
+    :global(.contrast-badge) { font-size: .58rem; font-weight: 700; padding: 1px 5px;
+      border-radius: .25rem; letter-spacing: .03em; align-self: flex-start; }
+    :global(.contrast-hint)  { font-size: .55rem; color: #71717a; margin-top: .1rem; }
+    :global(.badge-pass) { background: #14532d; color: #86efac; border: 1px solid #166534; }
+    :global(.badge-fail) { background: #450a0a; color: #fca5a5; border: 1px solid #7f1d1d; }
   </style>
 
   <CTASection
@@ -133,46 +237,74 @@ import CTASection from '../components/ctaSection.astro';
 </BaseLayout>
 
 <script is:inline>
-  // Color utility functions
-  function hexToHSL(hex) {
-    let r = parseInt(hex.slice(1, 3), 16) / 255;
-    let g = parseInt(hex.slice(3, 5), 16) / 255;
-    let b = parseInt(hex.slice(5, 7), 16) / 255;
-
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    let h = 0, s = 0, l = (max + min) / 2;
-
-    if (max === min) {
-      h = s = 0;
-    } else {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
-      }
-      h /= 6;
-    }
-
-    return [h * 360, s * 100, l * 100];
+  // ── OKLCH color pipeline ───────────────────────────────────────────────────
+  // Converts hex → linear sRGB (gamma expansion)
+  function hexToLinearRGB(hex) {
+    return [hex.slice(1,3), hex.slice(3,5), hex.slice(5,7)]
+      .map(c => {
+        const v = parseInt(c, 16) / 255;
+        return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+      });
   }
 
-  function hslToHex(h, s, l) {
-    s /= 100;
-    l /= 100;
-    const k = n => (n + h / 30) % 12;
-    const a = s * Math.min(l, 1 - l);
-    const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-    return "#" + [f(0), f(8), f(4)].map(x => {
-      const hex = Math.round(255 * x).toString(16);
-      return hex.length === 1 ? "0" + hex : hex;
-    }).join("").toUpperCase();
+  // Linear sRGB → Oklab  (Björn Ottosson's matrices)
+  function linearRGBToOklab(r, g, b) {
+    const l = Math.cbrt(0.4122214708*r + 0.5363325363*g + 0.0514459929*b);
+    const m = Math.cbrt(0.2119034982*r + 0.6806995451*g + 0.1073969566*b);
+    const s = Math.cbrt(0.0883024619*r + 0.2817188376*g + 0.6299787005*b);
+    return [
+      0.2104542553*l + 0.7936177850*m - 0.0040720468*s,
+      1.9779984951*l - 2.4285922050*m + 0.4505937099*s,
+      0.0259040371*l + 0.7827717662*m - 0.8086757660*s,
+    ];
+  }
+
+  // Oklab → OKLCH  (L 0-1, C ≥ 0, H 0-360°)
+  function oklabToOKLCH(L, a, b) {
+    return [L, Math.sqrt(a*a + b*b), ((Math.atan2(b, a) * 180 / Math.PI) + 360) % 360];
+  }
+
+  // OKLCH → Oklab
+  function oklchToOklab(L, C, H) {
+    const h = H * Math.PI / 180;
+    return [L, C * Math.cos(h), C * Math.sin(h)];
+  }
+
+  // Oklab → linear sRGB
+  function oklabToLinearRGB(L, a, b) {
+    const l = (L + 0.3963377774*a + 0.2158037573*b) ** 3;
+    const m = (L - 0.1055613458*a - 0.0638541728*b) ** 3;
+    const s = (L - 0.0894841775*a - 1.2914855480*b) ** 3;
+    return [
+      +4.0767416621*l - 3.3077115913*m + 0.2309699292*s,
+      -1.2684380046*l + 2.6097574011*m - 0.3413193965*s,
+      -0.0041960863*l - 0.7034186147*m + 1.7076147010*s,
+    ];
+  }
+
+  // Linear → sRGB (gamma compression + clamp to [0,1])
+  function linearToSRGB(c) {
+    c = Math.max(0, Math.min(1, c));
+    return c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1/2.4) - 0.055;
+  }
+
+  // Public: hex → [L, C, H]
+  function hexToOKLCH(hex) {
+    const [r, g, b] = hexToLinearRGB(hex);
+    const [L, a, bb] = linearRGBToOklab(r, g, b);
+    return oklabToOKLCH(L, a, bb);
+  }
+
+  // Public: [L, C, H] → hex  (gamut-clamped)
+  function oklchToHex(L, C, H) {
+    const [labL, a, b] = oklchToOklab(L, C, H);
+    const [r, g, bl] = oklabToLinearRGB(labL, a, b);
+    const toHex = c => Math.round(linearToSRGB(c) * 255).toString(16).padStart(2, "0");
+    return ("#" + toHex(r) + toHex(g) + toHex(bl)).toUpperCase();
   }
 
   function randomHex() {
-    return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0").toUpperCase();
+    return "#" + Math.floor(Math.random() * 16777216).toString(16).padStart(6, "0").toUpperCase();
   }
 
   // State
@@ -182,7 +314,7 @@ import CTASection from '../components/ctaSection.astro';
   };
 
   const elements = {
-    generateBtn: document.getElementById("generateBtn"),
+    randomizeBtn: document.getElementById("randomizeBtn"),
     harmonyMode: document.getElementById("harmonyMode"),
     paletteContainer: document.getElementById("paletteContainer"),
     toast: document.getElementById("toast"),
@@ -200,7 +332,7 @@ import CTASection from '../components/ctaSection.astro';
     const mode = elements.harmonyMode?.value || 'random';
     const pickerColor = (elements.baseColorPicker?.value || '#6366f1').toUpperCase();
     const baseColor = state.locked[0] ? (state.colors[0] || pickerColor) : pickerColor;
-    const [h, s, l] = hexToHSL(baseColor);
+    const [L, C, H] = hexToOKLCH(baseColor);
     const newColors = [];
 
     // Generate base color
@@ -209,32 +341,32 @@ import CTASection from '../components/ctaSection.astro';
     if (elements.baseColorPicker) elements.baseColorPicker.value = baseColor;
     if (elements.baseColorHex) elements.baseColorHex.textContent = baseColor;
 
-    // Generate harmony colors
+    // Hue rotation angles per harmony mode
     const angles = {
-      random: [60, 120, 180, 240],
-      complementary: [180, 90, 270, 45],
-      analogous: [30, 60, 330, 300],
-      triadic: [120, 240, 60, 180],
-      monochromatic: [0, 0, 0, 0],
-      "split-complementary": [150, 210, 30, 60],
+      random:                [137.5, 275, 52.5, 190],  // golden-angle inspired
+      complementary:         [180, 150, 210, 60],
+      analogous:             [30, 60, 330, 300],
+      triadic:               [120, 240, 60, 180],
+      monochromatic:         [0, 0, 0, 0],
+      "split-complementary": [150, 210, 30, 330],
     };
 
-    let colorAngles = angles[mode] || angles.random;
+    const colorAngles = angles[mode] || angles.random;
 
     for (let i = 0; i < 4; i++) {
       if (state.locked[i + 1]) {
         newColors.push(state.colors[i + 1] || baseColor);
       } else {
-        let newH = (h + colorAngles[i]) % 360;
-        let newS = s;
-        let newL = l;
+        let newH = (H + colorAngles[i]) % 360;
+        let newC = C;
+        let newL = L;
 
         if (mode === "monochromatic") {
-          newL = l + (i - 1.5) * 15;
-          newL = Math.max(20, Math.min(80, newL));
+          // Vary perceptual lightness; keep hue and chroma
+          newL = Math.max(0.25, Math.min(0.85, L + (i - 1.5) * 0.13));
         }
 
-        newColors.push(hslToHex(newH, newS, newL));
+        newColors.push(oklchToHex(newL, newC, newH));
       }
     }
 
@@ -244,49 +376,109 @@ import CTASection from '../components/ctaSection.astro';
 
   function renderPalette() {
     if (!elements.paletteContainer) return;
-    
-    elements.paletteContainer.innerHTML = state.colors.map((color, idx) => `
+
+    elements.paletteContainer.innerHTML = state.colors.map((color, idx) => {
+      return `
       <div class="color-card group relative">
-        <div class="color-swatch" style="background-color: ${color}" onclick="copyToClipboard('${color}', ${idx})"></div>
-        <button class="lock-btn" onclick="toggleLock(${idx})" title="${state.locked[idx] ? 'Unlock' : 'Lock'}">
+        <div class="color-swatch" style="background-color:${color}" onclick="copyToClipboard('${color}')"
+          title="Click to copy"></div>
+        <button class="lock-btn" onclick="toggleLock(${idx})" title="${state.locked[idx] ? 'Unlock color' : 'Lock color'}">
           ${state.locked[idx] ? '🔒' : '🔓'}
         </button>
         <div class="color-info">
-          <div class="font-semibold text-white">${getColorName(color)}</div>
-          <div class="color-value">${color}</div>
-          <div class="color-value text-zinc-500">${getHSL(color)}</div>
-          <button onclick="copyToClipboard('${color}', ${idx})" class="text-xs bg-zinc-100 hover:bg-zinc-200 text-zinc-700 px-2 py-1 rounded transition-colors mt-2">
-            📋 Copy Hex
-          </button>
+          <div class="color-name">${getColorName(color)}</div>
+          <input class="color-hex-input" value="${color}" maxlength="7"
+            onchange="updateColor(${idx}, this.value)"
+            onclick="this.select()"
+            title="Click to edit hex value" />
+          <div class="contrast-block">${contrastBadgeHTML(color)}</div>
+          <button class="copy-btn" onclick="copyToClipboard('${color}')">Copy hex</button>
         </div>
-      </div>
-    `).join("");
+      </div>`;
+    }).join("");
   }
 
   function getColorName(hex) {
-    const [h, s, l] = hexToHSL(hex);
-    
-    if (s < 10) return "Grayscale";
-    if (l > 80) return "Light";
-    if (l < 20) return "Dark";
+    const [L, C, H] = hexToOKLCH(hex);
+
+    if (C < 0.04) return "Grayscale";
+    if (L > 0.82) return "Light";
+    if (L < 0.22) return "Dark";
     
     const hueNames = {
       0: "Red", 30: "Orange", 60: "Yellow", 120: "Green",
       180: "Cyan", 240: "Blue", 300: "Magenta"
     };
     
-    let closest = Object.keys(hueNames).reduce((a, b) => 
-      Math.abs(h - parseInt(a)) < Math.abs(h - parseInt(b)) ? a : b
+    let closest = Object.keys(hueNames).reduce((a, b) =>
+      Math.abs(H - parseInt(a)) < Math.abs(H - parseInt(b)) ? a : b
     );
     return hueNames[closest] || "Color";
   }
 
-  function getHSL(hex) {
-    const [h, s, l] = hexToHSL(hex);
-    return `hsl(${Math.round(h)}, ${Math.round(s)}%, ${Math.round(l)}%)`;
+  function getOKLCH(hex) {
+    const [L, C, H] = hexToOKLCH(hex);
+    return `oklch(${L.toFixed(2)} ${C.toFixed(3)} ${Math.round(H)}°)`;
   }
 
-  function copyToClipboard(text, idx) {
+  // ── WCAG contrast ─────────────────────────────────────────────────────────
+  // WCAG relative luminance uses the linear RGB values we already compute
+  function wcagLuminance(hex) {
+    const [r, g, b] = hexToLinearRGB(hex);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  function contrastRatio(hex1, hex2) {
+    const l1 = wcagLuminance(hex1);
+    const l2 = wcagLuminance(hex2);
+    const lighter = Math.max(l1, l2);
+    const darker  = Math.min(l1, l2);
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+
+  function contrastBadgeHTML(hex) {
+    const onWhite = contrastRatio(hex, "#FFFFFF");
+    const onBlack = contrastRatio(hex, "#000000");
+
+    const badge = (ratio) => {
+      const pass = ratio >= 4.5;
+      const cls  = pass ? 'badge-pass' : 'badge-fail';
+      const label = pass ? '✓ Pass' : '✗ Fail';
+      return `<span class="contrast-badge ${cls}">${label}</span>`;
+    };
+
+    return `
+      <div class="contrast-title">Text contrast</div>
+      <div class="contrast-row">
+        <span class="contrast-label" style="background:#fff;color:#000;border:1px solid #e5e7eb">
+          A on white &nbsp;<strong>${onWhite.toFixed(2)}:1</strong>
+        </span>
+        ${badge(onWhite)}
+      </div>
+      <div class="contrast-row">
+        <span class="contrast-label" style="background:#000;color:#fff">
+          A on black &nbsp;<strong>${onBlack.toFixed(2)}:1</strong>
+        </span>
+        ${badge(onBlack)}
+      </div>
+      <div class="contrast-hint">Min. 4.5:1 for readable body text</div>`;
+  }
+
+  function updateColor(idx, value) {
+    const hex = value.trim().toUpperCase();
+    if (!/^#[0-9A-F]{6}$/i.test(hex)) {
+      renderPalette(); // revert invalid input
+      return;
+    }
+    state.colors[idx] = hex;
+    if (idx === 0 && elements.baseColorPicker) {
+      elements.baseColorPicker.value = hex;
+      if (elements.baseColorHex) elements.baseColorHex.textContent = hex;
+    }
+    renderPalette();
+  }
+
+  function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
       showToast();
     });
@@ -345,7 +537,13 @@ import CTASection from '../components/ctaSection.astro';
   });
 
   // Event listeners
-  elements.generateBtn?.addEventListener("click", generatePalette);
+  elements.randomizeBtn?.addEventListener("click", () => {
+    state.locked = [false, false, false, false, false];
+    const hex = randomHex();
+    if (elements.baseColorPicker) elements.baseColorPicker.value = hex;
+    if (elements.baseColorHex) elements.baseColorHex.textContent = hex;
+    generatePalette();
+  });
   elements.harmonyMode?.addEventListener("change", generatePalette);
   elements.lockAllBtn?.addEventListener("click", () => {
     state.locked = [true, true, true, true, true];
@@ -362,6 +560,7 @@ import CTASection from '../components/ctaSection.astro';
   // Expose globally for onclick handlers
   window.copyToClipboard = copyToClipboard;
   window.toggleLock = toggleLock;
+  window.updateColor = updateColor;
 
   // Initialize
   generatePalette();
