@@ -7,9 +7,10 @@ import { SITE_CONFIG } from '../config';
 
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = SITE_CONFIG.title } = Astro.props;
+const { title = SITE_CONFIG.title, description = SITE_CONFIG.description } = Astro.props;
 const currentPage = getPageName(Astro.url.pathname);
 ---
 
@@ -19,6 +20,7 @@ const currentPage = getPageName(Astro.url.pathname);
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
 		<meta name="google-site-verification" content="k1WKNTc7JScK2OXSMwhdX-LzEEO7XalnBS2r0E861FE" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
@@ -27,7 +29,7 @@ const currentPage = getPageName(Astro.url.pathname);
 
     <body>
         <Navbar transition:persist currentPage={currentPage} />
-        <main transition:animate="none" style="view-transition-name: page-content;">
+        <main transition:animate="fade">
           <slot />
         </main>
     </body>

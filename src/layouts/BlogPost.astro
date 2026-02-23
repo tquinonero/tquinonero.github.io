@@ -15,14 +15,14 @@ interface Props {
 }
 
 const { frontmatter } = Astro.props;
-const { title, date, author, tags = [] } = frontmatter;
+const { title, date, author, description, tags = [] } = frontmatter;
 
 const formattedDate = new Date(date).toLocaleDateString('en-GB', {
   year: 'numeric', month: 'long', day: 'numeric'
 });
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description}>
   <Hero
     title="Blog about WP and stuff"
     subtitle="Insights, tips, and stories from the web."

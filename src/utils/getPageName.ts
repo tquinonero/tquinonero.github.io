@@ -10,6 +10,7 @@ export function getPageName(pathname: string): string {
   if (pathname.includes('/cron-expression-builder')) return 'cron-expression-builder';
   if (pathname.includes('/robots-txt-generator')) return 'robots-txt-generator';
   if (pathname.includes('/blog')) return 'blog';
+  if (pathname.includes('/posts/')) return 'blog';
   if (pathname.includes('/about')) return 'about';
   if (pathname.includes('/contact')) return 'contact';
   return 'index';
