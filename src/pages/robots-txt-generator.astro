@@ -326,6 +326,8 @@ const pageTitle = "Robots.txt Generator";
         state.disallowedPaths.clear();
         p.bots.forEach(ua => state.blockedBots.add(ua));
         p.paths.forEach(path => state.disallowedPaths.add(path));
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         rerenderAll();
       });
     });
@@ -395,7 +397,7 @@ const pageTitle = "Robots.txt Generator";
     rerenderAll();
   </script>
 
-  <style is:global>
+  <style>
     .container-page {
       max-width: 80rem;
       margin-inline: auto;
@@ -429,30 +431,31 @@ const pageTitle = "Robots.txt Generator";
       font-weight: 500; cursor: pointer;
     }
     .btn-secondary:hover { border-color: #e11d48; color: #e11d48; }
+    .btn-secondary.active { background: #111827; color: white; border-color: #111827; }
 
-    /* Checkbox rows */
-    .checkbox-row {
+    /* Checkbox rows — :global() because these are created dynamically via JS */
+    :global(.checkbox-row) {
       display: flex;
       align-items: center;
       gap: .5rem;
     }
-    .checkbox-input {
+    :global(.checkbox-input) {
       width: 1rem; height: 1rem;
       accent-color: #e11d48;
       cursor: pointer; flex-shrink: 0;
     }
-    .checkbox-label {
+    :global(.checkbox-label) {
       display: flex;
       flex-direction: column;
       gap: .05rem;
       cursor: pointer;
       line-height: 1.2;
     }
-    .checkbox-ua {
+    :global(.checkbox-ua) {
       font-size: .75rem; font-family: monospace;
       font-weight: 600; color: #111827;
     }
-    .checkbox-desc {
+    :global(.checkbox-desc) {
       font-size: .65rem; color: #4b5563;
     }
   </style>

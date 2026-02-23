@@ -2,6 +2,7 @@
 title: "New Tools on the Site: A Quick Rundown"
 date: 2026-02-22
 author: "Toni Q."
+slug: new-tools-on-the-site
 description: "I've added six free browser-based tools to the site — a regex tester, cron builder, robots.txt generator, frontmatter generator, color palette generator, and a WordPress quiz. Here's what each one does."
 tags: ["tools", "web development", "productivity", "wordpress", "design"]
 ---
@@ -54,6 +55,8 @@ If you use Astro content collections, you've typed out the same frontmatter bloc
 
 Pick a collection type — blog, docs, portfolio, changelog, authors, or custom — fill in the fields, and the YAML block appears on the right. Required fields are marked, optional ones are pre-populated with sensible defaults, and the output is always valid against the schema.
 
+It covers all the common fields: title, description, pubDate, updatedDate, author, category, tags (hit Enter or comma to add one, Backspace to remove the last), heroImage, heroAlt, and flags like Draft, Featured, and Table of Contents (which shows up automatically for collection types that support it). There's also a Custom Fields section at the bottom where you can add any arbitrary key/value pairs your schema needs. A live preview panel on the right updates as you type so you can see exactly what you're about to paste before you copy it.
+
 It's a small thing but it speeds up the "spin up a new post" step noticeably.
 
 → [Try the Frontmatter Generator](/frontmatter-generator)
@@ -86,4 +89,4 @@ It's useful if you're onboarding someone onto a WordPress project, brushing up b
 
 All six tools are free, open to anyone, and work without JavaScript frameworks — just plain browser APIs. If any of them are broken or missing something obvious, the best way to reach me is through the contact section on the homepage.
 
-More tools are in the backlog. Next up is probably a `wp_query` args builder and something around Open Graph tag generation.
+More tools are in the backlog.

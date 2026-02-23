@@ -773,7 +773,11 @@ function my_plugin_deactivate(): void {
 
     // ── Preset buttons ────────────────────────────────────────────────────────
     document.querySelectorAll('.preset-btn').forEach(btn => {
-      btn.addEventListener('click', () => parseAndApply(btn.dataset.expr));
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        parseAndApply(btn.dataset.expr);
+      });
     });
 
     // ── Parse raw expression ──────────────────────────────────────────────────
@@ -914,6 +918,7 @@ function my_plugin_deactivate(): void {
       padding: .5rem 1rem; border-radius: .375rem; font-size: .75rem; cursor: pointer;
     }
     .btn-secondary:hover { border-color: #2563eb; color: #2563eb; }
+    .btn-secondary.active { background: #111827; color: white; border-color: #111827; }
 
     /* ── Mode buttons (field tabs) ──────────────────────────────────────── */
     .mode-btn {
@@ -934,50 +939,51 @@ function my_plugin_deactivate(): void {
       color: #374151;
       line-height: 1.65;
     }
-    .note-box p { margin-bottom: .65rem; }
-    .note-box p:last-child { margin-bottom: 0; }
-    .note-box code {
+    /* Inner note classes — :global() because injected via innerHTML at runtime */
+    :global(.note-box p) { margin-bottom: .65rem; }
+    :global(.note-box p:last-child) { margin-bottom: 0; }
+    :global(.note-box code) {
       background: #e5e7eb; padding: 1px 5px; border-radius: 3px;
       font-size: .75rem; font-family: monospace;
     }
-    .note-box pre.note-code {
+    :global(.note-box pre.note-code) {
       background: #1e293b; color: #94a3b8;
       padding: .6rem 1rem; border-radius: .375rem;
       font-size: .72rem; overflow-x: auto; margin: .5rem 0;
     }
-    .note-title {
+    :global(.note-title) {
       font-weight: 700; font-size: .82rem; color: #111827;
       margin-bottom: .4rem !important;
     }
-    .note-caveat {
+    :global(.note-caveat) {
       background: #fffbeb; border: 1px solid #fde68a;
       border-radius: .375rem; padding: .5rem .75rem; color: #92400e;
     }
-    .note-caveat code { background: #fef3c7; }
-    .note-links-heading {
+    :global(.note-caveat code) { background: #fef3c7; }
+    :global(.note-links-heading) {
       font-weight: 600; font-size: .75rem; color: #6b7280;
       text-transform: uppercase; letter-spacing: .05em;
       margin-top: .75rem !important; margin-bottom: .25rem !important;
     }
-    .note-links {
+    :global(.note-links) {
       list-style: none; padding: 0; margin: 0;
       display: flex; flex-direction: column; gap: .2rem;
     }
-    .note-links li { font-size: .78rem; color: #4b5563; }
-    .note-links a {
+    :global(.note-links li) { font-size: .78rem; color: #4b5563; }
+    :global(.note-links a) {
       color: #2563eb; text-decoration: none; font-weight: 500;
     }
-    .note-links a:hover { text-decoration: underline; }
+    :global(.note-links a:hover) { text-decoration: underline; }
 
-    /* ── Toggle buttons (specific value pickers) ─────────────────────────── */
-    .toggle-btn {
+    /* ── Toggle buttons (specific value pickers) — :global() because created via JS ── */
+    :global(.toggle-btn) {
       border: 1px solid #d1d5db; background: white; color: #6b7280;
       padding: .25rem .3rem; border-radius: .25rem; font-size: .7rem;
       font-family: monospace; cursor: pointer; text-align: center;
       transition: all .15s;
     }
-    .toggle-btn:hover    { border-color: #2563eb; color: #2563eb; }
-    .toggle-btn.selected { background: #2563eb; color: white; border-color: #2563eb; }
+    :global(.toggle-btn:hover)    { border-color: #2563eb; color: #2563eb; }
+    :global(.toggle-btn.selected) { background: #2563eb; color: white; border-color: #2563eb; }
 
     /* ── Expression display colours ──────────────────────────────────────── */
     .part-minute { color: #60a5fa; }   /* blue-400   */
