@@ -1,0 +1,233 @@
+---
+import Layout from '../layouts/base.astro';
+
+// Default preview image
+const DEFAULT_IMG = "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
+---
+
+<Layout title="Social Card (Open Graph) Generator">
+  <main class="min-h-screen bg-zinc-950 px-6 py-12 text-zinc-100 font-sans">
+    
+    <!-- HEADER -->
+    <div class="max-w-3xl mx-auto mb-16 text-center">
+      <div class="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-full px-4 py-1.5 text-xs font-mono text-purple-400 mb-6 tracking-widest uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+        SEO Helper
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Social Card Generator</h1>
+      <p class="text-zinc-400 text-lg max-w-xl mx-auto">
+        Create and preview perfect Open Graph meta tags for Facebook, Twitter, LinkedIn, and Slack.
+      </p>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+      
+      <!-- CONTROLS (Left Customization) -->
+      <div class="lg:col-span-5 space-y-8 bg-zinc-900 p-6 rounded-2xl border border-zinc-800 shadow-xl h-fit">
+        
+        <div>
+          <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+            <span class="w-2 h-6 bg-purple-500 rounded-full"></span>
+            Card Details
+          </h3>
+          
+          <div class="space-y-5">
+            <form onsubmit="event.preventDefault(); return false;">
+              <div>
+                <label class="block text-sm font-medium text-zinc-400 mb-1">Page Title (og:title)</label>
+                <input type="text" id="ogTitle" placeholder="My Awesome Post" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-zinc-600" />
+                <p class="text-xs text-zinc-500 mt-1 flex justify-between">
+                  <span>Recommended: 50-60 chars</span>
+                  <span id="titleCount">0</span>
+                </p>
+              </div>
+
+              <div class="mt-5">
+                <label class="block text-sm font-medium text-zinc-400 mb-1">Description (og:description)</label>
+                <textarea id="ogDesc" rows="3" placeholder="Click to learn more about..." class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-zinc-600"></textarea>
+                 <p class="text-xs text-zinc-500 mt-1 flex justify-between">
+                  <span>Recommended: 150-160 chars</span>
+                  <span id="descCount">0</span>
+                </p>
+              </div>
+
+              <div class="mt-5">
+                <label class="block text-sm font-medium text-zinc-400 mb-1">Image URL (og:image)</label>
+                <div class="flex gap-2">
+                  <input type="url" id="ogImage" placeholder="https://example.com/image.jpg" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-zinc-600" />
+                </div>
+                <p class="text-xs text-zinc-500 mt-1">Ideally 1200x630 pixels.</p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 mt-5">
+                <div>
+                  <label class="block text-sm font-medium text-zinc-400 mb-1">Site Name</label>
+                  <input type="text" id="ogSiteName" placeholder="My Site" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-zinc-600" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-zinc-400 mb-1">URL</label>
+                  <input type="text" id="ogUrl" placeholder="example.com" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-zinc-600" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Generated Code -->
+        <div class="pt-6 border-t border-zinc-800">
+           <h3 class="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">HTML Output</h3>
+           <div class="relative group">
+             <pre class="bg-[#1e1e1e] p-4 rounded-lg overflow-x-auto text-xs font-mono text-zinc-300 border border-zinc-800"><code id="codeOutput"></code></pre>
+             <button id="copyBtn" class="absolute top-2 right-2 bg-zinc-700 hover:bg-zinc-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Copy</button>
+           </div>
+           <p id="copyMsg" class="text-center text-xs text-green-400 mt-2 opacity-0 transition-opacity">Copied to clipboard!</p>
+        </div>
+
+      </div>
+
+      <!-- PREVIEWS (Right Column) -->
+      <div class="lg:col-span-7 flex flex-col gap-8">
+        
+        <!-- Facebook / LinkedIn Style -->
+        <div>
+          <span class="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 block">Facebook / LinkedIn Large Card</span>
+          <div class="bg-white rounded-lg border border-gray-300 overflow-hidden shadow-sm max-w-xl">
+             <div class="aspect-[1.91/1] bg-gray-100 w-full overflow-hidden relative">
+               <img id="previewImgFB" src={DEFAULT_IMG} class="w-full h-full object-cover" alt="Preview" />
+             </div>
+             <div class="p-3 bg-gray-50 border-t border-gray-200">
+               <div id="previewUrlFB" class="text-xs text-gray-500 uppercase truncate mb-0.5">EXAMPLE.COM</div>
+               <div id="previewTitleFB" class="text-base font-bold text-gray-900 leading-tight mb-1 line-clamp-2">My Awesome Post Title</div>
+               <div id="previewDescFB" class="text-sm text-gray-600 line-clamp-1">Click to learn more about this awesome topic...</div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Twitter / X Large Card -->
+        <div>
+          <span class="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 block">Twitter / X Large Card</span>
+          <div class="bg-black rounded-2xl border border-gray-800 overflow-hidden max-w-xl">
+             <div class="aspect-[2/1] bg-gray-900 w-full overflow-hidden relative">
+               <img id="previewImgX" src={DEFAULT_IMG} class="w-full h-full object-cover" alt="Preview" />
+               <div class="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-1 rounded">EXAMPLE.COM</div>
+             </div>
+             <div class="p-3">
+               <div id="previewTitleX" class="text-sm font-medium text-white leading-tight mb-0.5">My Awesome Post Title</div>
+               <div id="previewDescX" class="text-sm text-gray-500 line-clamp-2">Click to learn more about this awesome topic...</div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Slack / Discord Style -->
+        <div>
+           <span class="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 block">Slack / Discord Embed</span>
+           <div class="pl-3 border-l-4 border-gray-300 max-w-xl">
+             <div class="text-xs text-gray-500 font-bold mb-1 flex items-center gap-1">
+               <img src="/favicon.ico" class="w-3 h-3 grayscale opacity-50" />
+               <span id="previewSiteSlack">My Site</span>
+             </div>
+             <div id="previewTitleSlack" class="text-blue-600 font-bold text-sm mb-1 hover:underline cursor-pointer">My Awesome Post Title</div>
+             <div id="previewDescSlack" class="text-sm text-gray-300 mb-2">Click to learn more about this awesome topic...</div>
+             <div class="w-full aspect-[1.91/1] max-w-[360px] rounded-lg overflow-hidden border border-zinc-700">
+                <img id="previewImgSlack" src={DEFAULT_IMG} class="w-full h-full object-cover" />
+             </div>
+           </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // @ts-nocheck
+  const inputs = {
+    title: document.getElementById('ogTitle'),
+    desc: document.getElementById('ogDesc'),
+    image: document.getElementById('ogImage'),
+    site: document.getElementById('ogSiteName'),
+    url: document.getElementById('ogUrl'),
+  };
+
+  const previews = {
+    titles: document.querySelectorAll('#previewTitleFB, #previewTitleX, #previewTitleSlack'),
+    descs: document.querySelectorAll('#previewDescFB, #previewDescX, #previewDescSlack'),
+    imgs: document.querySelectorAll('#previewImgFB, #previewImgX, #previewImgSlack'),
+    sites: document.querySelectorAll('#previewSiteSlack'),
+    urls: document.querySelectorAll('#previewUrlFB'),
+  };
+  
+  const DEFAULT_IMG = "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
+
+  function update() {
+    const data = {
+      title: inputs.title.value || 'Your Page Title',
+      desc: inputs.desc.value || 'A description of your content goes here. Keep it snappy and engaging.',
+      image: inputs.image.value || DEFAULT_IMG,
+      site: inputs.site.value || 'Site Name',
+      url: inputs.url.value || 'example.com',
+    };
+
+    // Update Counts
+    document.getElementById('titleCount').textContent = inputs.title.value.length;
+    document.getElementById('titleCount').className = inputs.title.value.length > 60 ? 'text-red-400' : 'text-zinc-500';
+    
+    document.getElementById('descCount').textContent = inputs.desc.value.length;
+    document.getElementById('descCount').className = inputs.desc.value.length > 160 ? 'text-red-400' : 'text-zinc-500';
+
+    // Update Previews
+    previews.titles.forEach(el => el.textContent = data.title);
+    previews.descs.forEach(el => el.textContent = data.desc);
+    previews.sites.forEach(el => el.textContent = data.site);
+    previews.urls.forEach(el => el.textContent = data.url.replace(/^https?:\/\//, '').toUpperCase());
+    
+    // Only update image preview if it looks like a valid URL or data URI, otherwise validation error or keep default
+    previews.imgs.forEach(el => {
+      if (data.image.match(/^https?:\/\//) || data.image.startsWith('data:image')) {
+        el.src = data.image;
+      } else if (data.image === DEFAULT_IMG) {
+        el.src = DEFAULT_IMG;
+      }
+      // If user clears input or types garbage, we could revert to default or let onerror handle it.
+      // But setting src="garbage" causes 404 network requests.
+      // onerror below handles 404s, but we want to prevent the request if possible.
+      
+      el.onerror = () => { el.src = DEFAULT_IMG; };
+    });
+
+    // Update Code
+    const code = `
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="${data.url}">
+<meta property="og:title" content="${data.title}">
+<meta property="og:description" content="${data.desc}">
+<meta property="og:image" content="${data.image}">
+<meta property="og:site_name" content="${data.site}">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="${data.url}">
+<meta property="twitter:title" content="${data.title}">
+<meta property="twitter:description" content="${data.desc}">
+<meta property="twitter:image" content="${data.image}">`.trim();
+
+    document.getElementById('codeOutput').textContent = code;
+  }
+
+  // Listeners
+  Object.values(inputs).forEach(i => i.addEventListener('input', update));
+  
+  // Init
+  update();
+
+  // Copy
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(document.getElementById('codeOutput').textContent).then(() => {
+      const msg = document.getElementById('copyMsg');
+      msg.style.opacity = '1';
+      setTimeout(() => msg.style.opacity = '0', 2000);
+    });
+  });
+
+</script>

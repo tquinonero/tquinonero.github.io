@@ -1,0 +1,310 @@
+---
+import Layout from '../layouts/base.astro';
+import Footer from '../components/Footer.astro';
+
+const PRESETS = {
+  minorSecond: { label: 'Minor Second (1.067)', value: 1.067 },
+  majorSecond: { label: 'Major Second (1.125)', value: 1.125 },
+  minorThird: { label: 'Minor Third (1.200)', value: 1.200 },
+  majorThird: { label: 'Major Third (1.250)', value: 1.250 },
+  perfectFourth: { label: 'Perfect Fourth (1.333)', value: 1.333 },
+  augmentedFourth: { label: 'Augmented Fourth (1.414)', value: 1.414 },
+  perfectFifth: { label: 'Perfect Fifth (1.500)', value: 1.500 },
+  goldenRatio: { label: 'Golden Ratio (1.618)', value: 1.618 },
+};
+---
+
+<Layout title="Theme.json Typography Calculator">
+  <main class="min-h-screen bg-gray-950 px-6 py-12 text-gray-100 font-sans">
+    
+    <!-- HEADER -->
+    <div class="max-w-3xl mx-auto mb-16 text-center">
+      <div class="inline-flex items-center gap-2 bg-gray-900 border border-gray-800 rounded-full px-4 py-1.5 text-xs font-mono text-blue-400 mb-6 tracking-widest uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+        Theme.json Helper
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Fluid Typography Calculator</h1>
+      <p class="text-gray-400 text-lg max-w-xl mx-auto">
+        Generate fluid font sizes for WordPress <code class="text-blue-300 bg-gray-900 px-1 py-0.5 rounded">theme.json</code> using modern <code class="text-blue-300">clamp()</code> functions.
+      </p>
+    </div>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+      
+      <!-- CONTROLS (Left Column) -->
+      <div class="lg:col-span-4 space-y-8 bg-gray-900 p-6 rounded-2xl border border-gray-800 shadow-xl h-fit">
+        
+        <!-- Base Settings -->
+        <div>
+          <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <span class="w-2 h-6 bg-blue-500 rounded-full"></span>
+            Base Settings
+          </h3>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Base Size (rem)</label>
+              <input type="number" id="baseSize" value="1" step="0.125" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all text-white" />
+              <p class="text-xs text-gray-500 mt-1">Usually 1rem (16px)</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Scale Ratio</label>
+              <select id="scaleRatio" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all text-white">
+                {Object.entries(PRESETS).map(([key, { label, value }]) => (
+                  <option value={value} selected={key === 'majorThird'}>{label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Viewports -->
+        <div>
+          <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <span class="w-2 h-6 bg-purple-500 rounded-full"></span>
+            Viewports (px)
+          </h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Minimum</label>
+              <input type="number" id="minWidth" value="320" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 text-white" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Maximum</label>
+              <input type="number" id="maxWidth" value="1200" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 text-white" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Steps -->
+        <div>
+           <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <span class="w-2 h-6 bg-green-500 rounded-full"></span>
+            Steps
+          </h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+               <label class="block text-sm font-medium text-gray-400 mb-1">Negative Steps</label>
+               <input type="number" id="negSteps" value="2" min="0" max="5" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-green-500" />
+            </div>
+             <div>
+               <label class="block text-sm font-medium text-gray-400 mb-1">Positive Steps</label>
+               <input type="number" id="posSteps" value="5" min="1" max="10" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-green-500" />
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-gray-800">
+           <button id="copy-json" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
+             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+             Copy JSON
+           </button>
+           <p id="copy-msg" class="text-center text-sm text-green-400 mt-2 opacity-0 transition-opacity">Copied!</p>
+        </div>
+
+      </div>
+
+      <!-- PREVIEW & OUTPUT (Right Column) -->
+      <div class="lg:col-span-8 flex flex-col gap-8">
+        
+        <!-- Live Preview -->
+        <div class="bg-white text-gray-900 p-8 rounded-2xl shadow-xl overflow-hidden relative">
+          <div class="absolute top-4 right-4 text-xs font-bold text-gray-400 tracking-wider uppercase">Live Preview</div>
+          <div id="preview-container" class="space-y-6">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Code Block -->
+        <div class="relative bg-[#1e1e1e] rounded-2xl overflow-hidden shadow-xl border border-gray-800">
+           <div class="flex items-center justify-between px-4 py-3 bg-[#252526] border-b border-gray-800">
+             <span class="text-xs text-gray-400 font-mono">theme.json / settings / typography / fontSizes</span>
+           </div>
+           <pre class="p-4 overflow-x-auto text-sm font-mono leading-relaxed"><code id="code-output" class="language-json text-blue-300"></code></pre>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // @ts-nocheck
+  
+  // -- Elements
+  const inputs = {
+    baseSize: document.getElementById('baseSize'),
+    scaleRatio: document.getElementById('scaleRatio'),
+    minWidth: document.getElementById('minWidth'),
+    maxWidth: document.getElementById('maxWidth'),
+    negSteps: document.getElementById('negSteps'),
+    posSteps: document.getElementById('posSteps'),
+  };
+  
+  const outputs = {
+    preview: document.getElementById('preview-container'),
+    code: document.getElementById('code-output'),
+    copyBtn: document.getElementById('copy-json'),
+    copyMsg: document.getElementById('copy-msg'),
+  };
+
+  // -- State
+  let state = {
+    base: 1,
+    ratio: 1.25,
+    minW: 320,
+    maxW: 1200,
+    neg: 2,
+    pos: 5
+  };
+
+  // -- Standard WordPress Slugs/Names
+  const STEP_NAMES = {
+    '-2': { slug: 'xs', name: 'Extra Small' },
+    '-1': { slug: 'sm', name: 'Small' },
+    '0':  { slug: 'md', name: 'Medium' },
+    '1':  { slug: 'lg', name: 'Large' },
+    '2':  { slug: 'xl', name: 'Extra Large' },
+    '3':  { slug: 'xxl', name: '2XL' },
+    '4':  { slug: '3xl', name: '3XL' },
+    '5':  { slug: '4xl', name: '4XL' },
+    '6':  { slug: '5xl', name: '5XL' },
+    '7':  { slug: '6xl', name: '6XL' },
+    '8':  { slug: '7xl', name: '7XL' },
+    '9':  { slug: '8xl', name: '8XL' },
+    '10': { slug: '9xl', name: '9XL' },
+  };
+
+  function getStepLabel(i) {
+    if (STEP_NAMES[i]) return STEP_NAMES[i];
+    // Fallback for extreme steps
+    if (i < 0) return { slug: `xs-${Math.abs(i)}`, name: `XS ${Math.abs(i)}` };
+    return { slug: `${i+1}xl`, name: `${i+1}XL` };
+  }
+
+  // Round to 3 decimals
+  const round = (n) => Math.round(n * 1000) / 1000;
+
+  function calculateClamp(step) {
+    // 1. Calculate min/max sizes for this step
+    const minSize = state.base * Math.pow(state.ratio, step); 
+    const maxSize = state.base * Math.pow(state.ratio, step); 
+    
+    // NOTE: True fluid typography usually wants the "minSize" to be smaller than "maxSize".
+    // However, if we simply apply the ratio to 1rem, we get the same value calculated at the base.
+    // To make it fluid, we usually assume the "Ratio" at minWidth is smaller than at maxWidth.
+    // OR we scale the whole system.
+    
+    // Simplification for this tool:
+    // We assume the User wants the Ratio to apply fully at MaxWidth, 
+    // and perhaps a slightly tighter ratio (or just smaller base) at MinWidth?
+    // STRICT APPROACH: The user inputs ONE base and ONE ratio. 
+    // Usually, people want "Major Third" at Desktop, but maybe "Minor Third" at Mobile.
+    
+    // Let's implement "Fluid Type Scale":
+    // MinFontSize = Base * (MinRatio ^ step)
+    // MaxFontSize = Base * (MaxRatio ^ step)
+    // FOR SIMPLICITY: We will use a fixed MinRatio of 1.125 (Major Second) for mobile if the chosen ratio is larger.
+    // If chosen ratio <= 1.125, we use it for both.
+    
+    const minRatio = Math.min(state.ratio, 1.2); // Cap mobile scaling to avoid huge types on small screens
+    const minS = state.base * Math.pow(minRatio, step);
+    const maxS = state.base * Math.pow(state.ratio, step);
+
+    // Convert rem to pixels for calculation (assuming 1rem = 16px)
+    const minSizePx = minS * 16;
+    const maxSizePx = maxS * 16;
+    const minWidthPx = state.minW;
+    const maxWidthPx = state.maxW;
+
+    const slope = (maxSizePx - minSizePx) / (maxWidthPx - minWidthPx);
+    const yIntersect = minSizePx - (slope * minWidthPx);
+
+    // Convert intercept back to rem
+    const yIntersectRem = yIntersect / 16;
+    const slopeVw = slope * 100;
+
+    const val = `${round(yIntersectRem)}rem + ${round(slopeVw)}vw`;
+    const minRem = `${round(minS)}rem`;
+    const maxRem = `${round(maxS)}rem`;
+
+    return `clamp(${minRem}, ${val}, ${maxRem})`;
+  }
+
+  function render() {
+    const stepsArr = [];
+    
+    // Generate range: -neg to +pos
+    for (let i = -state.neg; i <= state.pos; i++) {
+      stepsArr.push(i);
+    }
+
+    // 1. Generate JSON
+    const jsonOutput = stepsArr.map(i => {
+      const { slug, name } = getStepLabel(i);
+      const value = calculateClamp(i);
+      return {
+        slug,
+        size: value,
+        name
+      };
+    });
+
+    const jsonString = JSON.stringify(jsonOutput, null, 2);
+    outputs.code.textContent = jsonString;
+
+    // 2. Generate Preview
+    outputs.preview.innerHTML = '';
+    
+    // Sort for preview (largest to smallest looks better usually? or logical order?)
+    // Logical order usually best for a scale.
+    // But let's show large on top.
+    const reverseSteps = [...stepsArr].reverse();
+
+    reverseSteps.forEach(i => {
+      const { slug, name } = getStepLabel(i);
+      const clampVal = calculateClamp(i);
+      
+      const row = document.createElement('div');
+      row.className = 'border-b border-gray-100 pb-4 last:border-0';
+      row.innerHTML = `
+        <div class="flex items-baseline justify-between mb-1">
+           <span class="text-xs font-mono text-gray-400 uppercase tracking-widest">${name} (${slug})</span>
+           <span class="text-xs font-mono text-gray-300 select-all">${clampVal}</span>
+        </div>
+        <div style="font-size: ${clampVal}; line-height: 1.2; font-weight: 700;">
+          The quick brown fox jumps over the lazy dog.
+        </div>
+      `;
+      outputs.preview.appendChild(row);
+    });
+  }
+
+  function updateState() {
+    state.base = parseFloat(inputs.baseSize.value);
+    state.ratio = parseFloat(inputs.scaleRatio.value);
+    state.minW = parseFloat(inputs.minWidth.value);
+    state.maxW = parseFloat(inputs.maxWidth.value);
+    state.neg = parseInt(inputs.negSteps.value);
+    state.pos = parseInt(inputs.posSteps.value);
+    render();
+  }
+
+  // Listeners
+  Object.values(inputs).forEach(input => {
+    input.addEventListener('input', updateState);
+  });
+
+  // Copy
+  outputs.copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(outputs.code.textContent).then(() => {
+      outputs.copyMsg.style.opacity = '1';
+      setTimeout(() => outputs.copyMsg.style.opacity = '0', 2000);
+    });
+  });
+
+  // Init
+  render();
+
+</script>
