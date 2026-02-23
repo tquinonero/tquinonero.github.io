@@ -1,13 +1,14 @@
 ---
 import Layout from '../layouts/base.astro';
 import Card from '../components/card.astro';
+import ToolCard from '../components/ToolCard.astro';
 import TextSection from '../components/textSection.astro';
 import Hero from '../components/hero.astro';
 import StatsCounter from '../components/StatsCounter.astro';
 const stats = [
   { label: 'Projects completed', value: 46 },
   { label: 'Clients helped', value: 10 },
-  { label: 'Free tools built', value: 8 },
+  { label: 'Free tools built', value: 9 },
 ];
 ---
 		<Layout>
@@ -65,12 +66,78 @@ const stats = [
 				</div>
 			</section>
 
+			<!-- Tools -->
+			<section class="py-14 bg-gray-900 border-t border-gray-800 transition-colors">
+				<div class="max-w-7xl mx-auto px-6">
+					<h2 class="text-3xl font-bold mb-10 text-center text-white">Free Tools & Open Source</h2>
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+						<ToolCard 
+							title="WC Loop Variations" 
+							subtitle="New WordPress Plugin" 
+							content="Display WooCommerce variations inside product loops (FSE / Query Loop compatible). A block-based solution for modern WordPress themes available on GitHub."
+                            href="https://github.com/tquinonero/Loop-Variations-Block-for-Wocommerce"
+                            isExternal={true}
+						/>
+						<ToolCard 
+							title="Typography Calculator" 
+							subtitle="WordPress Dev Tool" 
+							content="Generate fluid font sizes for WordPress theme.json using clamp(). Visualize scaling across viewports instantly."
+                            href="/theme-typography-calculator"
+						/>
+						<ToolCard 
+							title="Social Card Generator" 
+							subtitle="SEO Tool" 
+							content="Preview Open Graph images and generate meta tags. Ensure your content looks perfect when shared on social media."
+                            href="/social-card-generator"
+						/>
+                        <ToolCard 
+							title="Cron Expression Builder" 
+							subtitle="Utility" 
+							content="Visually build and test cron expressions for scheduling tasks. A helper for setting up automated server jobs."
+                            href="/cron-expression-builder"
+						/>
+                        <ToolCard 
+							title="Regex Tester" 
+							subtitle="Developer Utility" 
+							content="Test regular expressions with real-time feedback. Includes common patterns for validation and extraction."
+                            href="/regex-tester"
+						/>
+                         <ToolCard 
+							title="Robots.txt Generator" 
+							subtitle="SEO Utility" 
+							content="Create perfect robots.txt files for your site. Control how search engines crawl and index your content."
+                            href="/robots-txt-generator"
+						/>
+                        <ToolCard 
+							title="Color Palette Generator" 
+							subtitle="Design Tool" 
+							content="Create harmonious color schemes for your projects. Export palettes to CSS, SCSS, or Tailwind config."
+                            href="/color-palette-generator"
+						/>
+                        <ToolCard 
+							title="WordPress Quiz" 
+							subtitle="Knowledge Check" 
+							content="Test your knowledge of WordPress development, hooks, and architecture with this interactive quiz."
+                            href="/wordpress-quiz"
+						/>
+                         <ToolCard 
+							title="Frontmatter Generator" 
+							subtitle="Content Tool" 
+							content="Generate Markdown frontmatter for your blog posts. Streamline your content creation workflow."
+                            href="/frontmatter-generator"
+						/>
+					</div>
+				</div>
+			</section>
+
 			<!-- Code Snippets callout -->
 			<section class="bg-gray-950">
 				<div class="max-w-5xl mx-auto px-6">
 					<TextSection 
-						heading="Code Snippets for WordPress."
+						heading="Code Snippets for WordPress"
 						paragraph="Discover a collection of practical code snippets for development in WordPress. From custom functions to performance optimizations, these snippets are designed to help you build better WordPress sites with ease."
+						buttonText="Browse Snippets on GitHub"
+						buttonLink="https://github.com/tquinonero/WP-Snippets"
 					/>
 				</div>
 			</section>

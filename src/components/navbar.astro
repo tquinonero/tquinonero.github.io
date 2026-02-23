@@ -37,13 +37,13 @@ const toolsActive = tools.some(t => t.code === currentPage);
 
       <!-- Navigation Links -->
       <!-- Desktop Menu -->
-      <div class="hidden md:flex space-x-1">
+      <div class="hidden md:flex space-x-1 items-center">
         {links.map(link => (
           <a
             href={link.href}
             class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
               link.active
-                ? 'bg-blue-600 text-white'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                 : 'text-gray-300 hover:bg-gray-800 hover:text-white'
             }`}
           >
@@ -52,12 +52,12 @@ const toolsActive = tools.some(t => t.code === currentPage);
         ))}
 
         <!-- Tools Dropdown -->
-        <div class="group relative">
+        <div class="group relative py-2">
           <button
             class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-1 ${
               toolsActive
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                : 'text-gray-300 group-hover:bg-gray-800'
             }`}
           >
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -70,19 +70,21 @@ const toolsActive = tools.some(t => t.code === currentPage);
           </button>
 
           <!-- Dropdown Menu -->
-          <div class="absolute right-0 mt-0 w-64 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-2 z-50 ring-1 ring-black ring-opacity-5">
-            {tools.map(tool => (
-              <a
-                href={tool.href}
-                class={`block px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                  tool.active
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`}
-              >
-                {tool.label}
-              </a>
-            ))}
+          <div class="absolute right-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
+            <div class="py-1">
+              {tools.map(tool => (
+                <a
+                  href={tool.href}
+                  class={`block px-4 py-2.5 text-sm font-medium transition-colors duration-200 border-l-2 ${
+                    tool.active
+                      ? 'bg-gray-700/50 text-blue-400 border-blue-500'
+                      : 'border-transparent text-gray-300 hover:bg-gray-700 hover:text-white'
+                  }`}
+                >
+                  {tool.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -141,8 +143,22 @@ const toolsActive = tools.some(t => t.code === currentPage);
   const menu = document.getElementById('mobile-menu');
 
   if (btn && menu) {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       menu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!menu.contains(target) && !btn.contains(target) && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+      }
     });
   }
 </script>
