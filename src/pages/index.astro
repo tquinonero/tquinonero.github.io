@@ -8,7 +8,7 @@ import StatsCounter from '../components/StatsCounter.astro';
 const stats = [
   { label: 'Projects completed', value: 46 },
   { label: 'Clients helped', value: 10 },
-  { label: 'Free tools built', value: 9 },
+	{ label: 'Free tools built', value: 12 },
 ];
 ---
 		<Layout>
@@ -138,6 +138,20 @@ const stats = [
 							subtitle="Plugin for WooCommerce Admin Area"
 							content="Identify WooCommerce products missing short descriptions. Lists products, thumbnails, SKUs, and provides quick edit links. Polylang compatible."
 							href="https://github.com/tquinonero/WC-Missing-Short-Descriptions"
+							isExternal={true}
+						/>
+						<ToolCard 
+							title="A/B Testing Block"
+							subtitle="A/B Variant Block for WordPress"
+							content="Lightweight, privacy-friendly A/B testing block for WordPress. Server-side rendering, conversion tracking, stats dashboard, and no third-party scripts. Fully FSE compatible."
+							href="https://github.com/tquinonero/greenshift-ab-testing"
+							isExternal={true}
+						/>
+						<ToolCard 
+							title="Custom Dashboard Widgets"
+							subtitle="WordPress Admin Dashboard Plugin"
+							content="Customizes the WordPress admin dashboard: removes core widgets, adds custom ones (Help, Stats, Media, Posts, Tasks, Updates, Appearance, Users, Tools, Settings), and modernizes styling. Includes settings for support email and docs. Security-hardened."
+							href="https://github.com/tquinonero/Custom-Dashboard-Widgets"
 							isExternal={true}
 						/>
 					</div>
