@@ -28,30 +28,28 @@ const { stats } = Astro.props as Props;
 </div>
 
 <script>
-  // Cast NodeList elements to HTMLSpanElement for TS safety
-  const counters = document.querySelectorAll('.counter') as NodeListOf<HTMLSpanElement>;
   let triggered = false;
 
   function animateCounters() {
-    if (triggered) return;
-
+    // Re-query counters each time to handle View Transitions
+    const counters = document.querySelectorAll('.counter') as NodeListOf<HTMLSpanElement>;
     const triggerPoint = window.innerHeight * 0.8;
 
-    counters.forEach((counter, i) => {
+    counters.forEach((counter) => {
       const rect = counter.getBoundingClientRect();
       if (rect.top <= triggerPoint) {
         triggered = true;
 
         counters.forEach((c, idx) => {
-          const target = parseInt(c.dataset.target!); // dataset is defined
-          const duration = 2000; // 2 seconds
+          const target = parseInt(c.dataset.target!);
+          const duration = 2000;
           const startTime = performance.now();
 
-          function update(now: number) { // type 'now' properly
+          function update(now: number) {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            c.textContent = Math.floor(progress * target).toString(); // convert number -> string
-            c.style.opacity = progress.toString(); // convert number -> string
+            c.textContent = Math.floor(progress * target).toString();
+            c.style.opacity = progress.toString();
 
             if (progress < 1) {
               requestAnimationFrame(update);
@@ -60,13 +58,14 @@ const { stats } = Astro.props as Props;
             }
           }
 
-          // Stagger start by 200ms each
           setTimeout(() => requestAnimationFrame(update), idx * 200);
         });
       }
     });
   }
 
-  window.addEventListener('scroll', animateCounters);
-  window.addEventListener('load', animateCounters);
+  // Handle both initial load and View Transition navigations
+  document.addEventListener('astro:page-load', () => {
+    animateCounters();
+  });
 </script>
