@@ -7,9 +7,9 @@ const { currentPage } = Astro.props;
 
 const links = [
   { href: '/', label: 'Home', code: 'index', active: currentPage === 'index' },
+  { href: '/cdw', label: 'CDW', code: 'cdw', active: currentPage === 'cdw' },
   { href: '/about', label: 'About', code: 'about', active: currentPage === 'about' },
   { href: '/blog', label: 'Blog', code: 'blog', active: currentPage === 'blog' },
-  { href: '/cdw', label: 'CDW', code: 'cdw', active: currentPage === 'cdw' },
 ];
 
 const tools = [
