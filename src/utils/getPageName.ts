@@ -13,5 +13,6 @@ export function getPageName(pathname: string): string {
   if (pathname.includes('/posts/')) return 'blog';
   if (pathname.includes('/about')) return 'about';
   if (pathname.includes('/contact')) return 'contact';
+  if (pathname.includes('/cdw')) return 'cdw';
   return 'index';
 }

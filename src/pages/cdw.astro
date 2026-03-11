@@ -1,0 +1,333 @@
+---
+import Layout from '../layouts/base.astro';
+import Hero from '../components/hero.astro';
+import Card from '../components/card.astro';
+import StatsCounter from '../components/StatsCounter.astro';
+import TextSection from '../components/textSection.astro';
+import FeatureHighlight from '../components/FeatureHighlight.astro';
+
+const GITHUB_URL = 'https://github.com/tquinonero/Custom-Dashboard-Widgets';
+
+const widgets = [
+  {
+    title: 'Site Statistics',
+    subtitle: 'Post, page, user & media counts',
+    content: 'At-a-glance counters for posts, pages, comments, users, and media. Everything you need to know about your site without leaving the dashboard.',
+  },
+  {
+    title: 'Latest Posts',
+    subtitle: 'Recent content at a glance',
+    content: 'Your most recently published content, displayed clearly in the dashboard so you can quickly check what went live and jump back into editing.',
+  },
+  {
+    title: 'Latest Media',
+    subtitle: 'Quick access to uploads',
+    content: 'A preview of your most recently uploaded files - images, documents, anything in the media library - right on the dashboard.',
+  },
+  {
+    title: 'Pending Tasks',
+    subtitle: 'Per-user to-do list',
+    content: 'A personal task list stored per user. Each team member has their own tasks, separate from everyone else\'s. Forget sticky notes on your monitor.',
+  },
+  {
+    title: 'Updates',
+    subtitle: 'Plugin & theme updates (admin only)',
+    content: 'See available plugin and theme updates without navigating away from the dashboard. Admin-only visibility keeps the clutter away from editors.',
+  },
+  {
+    title: 'Quick Links',
+    subtitle: 'Fast admin navigation (admin only)',
+    content: 'Configurable shortcuts to the WordPress admin pages you visit most. One click instead of hunting through the sidebar menu.',
+  },
+  {
+    title: 'Help & Support',
+    subtitle: 'Custom support info for your team',
+    content: 'Display a support email and documentation link for your team or clients. Perfect for agencies handing off sites to clients.',
+  },
+  {
+    title: 'Command Line',
+    subtitle: 'WP-CLI-like terminal (admin only)',
+    content: 'A full terminal interface inside the WordPress admin. Powered by WordPress APIs, not a real shell - so it works on any host, no SSH required.',
+  },
+  {
+    title: 'AI Assistant',
+    subtitle: 'Conversational site management (admin only)',
+    content: 'Connect to OpenAI, Claude, Gemini, or any OpenAI-compatible endpoint. List plugins, create posts, flush caches - using natural language.',
+  },
+];
+
+const stats = [
+  { label: 'New Abilities', value: 70 },
+  { label: 'PHP unit tests', value: 424 },
+  { label: 'JS unit tests', value: 162 },
+];
+---
+
+<Layout
+  title="Custom Dashboard Widgets - WordPress Plugin"
+  description="Replace the WordPress admin dashboard with 9 React-powered widgets. Includes an AI assistant, a WP-CLI-like terminal, and the WordPress Abilities API."
+>
+  <!-- Hero -->
+  <Hero
+    title="Custom Dashboard Widgets"
+    subtitle="Replace the WordPress admin dashboard with 9 React-powered widgets. Including an AI assistant and a built-in CLI terminal."
+    ctaText="View on GitHub"
+    ctaHref={GITHUB_URL}
+  />
+
+  <!-- Intro banner -->
+  <section class="bg-gray-950 border-b border-gray-800">
+    <div class="max-w-4xl mx-auto px-6 py-10 text-center">
+      <div class="flex flex-wrap justify-center gap-3 mb-6">
+        <span class="text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full border bg-blue-500/10 text-blue-400 border-blue-500/30">Free & Open Source</span>
+        <span class="text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full border bg-purple-500/10 text-purple-400 border-purple-500/30">PHP 8.4+ · WP 6.9+</span>
+        <span class="text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full border bg-green-500/10 text-green-400 border-green-500/30">React-Powered</span>
+        <span class="text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full border bg-yellow-500/10 text-yellow-400 border-yellow-500/30">No Build Step Required</span>
+      </div>
+      <p class="text-gray-400 text-lg leading-relaxed max-w-3xl mx-auto">
+        The WordPress admin dashboard looks the same as it did years ago. CDW replaces it with something you'd actually want to open - configurable, React-powered widgets, per-user task management, a terminal, and an AI assistant wired to your site.
+      </p>
+    </div>
+  </section>
+
+  <!-- Dashboard screenshot -->
+  <section class="bg-gray-950 border-b border-gray-800 py-14">
+    <div class="max-w-5xl mx-auto px-6">
+      <img src="/cdw-screenshot.png" alt="Custom Dashboard Widgets - full WordPress dashboard view" class="rounded-xl border border-gray-700 w-full shadow-2xl" />
+    </div>
+  </section>
+
+  <!-- Widgets grid -->
+  <section class="py-16 bg-gray-950">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-3 text-center text-white">9 Widgets, Fully Configurable</h2>
+      <p class="text-center text-gray-400 mb-10 max-w-2xl mx-auto">
+        Mix, match, and rearrange using the native WordPress drag-and-drop system. Each widget can be individually enabled or disabled from the settings page.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {widgets.map(w => (
+          <Card title={w.title} subtitle={w.subtitle} content={w.content} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature highlights -->
+  <section class="py-16 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-3 text-center text-white">Built for Real Work</h2>
+      <p class="text-center text-gray-400 mb-14 max-w-2xl mx-auto">
+        Three headline features that make CDW more than a dashboard - it's a full site management layer.
+      </p>
+
+      <div class="space-y-16">
+
+        <!-- CLI Terminal -->
+        <FeatureHighlight
+          title="A Terminal Inside Your WordPress Admin"
+          description="The Command Line widget gives you a WP-CLI-like interface powered by WordPress APIs - not a real shell. That means it works on any host, including shared hosting with no SSH access. It covers plugin and theme management, user operations, post management, database optimization, transient flushing, search-replace (with --dry-run), maintenance mode, cron inspection, and more. Destructive operations require an explicit --force flag. Every command is logged to an audit table so you have a record of what ran and when."
+          badge="CLI Terminal"
+          badgeColor="blue"
+        >
+          <Fragment slot="icon">
+            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </Fragment>
+          <Fragment slot="extra">
+            <div class="mt-5 bg-gray-950 rounded-lg border border-gray-700 p-4 font-mono text-sm">
+              <p class="text-gray-500 select-none mb-1">$ </p>
+              <p><span class="text-green-400">plugin list --status=active</span></p>
+              <p><span class="text-green-400">user create editor@example.com --role=editor</span></p>
+              <p><span class="text-green-400">search-replace "http://" "https://" --dry-run</span></p>
+              <p><span class="text-green-400">cache flush</span></p>
+              <p><span class="text-green-400">maintenance-mode on</span></p>
+            </div>
+            <img src="/cli-widget.jpg" alt="CDW Command Line widget in the WordPress admin dashboard" class="mt-5 rounded-xl border border-gray-700 w-full" />
+          </Fragment>
+        </FeatureHighlight>
+
+        <!-- AI Assistant -->
+        <FeatureHighlight
+          title="An AI That Can Actually Manage Your Site"
+          description="The AI Assistant connects to your provider of choice - OpenAI, Anthropic (Claude), Google Gemini, or any OpenAI-compatible endpoint like OpenRouter or Groq - using your own API key. It uses an agentic loop with function-calling tools mapped to the same commands the CLI widget uses. So when you ask it to list plugins with updates or create a draft post, it's calling real commands - not guessing. Two modes: Confirm (review before it runs) and Auto (execute immediately for trusted tasks). Your API key is encrypted with AES-256-CBC before being saved, derived from your site's AUTH_SALT constants."
+          badge="AI Assistant"
+          badgeColor="purple"
+        >
+          <Fragment slot="icon">
+            <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+            </svg>
+          </Fragment>
+          <Fragment slot="extra">
+            <div class="mt-5 space-y-2">
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs px-2.5 py-1 rounded-full bg-gray-800 border border-gray-700 text-gray-300">OpenAI</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-gray-800 border border-gray-700 text-gray-300">Anthropic Claude</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-gray-800 border border-gray-700 text-gray-300">Google Gemini</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-gray-800 border border-gray-700 text-gray-300">OpenRouter</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-gray-800 border border-gray-700 text-gray-300">Groq</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-gray-800 border border-gray-700 text-gray-300">Any OpenAI-compatible endpoint</span>
+              </div>
+            </div>
+            <img src="/ai-widget.jpg" alt="CDW AI Assistant widget in the WordPress admin dashboard" class="mt-5 rounded-xl border border-gray-700 w-full" />
+          </Fragment>
+        </FeatureHighlight>
+
+        <!-- WordPress Abilities API -->
+        <FeatureHighlight
+          title="WordPress Abilities API - First-Class Integration"
+          description="CDW v3 registers 70 admin tools as native WP_Ability objects in the cdw-admin-tools category - one of the first plugins to fully adopt the WordPress 6.9 Abilities API. All abilities are REST-exposed via the wp-abilities/v1 namespace with show_in_rest: true, and each one carries correct annotations: readonly for safe list/get/status operations, and destructive for anything that deletes. There's also an opt-in toggle to expose abilities via the WordPress MCP adapter plugin, making them discoverable to external AI clients. CDW isn't just a dashboard tool - it's an API for site management."
+          badge="WordPress Abilities API"
+          badgeColor="green"
+        >
+          <Fragment slot="icon">
+            <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </Fragment>
+          <Fragment slot="extra">
+            <div class="mt-5 bg-gray-950 rounded-lg border border-gray-700 p-4 font-mono text-sm text-gray-400">
+              <span class="text-blue-400">GET</span> /wp-json/wp-abilities/v1/abilities?category=cdw-admin-tools
+            </div>
+            <div class="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 text-xs font-mono">
+              <span class="text-green-400">plugin-list</span>
+              <span class="text-green-400">plugin-status</span>
+              <span class="text-green-400">plugin-activate</span>
+              <span class="text-green-400">plugin-deactivate</span>
+              <span class="text-green-400">plugin-install</span>
+              <span class="text-green-400">plugin-update</span>
+              <span class="text-red-400">plugin-delete</span>
+              <span class="text-green-400">plugin-update-all</span>
+              <span class="text-green-400">theme-list</span>
+              <span class="text-green-400">theme-info</span>
+              <span class="text-green-400">theme-status</span>
+              <span class="text-green-400">theme-activate</span>
+              <span class="text-green-400">theme-install</span>
+              <span class="text-green-400">theme-update</span>
+              <span class="text-green-400">theme-update-all</span>
+              <span class="text-red-400">theme-delete</span>
+              <span class="text-green-400">user-list</span>
+              <span class="text-green-400">user-get</span>
+              <span class="text-green-400">user-create</span>
+              <span class="text-green-400">user-role</span>
+              <span class="text-red-400">user-delete</span>
+              <span class="text-green-400">post-list</span>
+              <span class="text-green-400">post-get</span>
+              <span class="text-green-400">post-get-content</span>
+              <span class="text-green-400">post-create</span>
+              <span class="text-green-400">post-set-content</span>
+              <span class="text-green-400">post-append-content</span>
+              <span class="text-green-400">post-count</span>
+              <span class="text-green-400">post-status</span>
+              <span class="text-red-400">post-delete</span>
+              <span class="text-green-400">page-create</span>
+              <span class="text-green-400">option-get</span>
+              <span class="text-green-400">option-list</span>
+              <span class="text-green-400">option-set</span>
+              <span class="text-red-400">option-delete</span>
+              <span class="text-green-400">transient-list</span>
+              <span class="text-red-400">transient-delete</span>
+              <span class="text-green-400">cron-list</span>
+              <span class="text-green-400">cron-run</span>
+              <span class="text-green-400">site-info</span>
+              <span class="text-green-400">site-status</span>
+              <span class="text-green-400">site-settings</span>
+              <span class="text-green-400">cache-flush</span>
+              <span class="text-green-400">db-size</span>
+              <span class="text-green-400">db-tables</span>
+              <span class="text-red-400">search-replace</span>
+              <span class="text-green-400">rewrite-flush</span>
+              <span class="text-green-400">core-version</span>
+              <span class="text-green-400">comment-list</span>
+              <span class="text-green-400">comment-approve</span>
+              <span class="text-green-400">comment-spam</span>
+              <span class="text-red-400">comment-delete</span>
+              <span class="text-green-400">maintenance-on</span>
+              <span class="text-green-400">maintenance-off</span>
+              <span class="text-green-400">maintenance-status</span>
+              <span class="text-green-400">media-list</span>
+              <span class="text-green-400">task-list</span>
+              <span class="text-green-400">task-create</span>
+              <span class="text-green-400">task-delete</span>
+              <span class="text-green-400">skill-list</span>
+              <span class="text-green-400">skill-get</span>
+              <span class="text-green-400">block-patterns-list</span>
+              <span class="text-green-400">block-patterns-get</span>
+              <span class="text-green-400">custom-patterns-list</span>
+              <span class="text-green-400">custom-patterns-get</span>
+              <span class="text-green-400">build-page</span>
+              <span class="text-green-400">role-list</span>
+              <span class="text-green-400">role-create</span>
+              <span class="text-green-400">role-update</span>
+              <span class="text-red-400">role-delete</span>
+            </div>
+            <p class="mt-3 text-xs text-gray-500">
+              <span class="text-green-400">green</span> = read-only · <span class="text-red-400">red</span> = destructive
+            </p>
+          </Fragment>
+        </FeatureHighlight>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="py-16 bg-gray-950 border-t border-gray-800">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-3 text-center text-white">Built with Quality and Security in Mind</h2>
+      <p class="text-center text-gray-400 mb-10 max-w-2xl mx-auto">
+        Every release goes through a full test suite - PHP unit tests with Brain\Monkey, JavaScript tests with Jest and Testing Library, and integration tests against a real WordPress database. PHPCS + PHPStan level 6, zero errors.
+      </p>
+      <StatsCounter stats={stats} />
+
+      <!-- Quality badges -->
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <span class="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-300">Brain\Monkey + Mockery</span>
+        <span class="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-300">Jest + @testing-library/react</span>
+        <span class="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-300">24 integration tests</span>
+        <span class="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-300">PHPCS + PHPStan level 6</span>
+        <span class="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-300">GitHub Actions CI</span>
+        <span class="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-300">WordPress Coding Standards</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install section -->
+  <section class="py-16 bg-gray-900 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-3 text-center text-white">Install in 3 Steps</h2>
+      <p class="text-center text-gray-400 mb-10">
+        No build step required. The compiled JS is shipped in the repository.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-gray-950 border border-gray-700 rounded-lg p-6 text-center">
+          <div class="w-10 h-10 rounded-full bg-blue-600/10 border border-blue-500/30 text-blue-400 font-bold text-lg flex items-center justify-center mx-auto mb-4">1</div>
+          <h3 class="text-white font-semibold mb-2">Download</h3>
+          <p class="text-gray-400 text-sm">Go to the GitHub repository and click <span class="text-white font-mono">Code → Download ZIP</span>.</p>
+        </div>
+        <div class="bg-gray-950 border border-gray-700 rounded-lg p-6 text-center">
+          <div class="w-10 h-10 rounded-full bg-blue-600/10 border border-blue-500/30 text-blue-400 font-bold text-lg flex items-center justify-center mx-auto mb-4">2</div>
+          <h3 class="text-white font-semibold mb-2">Upload</h3>
+          <p class="text-gray-400 text-sm">In WordPress go to <span class="text-white font-mono">Plugins → Add New → Upload Plugin</span>, upload the ZIP, and activate.</p>
+        </div>
+        <div class="bg-gray-950 border border-gray-700 rounded-lg p-6 text-center">
+          <div class="w-10 h-10 rounded-full bg-blue-600/10 border border-blue-500/30 text-blue-400 font-bold text-lg flex items-center justify-center mx-auto mb-4">3</div>
+          <h3 class="text-white font-semibold mb-2">Configure</h3>
+          <p class="text-gray-400 text-sm">All widget settings live under <span class="text-white font-mono">Settings → Dashboard Widgets</span> once the plugin is active.</p>
+        </div>
+      </div>
+
+      <!-- Code alternative -->
+      <div class="bg-gray-950 border border-gray-700 rounded-lg p-6">
+        <p class="text-gray-400 text-sm mb-3">Or clone and build from source:</p>
+        <pre class="font-mono text-sm text-green-400 overflow-x-auto leading-relaxed"><code>cd wp-content/plugins
+git clone https://github.com/tquinonero/custom-dashboard-widgets CDW
+cd CDW
+composer install --no-dev</code></pre>
+      </div>
+    </div>
+  </section>
+
+</Layout>

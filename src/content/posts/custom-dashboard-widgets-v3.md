@@ -29,6 +29,8 @@ There are nine widgets you can mix, match, and rearrange using the native WordPr
 
 Every widget can be individually enabled or disabled from the settings page. You can also remove the default WordPress dashboard widgets if you want a clean slate.
 
+![Custom Dashboard Widgets - full WordPress dashboard with the plugin installed](/cdw-screenshot.png)
+
 ## The CLI Terminal
 
 This is probably the feature I use most day-to-day. The Command Line widget gives you a terminal interface inside the WordPress admin, powered by WordPress APIs rather than a real shell, so it works on any host — no SSH access required, no WP-CLI installed on the server needed.
@@ -36,6 +38,8 @@ This is probably the feature I use most day-to-day. The Command Line widget give
 It covers the commands you actually reach for: plugin and theme management, user operations, post management, database optimization, transient flushing, search-replace with a `--dry-run` option, maintenance mode, cron inspection, and more.
 
 Destructive operations require an explicit `--force` flag, critical options are protected from accidental overwrite, and every command is logged to an audit table so you have a record of what ran and when.
+
+![CDW Command Line widget - WP-CLI-like terminal inside the WordPress admin](/cli-widget.jpg)
 
 ## The AI Assistant
 
@@ -49,6 +53,8 @@ There are two execution modes:
 - **Auto** — The AI executes immediately. Useful for trusted, repetitive tasks.
 
 Your API key is encrypted with AES-256-CBC before being saved to the database, using a key derived from your site's `AUTH_SALT` and `SECURE_AUTH_SALT` constants. The raw key is never returned by any REST endpoint.
+
+![CDW AI Assistant widget - conversational site management in the WordPress admin](/ai-widget.jpg)
 
 ## WordPress Abilities API
 
