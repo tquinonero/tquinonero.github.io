@@ -19,12 +19,12 @@ const {
 
 <section class="relative bg-gray-950 h-[50vh] text-white overflow-hidden">
 
-  <!-- WordPress code rain canvas -->
-  <canvas id="hero-code-rain" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:2;"></canvas>
+  <!-- Hero background image -->
+  <img src="/cover-image.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" style="z-index:1;" aria-hidden="true" />
 
   <div class="relative z-10 flex flex-col justify-center items-center h-full text-center px-4">
     {title && <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">{title}</h1>}
-    {subtitle && <p class="text-lg md:text-xl text-gray-300 mb-8">{subtitle}</p>}
+    {subtitle && <p class="text-lg md:text-xl font-semibold text-gray-300 mb-8">{subtitle}</p>}
     {ctaText ? (
       <a
         href={ctaHref}
@@ -38,147 +38,3 @@ const {
   </div>
 </section>
 
-<script>
-  function initCodeRain() {
-    const canvas = document.getElementById('hero-code-rain') as HTMLCanvasElement | null;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // ── WordPress terms ──────────────────────────────────────────
-    const words = [
-      'add_action', 'add_filter', 'apply_filters', 'do_action',
-      'wp_enqueue_script', 'wp_enqueue_style', 'get_post_meta',
-      'update_post_meta', 'register_block_type', 'WP_Query',
-      'the_content', 'wp_head', 'wp_footer', 'get_template_part',
-      'wp_nonce_field', 'sanitize_text_field', 'esc_html',
-      'esc_attr', 'wp_safe_redirect', 'rest_api_init',
-      'register_post_type', 'register_taxonomy', 'wp_insert_post',
-      'get_posts', 'have_posts', 'the_post', 'wp_reset_postdata',
-      'is_admin', 'current_user_can', 'wp_die', 'wp_send_json',
-      'get_option', 'update_option', 'delete_option',
-      'wp_schedule_event', 'wp_mail', 'wp_remote_get',
-      'wp_cache_get', 'wp_cache_set', 'transient', 'init',
-      'plugins_loaded', 'after_setup_theme', 'template_redirect',
-      'save_post', 'pre_get_posts', 'the_title', 'the_excerpt',
-    ];
-
-    // ── Config ───────────────────────────────────────────────────
-    const COLUMN_COUNT = 8;          // more columns for density
-    const BASE_SPEED   = 0.3;        // pixels per frame (slow drift)
-    const FONT_SIZE    = 13;         // px
-    const FONT         = `${FONT_SIZE}px "JetBrains Mono", "Fira Code", "Cascadia Code", monospace`;
-    const MAX_ALPHA    = 0.18;       // clearly visible but not overpowering
-
-    // Colors: blue/cyan tones
-    const COLORS = [
-      [96, 165, 250],   // blue-400
-      [103, 232, 249],  // cyan-300
-      [147, 197, 253],  // blue-300
-    ];
-
-    type Drop = {
-      x: number;          // horizontal position
-      y: number;          // current top of the word
-      speed: number;       // px per frame
-      word: string;        // the WordPress term
-      color: number[];     // [r, g, b]
-      alphaMultiplier: number; // per-drop variation
-    };
-
-    let W = 0, H = 0;
-    let drops: Drop[] = [];
-    const state = { animId: 0 };
-
-    function resize() {
-      W = canvas!.width  = canvas!.offsetWidth;
-      H = canvas!.height = canvas!.offsetHeight;
-    }
-
-    function makeDrop(startAtTop = false): Drop {
-      const colWidth = W / COLUMN_COUNT;
-      const col = Math.floor(Math.random() * COLUMN_COUNT);
-      // Add some random offset within the column so it doesn't look like a strict grid
-      const xJitter = (Math.random() - 0.5) * colWidth * 0.6;
-      return {
-        x: colWidth * (col + 0.5) + xJitter,
-        y: startAtTop ? -(Math.random() * H * 0.5) : -(Math.random() * H * 1.5),
-        speed: BASE_SPEED + Math.random() * 0.25,
-        word: words[Math.floor(Math.random() * words.length)],
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        alphaMultiplier: 0.5 + Math.random() * 0.5,
-      };
-    }
-
-    function draw() {
-      ctx!.clearRect(0, 0, W, H);
-      ctx!.font = FONT;
-      ctx!.textAlign = 'center';
-
-      for (const d of drops) {
-        d.y += d.speed;
-
-        // Vertical fade: transparent at top & bottom edges, peak in the middle
-        const normalizedY = d.y / H; // 0 at top, 1 at bottom
-        let fade: number;
-        if (normalizedY < 0) {
-          fade = 0;
-        } else if (normalizedY < 0.25) {
-          fade = normalizedY / 0.25;          // fade in over top 25%
-        } else if (normalizedY < 0.75) {
-          fade = 1;                            // full in middle 50%
-        } else if (normalizedY < 1) {
-          fade = (1 - normalizedY) / 0.25;     // fade out over bottom 25%
-        } else {
-          fade = 0;
-        }
-
-        const alpha = MAX_ALPHA * fade * d.alphaMultiplier;
-        if (alpha > 0.001) {
-          const [r, g, b] = d.color;
-          ctx!.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-          ctx!.fillText(d.word, d.x, d.y);
-        }
-
-        // Recycle drop when it goes off-screen
-        if (d.y > H + 30) {
-          Object.assign(d, makeDrop(true));
-          d.y = -(Math.random() * 60 + 20); // restart above viewport
-        }
-      }
-
-      state.animId = requestAnimationFrame(draw);
-    }
-
-    function initDrops() {
-      // Stagger initial positions so drops are spread across the whole canvas
-      drops = Array.from({ length: COLUMN_COUNT * 2 }, () => {
-        const d = makeDrop(false);
-        d.y = Math.random() * H; // spread across viewport initially
-        return d;
-      });
-    }
-
-    // Handle resize
-    const ro = new ResizeObserver(() => {
-      resize();
-      initDrops();
-    });
-    ro.observe(canvas);
-
-    // Kick off
-    resize();
-    initDrops();
-    draw();
-
-    // Clean up before Astro navigates away (view transitions)
-    document.addEventListener('astro:before-preparation', () => {
-      cancelAnimationFrame(state.animId);
-      ro.disconnect();
-    }, { once: true });
-  }
-
-  // Run on first load and after every view-transition navigation
-  document.addEventListener('astro:page-load', initCodeRain);
-</script>
