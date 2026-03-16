@@ -3,7 +3,7 @@ title: "How to Optimise Images for WordPress Without Plugins"
 date: 2026-03-16
 author: "Toni Q"
 description: "Plugins aren't the only way to serve fast images in WordPress. Here's how to handle compression, modern formats, lazy loading, and responsive images using nothing but native tools."
-tags: ["WordPress", "Performance", "Images", "WebDevelopment"]
+tags: ["wordpress", "performance", "images", "web development"]
 slug: optimise-images-wordpress-without-plugins
 ---
 

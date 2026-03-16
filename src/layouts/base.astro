@@ -9,10 +9,13 @@ import { SITE_CONFIG } from '../config';
 interface Props {
   title?: string;
   description?: string;
+  ogType?: string;
+  ogImage?: string;
 }
 
-const { title = SITE_CONFIG.title, description = SITE_CONFIG.description } = Astro.props;
+const { title = SITE_CONFIG.title, description = SITE_CONFIG.description, ogType = 'website', ogImage } = Astro.props;
 const currentPage = getPageName(Astro.url.pathname);
+const canonicalUrl = Astro.url.toString();
 ---
 
 <html lang="en">
@@ -25,6 +28,27 @@ const currentPage = getPageName(Astro.url.pathname);
 		<meta name="google-site-verification" content="k1WKNTc7JScK2OXSMwhdX-LzEEO7XalnBS2r0E861FE" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+
+		<!-- Canonical -->
+		<link rel="canonical" href={canonicalUrl} />
+
+		<!-- RSS autodiscovery -->
+		<link rel="alternate" type="application/rss+xml" title="Tquinonero Blog" href="/rss.xml" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:site_name" content="Tquinonero" />
+		{ogImage && <meta property="og:image" content={ogImage} />}
+
+		<!-- Twitter / X -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		{ogImage && <meta name="twitter:image" content={ogImage} />}
+
 		<ClientRouter />
 	</head>
 

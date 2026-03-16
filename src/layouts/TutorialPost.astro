@@ -23,7 +23,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-GB', {
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
+  '@type': 'TechArticle',
   headline: title,
   description: description ?? '',
   datePublished: new Date(date).toISOString(),
@@ -44,18 +44,20 @@ const jsonLd = {
 
 <BaseLayout title={title} description={description} ogType="article" ogImage={image}>
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
   <Hero
-    title="Blog about WP and stuff"
-    subtitle="Insights, tips, and stories from the web."
+    title="Tutorials"
+    subtitle="Step-by-step guides for WordPress and web development."
   />
-  <!-- Post Header -->
+
+  <!-- Tutorial Header -->
   <div class="max-w-3xl mx-auto px-4 pt-12 pb-6">
     {tags.length > 0 && (
-      <div class="flex gap-2 mb-4">
+      <div class="flex gap-2 flex-wrap mb-4">
         {tags.map((tag: string) => (
           <a
             href={`/tags/${tag}`}
-            class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full hover:bg-blue-200 transition-colors"
+            class="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full hover:bg-emerald-200 transition-colors"
           >
             {tag}
           </a>
@@ -64,12 +66,13 @@ const jsonLd = {
     )}
     <h1 class="text-4xl font-bold leading-tight mb-4">{title}</h1>
     <p class="text-gray-500 text-sm">
-      By <span class="font-medium text-gray-700">{author || 'Anonymous'}</span> ·{' '}
+      By <span class="font-medium text-gray-700">{author ?? 'Anonymous'}</span> ·{' '}
       <time datetime={new Date(date).toISOString()}>{formattedDate}</time>
     </p>
   </div>
-  <!-- Post Content -->
-  <article class="prose prose-lg prose-slate max-w-3xl mx-auto px-4 pb-16 prose-headings:font-bold prose-h2:text-2xl prose-a:text-blue-600 prose-img:rounded-xl">
-      <slot />
-    </article>
+
+  <!-- Tutorial Content -->
+  <article class="prose prose-lg prose-slate max-w-3xl mx-auto px-4 pb-16 prose-headings:font-bold prose-h2:text-2xl prose-a:text-emerald-600 prose-img:rounded-xl">
+    <slot />
+  </article>
 </BaseLayout>

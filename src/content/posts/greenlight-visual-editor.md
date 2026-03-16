@@ -3,7 +3,7 @@ title: "GreenLight Visual Editor: The Future of In-Code Visual Design?"
 date: 2026-03-16
 author: "Toni Q"
 description: "GreenShift just announced GreenLight Visual Editor, a live visual editor for HTML, Astro, and Markdown that runs directly inside VS Code. Is HTML becoming the new design medium?"
-tags: ["AI", "WebDevelopment", "VSCode", "HTML", "WordPress", "Greenshift", "visual editor"]
+tags: ["ai", "web development", "vscode", "html", "wordpress", "greenshift", "visual editor"]
 slug: greenlight-visual-editor-future-in-code-visual-design
 ---
 

@@ -6,23 +6,26 @@ import MarkdownIt from 'markdown-it';
 const parser = new MarkdownIt();
 
 export async function GET(context) {
-  const blog = await getCollection('posts');
-  
-  return rss({
-    title: 'Tquinonero · Web Developer Blog',
-    description: 'Insights and stories from a WordPress & Astro developer.',
-    site: context.site,
-    items: blog.map((post) => ({
-      title: post.data.title,
-      pubDate: post.data.date,
-      description: post.data.description,
-      // Compute RSS link from post `id`
-      // This example assumes all posts are rendered as `/posts/[id]` routes
-      link: `/posts/${post.id}/`,
-      content: sanitizeHtml(parser.render(post.body || ''), {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img'])
+  const posts = await getCollection('posts');
+  const tutorials = await getCollection('tutorials');
+
+  const items = [...posts, ...tutorials]
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .map((entry) => ({
+      title: entry.data.title,
+      pubDate: entry.data.date,
+      description: entry.data.description,
+      link: `/${entry.collection}/${entry.id}/`,
+      content: sanitizeHtml(parser.render(entry.body || ''), {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
       }),
-    })),
+    }));
+
+  return rss({
+    title: 'Tquinonero · Web Developer Blog & Tutorials',
+    description: 'Articles and step-by-step guides from a WordPress & Astro developer.',
+    site: context.site,
+    items,
     customData: `<language>en-us</language>`,
   });
 }

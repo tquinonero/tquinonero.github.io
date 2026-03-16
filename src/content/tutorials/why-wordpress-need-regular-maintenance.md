@@ -3,7 +3,7 @@ title: "Why WordPress Websites Need Regular Maintenance"
 date: 2026-03-16
 author: "Toni Q"
 description: "A WordPress site isn't a 'set it and forget it' platform. Here's why ongoing maintenance is essential for security, performance, and peace of mind."
-tags: ["WordPress", "Maintenance", "Security", "WebDevelopment"]
+tags: ["wordpress", "maintenance", "security", "web development"]
 slug: why-wordpress-websites-need-regular-maintenance
 ---
 
