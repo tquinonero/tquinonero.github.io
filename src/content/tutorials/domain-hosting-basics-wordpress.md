@@ -6,11 +6,11 @@ description: "What even is a domain? How does hosting work? This practical guide
 tags: ["wordpress", "hosting", "domains", "beginners"]
 slug: domain-hosting-basics-wordpress
 ---
-So you want to build a WordPress website. You've probably heard you need a "domain" and "hosting" — but what does that actually mean, and how do you get them? This guide covers the essentials without the fluff.
+So you want to build a WordPress website. You've probably heard you need a "domain" and "hosting". But what does that actually mean, and how do you get them? This guide covers the essentials without the fluff. Let's get into it.
 
 ## What is a Domain?
 
-Think of a domain as your website's street address. Just like your home has a physical address, your website has a domain name — like `example.com`.
+Think of a domain as your website's street address. Just like your home has a physical address, your website has a domain name. It looks like this: `example.com`.
 
 When someone types `example.com` into their browser, the browser uses a system called DNS (Domain Name System) to find the actual server where your website lives. That server then sends the website files back to the visitor's browser.
 
@@ -28,13 +28,13 @@ When someone types `example.com` into their browser, the browser uses a system c
 -   Country codes (`.uk`, `.de`, `.es`) — location-specific
 -   Newer options (`.io`, `.dev`, `.app`) — popular in tech/startups
 
-For a WordPress site, `.com` is still the most recognizable. If your perfect `.com` is taken, a `.org` or `.io` can work — just avoid anything obscure that people will struggle to remember or spell.
+Globally `.com` is still the most recognizable. If your chosen `.com` is taken, a `.org` or `.io` can work. Just avoid anything obscure that people will struggle to remember or spell.
 
 ---
 
 ## What is Hosting?
 
-If the domain is your address, hosting is the physical building where your website lives. Hosting is a service that stores your website files on a server and makes them accessible on the internet.
+If the domain is your address, a server is the physical building where your website lives. Hosting is a service that stores your website files on a server and makes them accessible on the internet.
 
 When you sign up for hosting, you're renting space on a server — either a shared server (your site shares resources with other sites) or a dedicated server (your site has its own resources).
 
@@ -42,11 +42,11 @@ When you sign up for hosting, you're renting space on a server — either a shar
 
 **Shared Hosting** — Multiple websites share the same server. Cheapest option, good for beginners. Think of it as an apartment building.
 
-**VPS (Virtual Private Server)** — Your site still shares a server, but with dedicated resources (CPU, RAM). Better performance, costs more. Think of it as a condo.
+**VPS (Virtual Private Server)** — Your site still shares a server, but with dedicated resources. Better performance, costs more. Think of it as a condo.
 
 **Dedicated Server** — You rent an entire server for yourself. Most expensive, full control. Think of it as a house.
 
-**Managed WordPress Hosting** — Hosting specifically optimised for WordPress. The host handles updates, security, and performance. Worth the premium for serious sites. Examples: WP Engine, Kinsta, Flywheel.
+**Managed WordPress Hosting** — Hosting specifically optimised for WordPress. The hosting provider handles updates, security, and performance for you. Worth the premium for serious sites. Examples: Siteground, WP Engine, Kinsta, Flywheel.
 
 **Cloud Hosting** — Your site runs on a network of servers (the "cloud"). Scalable and reliable. Examples: AWS, Google Cloud, DigitalOcean.
 
@@ -60,8 +60,6 @@ You can buy a domain from a **registrar** — a company authorised to sell domai
 
 -   **Namecheap** — Cheap, good interface, includes WHOIS privacy
 -   **Cloudflare** — Cheap, simple, bundles well with their CDN
--   **Google Domains** — Simple, reliable (now Google Domains is owned by Squarespace)
--   **GoDaddy** — Huge market share, but renewal prices are high
 -   **Hover** — Clean interface, good support
 
 ### Tips for buying domains:
@@ -69,7 +67,7 @@ You can buy a domain from a **registrar** — a company authorised to sell domai
 1.  **Use a reputable registrar** — Avoid obscure resellers
 2.  **Enable auto-renewal** — Nothing worse than your domain expiring and someone else grabbing it
 3.  **Buy WHOIS privacy** — Keeps your personal details out of the public database (most registrars include it free)
-4.  **Don't buy from your host** — It's often cheaper to keep domain and hosting separate
+4.  **Don't buy from your host** — It's often good practice to keep domain and hosting separate
 5.  **Get the common TLDs** — If you buy `example.com`, consider grabbing `.org` and `.net` too to prevent copycats
 
 ---
@@ -78,20 +76,20 @@ You can buy a domain from a **registrar** — a company authorised to sell domai
 
 ### For a basic WordPress site, you have a few solid options:
 
-**Budget shared hosting (~$5–$10/month):**
+**Budget shared hosting (~5€–10€/month):**
 -   Hostinger
 -   A2 Hosting
 -   SiteGround (shared plans)
 -   Bluehost
 -   HostGator
 
-**Managed WordPress (~$15–$30/month):**
+**Managed WordPress (~15€–30€/month):**
 -   WP Engine
 -   Kinsta
 -   Flywheel
 -   SiteGround (managed)
 
-**Self-managed cloud/VPS (~$5–$20/month):**
+**Self-managed cloud/VPS (~15€–50€/month):**
 -   DigitalOcean
 -   Linode
 -   Hetzner
@@ -101,11 +99,11 @@ You can buy a domain from a **registrar** — a company authorised to sell domai
 
 -   **WordPress support** — Do they actually know WordPress?
 -   **Uptime guarantee** — Look for 99.9% or higher
--   **Backup frequency** — Daily backups at minimum
+-   **Backup frequency** — Daily automated backups at minimum
 -   **SSL certificate** — Should be free (Let's Encrypt)
--   **PHP version support** — Must support PHP 8.1+
+-   **PHP version support** — Must support PHP 8.4+
 -   **Storage and bandwidth** — Unlimited is often marketing speak; check the fair use policy
--   **数据中心 location** — Closer to your visitors = faster load times
+-   **Location** — Closer to your visitors = faster load times
 
 ---
 
@@ -162,10 +160,10 @@ It's convenient but not always cheaper. Buying separately gives you more flexibi
 
 For a typical WordPress site:
 
--   **Budget:** ~$5–$10/month for shared hosting + ~$10–$15/year for a domain
--   **Better:** ~$20–$30/month for managed WordPress hosting
--   **Minimum:** You'll need roughly $50–$70 to get started for the first year
+-   **Budget:** –10€/month for shared hosting + 10 to 15€/year for the domain
+-   **Better:** ~20 to 30€ per month for managed hosting for WordPress
+-   **Minimum:** You'll need around 40€ to get started the first year
 
-If you're just starting out, go with managed WordPress hosting — the extra cost is worth it for the ease of use, security, and support. As your site grows, you can always scale up.
+If you're just starting out, go with managed WordPress hosting. The extra cost is worth it in my opinion and as your site grows you can always move to a self-managed hosting or just continue letting your hostingp provider take care of the server configuration.
 
-Still have questions? Drop them in the comments.
+Still have questions? Send me an email and let's discuss.
