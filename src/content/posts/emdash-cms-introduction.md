@@ -7,11 +7,11 @@ tags: ["cloudflare", "cms", "emdash", "wordpress", "astro", "serverless"]
 slug: emdash-cms-introduction
 ---
 
-Cloudflare has just announced EmDash, a brand new content management system that they're calling the spiritual successor to WordPress. After spending some time reading about this launch, I wanted to break down what EmDash actually is and why it matters.
+Cloudflare has just [announced EmDash](https://blog.cloudflare.com/emdash-wordpress/), a brand new content management system that they're calling the spiritual successor to WordPress. After spending some time reading about this launch, I wanted to break down what EmDash actually is and why it matters.
 
 ## What is EmDash?
 
-EmDash is a full-stack serverless JavaScript CMS built on top of Astro 6.0. It's written entirely in TypeScript, is fully open source under the MIT license, and can be deployed to Cloudflare Workers or any Node.js server.
+EmDash is a full-stack serverless JavaScript CMS built on top of [Astro](https://astro.build/) 6.0. It's written entirely in TypeScript, is fully open source under the MIT license, and can be deployed to Cloudflare Workers or any Node.js server.
 
 The project aims to take what made WordPress successful (democratizing publishing for everyone) while addressing the fundamental problems that WordPress cannot solve after nearly 24 years of existence.
 
@@ -23,7 +23,7 @@ This is perhaps the most significant issue EmDash addresses. According to the an
 
 Why is this happening? A WordPress plugin is a PHP script that hooks directly into WordPress with no isolation. When you install a plugin, you're trusting it with access to nearly everything: your database, your filesystem, your entire site.
 
-EmDash solves this by running each plugin in its own sandboxed isolate called a Dynamic Worker. Rather than giving plugins direct access to underlying data, EmDash provides capabilities through bindings based on what the plugin explicitly declares it needs in its manifest. This means you know exactly what permissions you're granting before you install a plugin.
+EmDash solves this by running each plugin in its own sandboxed isolate called a [Dynamic Worker](https://developers.cloudflare.com/workers/runtime-apis/dynamic-workers/). Rather than giving plugins direct access to underlying data, EmDash provides capabilities through bindings based on what the plugin explicitly declares it needs in its manifest. This means you know exactly what permissions you're granting before you install a plugin.
 
 ### Marketplace Lock-in
 
@@ -40,7 +40,7 @@ EmDash breaks this cycle in two ways:
 
 WordPress requires provisioning and managing servers. To handle traffic spikes, you need to pre-provision instances and run some amount of idle compute.
 
-EmDash is built for serverless platforms. On Cloudflare Workers, it instantly spins up an isolate to execute code and serves a response, then scales back down to zero when there are no requests. You only pay for CPU time spent doing actual work.
+EmDash is built for serverless platforms. On [Cloudflare Workers](https://workers.cloudflare.com/), it instantly spins up an isolate to execute code and serves a response, then scales back down to zero when there are no requests. You only pay for CPU time spent doing actual work.
 
 ## Built for AI
 
@@ -60,7 +60,7 @@ Unlike WordPress themes that can run code through functions.php (creating the sa
 
 ## Built-in Payments
 
-Every EmDash site has x402 support built in. This is an open standard for Internet-native payments that lets you charge for access to content without requiring subscriptions. You can configure which content requires payment and set your prices.
+Every EmDash site has [x402](https://www.x402.org/) support built in. This is an open standard for Internet-native payments that lets you charge for access to content without requiring subscriptions. You can configure which content requires payment and set your prices.
 
 ## Authentication
 
@@ -80,7 +80,7 @@ EmDash is currently at v0.1.0 preview. You can deploy it to your Cloudflare acco
 npm create emdash@latest
 ```
 
-Or try the admin interface at emdashcms.com.
+Or try the admin interface at [emdashcms.com](https://emdashcms.com/).
 
 ## So... Is This the Successor to WordPress?
 
