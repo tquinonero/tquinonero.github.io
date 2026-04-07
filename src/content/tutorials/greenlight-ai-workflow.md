@@ -23,7 +23,7 @@ Before touching any AI model, Igor makes a fundamental choice: **HTML only**.
 
 His reasoning is practical: HTML is the native language of the web. When you ask an AI to generate HTML, it does not waste tokens converting between formats or understanding framework abstractions. It just builds. No server required, no webpack, no dependencies, just a file that works.
 
-For editing, he uses a combination of [Cursor](https://cursor.sh/), [Anti-Gravity](https://github.com/anncwb/anti-gravity), and [Visual Studio Code](https://code.visualstudio.com/) (all essentially VSCode forks), plus Greenlight as a visual editor extension.
+For editing, he uses a combination of [Cursor](https://cursor.sh/), [Anti-Gravity](https://antigravity.google/), and [Visual Studio Code](https://code.visualstudio.com/) (all essentially VSCode forks), plus Greenlight as a visual editor extension.
 
 ## Step 1: Build a Proper Design System
 
