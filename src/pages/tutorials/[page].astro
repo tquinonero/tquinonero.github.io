@@ -1,28 +1,39 @@
 ---
-import Layout from '../layouts/base.astro';
-import Hero from '../components/hero.astro';
+import Layout from '../../layouts/base.astro';
+import Hero from '../../components/hero.astro';
 import { getCollection } from 'astro:content';
 
 export const PAGE_SIZE = 6;
 
-const tutorials = (await getCollection('tutorials')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+export async function getStaticPaths() {
+  const tutorials = await getCollection('tutorials');
+  const sortedTutorials = tutorials.sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
+  
+  const totalPages = Math.ceil(sortedTutorials.length / PAGE_SIZE);
+  
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({
+    params: { page: String(i + 2) },
+    props: {
+      tutorials: sortedTutorials.slice((i + 1) * PAGE_SIZE, (i + 2) * PAGE_SIZE),
+      currentPage: i + 2,
+      totalPages,
+      totalItems: sortedTutorials.length
+    }
+  }));
+}
 
-const totalPages = Math.ceil(tutorials.length / PAGE_SIZE);
-const paginatedTutorials = tutorials.slice(0, PAGE_SIZE);
+const { tutorials, currentPage, totalPages, totalItems } = Astro.props;
 ---
 
-<Layout title="Tutorials">
+<Layout title={`Tutorials - Page ${currentPage}`}>
   <Hero title="Tutorials" subtitle="Step-by-step guides and deep dives." />
   <section class="py-14 px-6 bg-gray-950">
     <div class="max-w-4xl mx-auto">
       <h2 class="text-3xl font-bold text-white mb-10">Guides & Tutorials</h2>
-      {paginatedTutorials.length === 0 && (
-        <p class="text-gray-400">No tutorials yet. Check back soon!</p>
-      )}
       <div class="grid gap-6">
-        {paginatedTutorials.map((entry) => (
+        {tutorials.map((entry) => (
           <article class="group relative bg-gray-900 rounded-xl border border-gray-700 border-l-4 border-l-emerald-500 p-6 hover:shadow-xl hover:border-gray-600 transition-all duration-300">
             <h3 class="text-xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors duration-200">
               <a href={`/tutorials/${entry.id}`} class="before:absolute before:inset-0 focus:outline-none">
@@ -52,17 +63,25 @@ const paginatedTutorials = tutorials.slice(0, PAGE_SIZE);
           </article>
         ))}
       </div>
-      {totalPages > 1 && (
-        <div class="mt-12 flex justify-center gap-3">
-          {totalPages > 1 && (
-            <a href="/tutorials/2" class="px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 hover:bg-emerald-600 hover:border-emerald-500 transition-colors">
-              Next Page &rarr;
-            </a>
-          )}
-        </div>
-      )}
+      
+      <div class="mt-12 flex justify-center gap-3">
+        {currentPage > 2 && (
+          <a href={`/tutorials/${currentPage - 1}`} class="px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 hover:bg-emerald-600 hover:border-emerald-500 transition-colors">
+            &larr; Previous
+          </a>
+        )}
+        <a href="/tutorials" class="px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 hover:bg-emerald-600 hover:border-emerald-500 transition-colors">
+          Page 1
+        </a>
+        {currentPage < totalPages && (
+          <a href={`/tutorials/${currentPage + 1}`} class="px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 hover:bg-emerald-600 hover:border-emerald-500 transition-colors">
+            Next &rarr;
+          </a>
+        )}
+      </div>
+      
       <p class="text-center text-gray-500 text-sm mt-4">
-        Showing {paginatedTutorials.length} of {tutorials.length} tutorials
+        Page {currentPage} of {totalPages} ({totalItems} total tutorials)
       </p>
     </div>
   </section>

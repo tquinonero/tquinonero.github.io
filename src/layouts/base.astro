@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import { ClientRouter } from 'astro:transitions';
 import Navbar from '../components/navbar.astro';
 import Footer from '../components/Footer.astro';
 import { getPageName } from '../utils/getPageName';
@@ -48,13 +47,11 @@ const canonicalUrl = Astro.url.toString();
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		{ogImage && <meta name="twitter:image" content={ogImage} />}
-
-		<ClientRouter />
 	</head>
 
     <body>
-        <Navbar transition:persist currentPage={currentPage} />
-        <main transition:animate="fade">
+        <Navbar currentPage={currentPage} />
+        <main>
           <slot />
         </main>
         <Footer />
