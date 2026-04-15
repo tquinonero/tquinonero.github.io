@@ -27,7 +27,7 @@ const tools = [
 const toolsActive = tools.some(t => t.code === currentPage);
 ---
 
-<nav class="bg-warm-900 text-warm-100 shadow-lg sticky top-0 z-50">
+<nav id="navbar" class="bg-transparent text-warm-100 sticky top-0 z-50 transition-all duration-300">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo/Brand -->
@@ -143,6 +143,25 @@ const toolsActive = tools.some(t => t.code === currentPage);
 <script>
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
+  const navbar = document.getElementById('navbar');
+
+  // Scroll behavior - transparent at top, solid on scroll
+  function handleScroll() {
+    if (!navbar) return;
+    if (window.scrollY > 20) {
+      navbar.classList.add('bg-warm-900', 'shadow-lg');
+      navbar.classList.remove('bg-transparent');
+    } else {
+      navbar.classList.remove('bg-warm-900', 'shadow-lg');
+      navbar.classList.add('bg-transparent');
+    }
+  }
+
+  // Initial state
+  handleScroll();
+
+  // Listen for scroll
+  window.addEventListener('scroll', handleScroll, { passive: true });
 
   if (btn && menu) {
     btn.addEventListener('click', (e) => {
