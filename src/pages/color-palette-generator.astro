@@ -74,6 +74,9 @@ import BaseLayout from '../layouts/base.astro';
                 <button id="exportJSON" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
                   {} Copy JSON
                 </button>
+                <button id="exportThemeJSON" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                  🥥 Copy theme.json
+                </button>
               </div>
             </div>
 
@@ -199,6 +202,15 @@ import BaseLayout from '../layouts/base.astro';
     }
     :global(.color-hex-input:focus) { border-color: #7c3aed; background: #1c1c1f; }
 
+    :global(.color-name-input) {
+      width: 100%; font-family: sans-serif; font-size: .7rem; font-weight: 600;
+      color: #a1a1aa; background: #18181b; border: 1px solid transparent;
+      border-radius: .375rem; padding: 4px 6px; outline: none; transition: border-color .15s;
+      text-transform: uppercase; letter-spacing: .05em;
+    }
+    :global(.color-name-input:hover) { border-color: #3f3f46; color: #d4d4d8; }
+    :global(.color-name-input:focus) { border-color: #7c3aed; background: #1c1c1f; color: #f4f4f5; }
+
     :global(.lock-btn) {
       position: absolute; top: .5rem; right: .5rem;
       padding: .35rem .45rem; background: rgba(0,0,0,.5);
@@ -305,6 +317,7 @@ import BaseLayout from '../layouts/base.astro';
   // State
   const state = {
     colors: [],
+    names: ["Primary", "Secondary", "Tertiary", "Quaternary", "Quinary"],
     locked: [false, false, false, false, false],
   };
 
@@ -318,6 +331,7 @@ import BaseLayout from '../layouts/base.astro';
     exportCSS: document.getElementById("exportCSS"),
     exportTailwind: document.getElementById("exportTailwind"),
     exportJSON: document.getElementById("exportJSON"),
+    exportThemeJSON: document.getElementById("exportThemeJSON"),
     baseColorPicker: document.getElementById("baseColorPicker"),
     baseColorHex: document.getElementById("baseColorHex"),
     randomBaseBtn: document.getElementById("randomBaseBtn"),
@@ -381,7 +395,10 @@ import BaseLayout from '../layouts/base.astro';
           ${state.locked[idx] ? '🔒' : '🔓'}
         </button>
         <div class="color-info">
-          <div class="color-name">${getColorName(color)}</div>
+          <input class="color-name-input" value="${state.names[idx]}" maxlength="20"
+            onchange="updateColorName(${idx}, this.value)"
+            onclick="this.select()"
+            title="Click to edit name for theme.json" />
           <input class="color-hex-input" value="${color}" maxlength="7"
             onchange="updateColor(${idx}, this.value)"
             onclick="this.select()"
@@ -473,6 +490,12 @@ import BaseLayout from '../layouts/base.astro';
     renderPalette();
   }
 
+  function updateColorName(idx, value) {
+    const name = value.trim();
+    if (!name) return;
+    state.names[idx] = name;
+  }
+
   function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
       showToast();
@@ -505,6 +528,13 @@ import BaseLayout from '../layouts/base.astro';
       content = `theme: {\n  colors: {\n${state.colors.map((c, i) => `    color${i + 1}: '${c}',`).join("\n")}\n  }\n}`;
     } else if (format === "json") {
       content = JSON.stringify({ palette: state.colors }, null, 2);
+    } else if (format === "themejson") {
+      const palette = state.colors.map((color, idx) => ({
+        slug: state.names[idx].toLowerCase().replace(/\s+/g, "-"),
+        color: color,
+        name: state.names[idx]
+      }));
+      content = JSON.stringify({ settings: { color: { palette } } }, null, 2);
     }
 
     navigator.clipboard.writeText(content).then(() => {
@@ -551,11 +581,13 @@ import BaseLayout from '../layouts/base.astro';
   elements.exportCSS?.addEventListener("click", () => exportAs("css"));
   elements.exportTailwind?.addEventListener("click", () => exportAs("tailwind"));
   elements.exportJSON?.addEventListener("click", () => exportAs("json"));
+  elements.exportThemeJSON?.addEventListener("click", () => exportAs("themejson"));
 
   // Expose globally for onclick handlers
   window.copyToClipboard = copyToClipboard;
   window.toggleLock = toggleLock;
   window.updateColor = updateColor;
+  window.updateColorName = updateColorName;
 
   // Initialize
   generatePalette();
