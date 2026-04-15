@@ -31,6 +31,8 @@ The delay is not trivial. Real-time collaboration, similar to what Google Docs o
 - Performance optimization for concurrent editing
 - Seamless integration with the existing block editor
 
+The WordPress core team explained the delay in a [community announcement](https://make.wordpress.org/core/2026/03/31/extending-the-7-0-cycle/), detailing why more time was needed to get the feature right.
+
 When a feature this ambitious encounters delays, it is usually for good reason. The WordPress core team is right to hold back rather than ship something broken.
 
 ## The Reader's Perspective
