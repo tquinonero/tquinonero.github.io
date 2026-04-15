@@ -39,7 +39,7 @@ Bricks has become one of the more popular page builders in the WordPress space, 
 
 But the same pattern appears repeatedly: new addons launch with fanfare, attract early adopters, then fade away. Some developers release multiple addons and abandon all of them. Others disappear after a single update that breaks compatibility with a newer Bricks version.
 
-The irony is that Bricks itself is a paid product. Users already pay for the builder, then pay more for addons that claim to enhance it. When those addons die, users feel双重失望 — doubly disappointed.
+The irony is that Bricks itself is a paid product. Users already pay for the builder, then pay more for addons that claim to enhance it. When those addons die, users feel scammed — doubly disappointed.
 
 ## Why This Keeps Happening
 
@@ -69,14 +69,10 @@ If you use page builder addons, here are some strategies to minimize risk:
 
 6. **Consider the open-source alternative** - Gutenberg and the WordPress block editor have a different ecosystem. While not perfect, core WordPress features don't get abandoned.
 
-## The Bigger Picture
-
 This addon problem is part of a larger pattern in the WordPress ecosystem. The same dynamics appear in theme marketplaces, plugin bundles, and SaaS products. The enshittification that affects social media platforms also affects the tools we build our websites with.
 
-The difference is that when a social media platform declines, you can usually export your data and move on. When a page builder addon dies, you're often stuck with a site that's difficult to maintain and expensive to rebuild.
-
-The most resilient approach is to depend as much as possible on core functionality and well-established tools. The flashy new addon that promises to solve all your problems might be gone in a year. The basic features built into your page builder will likely still be there.
+The most resilient approach in my opinion is to depend as much as possible on core functionality and well-established tools. The flashy new addon that promises to solve all your problems might be gone in a year. The basic features built into your page builder will likely still be there.
 
 ---
 
-Building a website is an investment. Make sure you're not betting on tools that will leave you stranded.
+Building a website is an investment. Make sure you're not betting on tools that will leave you stranded!
