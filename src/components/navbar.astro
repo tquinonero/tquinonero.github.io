@@ -27,7 +27,7 @@ const tools = [
 const toolsActive = tools.some(t => t.code === currentPage);
 ---
 
-<nav class="bg-warm-950 text-warm-100 shadow-lg sticky top-0 z-50">
+<nav class="text-warm-100 shadow-lg sticky top-0 z-50" style="background-color: #0f0c0a !important;">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo/Brand -->
@@ -72,7 +72,7 @@ const toolsActive = tools.some(t => t.code === currentPage);
           </button>
 
           <!-- Dropdown Menu -->
-          <div class="absolute right-0 mt-2 w-64 bg-warm-800 rounded-lg shadow-xl border border-warm-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
+          <div class="absolute right-0 mt-2 w-64 rounded-lg shadow-xl border border-warm-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50" style="background-color: #292524 !important;">
             <div class="py-1">
               {tools.map(tool => (
                 <a
