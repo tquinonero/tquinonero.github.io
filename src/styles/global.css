@@ -1,6 +1,71 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Force warm palette across entire site */
+.bg-gray-950 { background-color: #0f0c0a !important; }
+.bg-gray-900 { background-color: #1c1917 !important; }
+.bg-gray-800 { background-color: #292524 !important; }
+.bg-gray-700 { background-color: #3d3835 !important; }
+
+.text-gray-950 { color: #0f0c0a !important; }
+.text-gray-900 { color: #1c1917 !important; }
+.text-gray-800 { color: #292524 !important; }
+.text-gray-700 { color: #57534e !important; }
+.text-gray-600 { color: #78716c !important; }
+.text-gray-500 { color: #a8a29e !important; }
+.text-gray-400 { color: #d6d3d1 !important; }
+.text-gray-300 { color: #e7e5e4 !important; }
+.text-gray-200 { color: #faf5eb !important; }
+.text-gray-100 { color: #fefcf8 !important; }
+.text-white { color: #faf5eb !important; }
+
+.border-gray-950 { border-color: #0f0c0a !important; }
+.border-gray-900 { border-color: #1c1917 !important; }
+.border-gray-800 { border-color: #292524 !important; }
+.border-gray-700 { border-color: #3d3835 !important; }
+.border-gray-600 { border-color: #57534e !important; }
+
+/* Blue to amber accent */
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800 { background-color: #f59e0b !important; }
+.bg-blue-400, .bg-blue-300, .bg-blue-200, .bg-blue-100 { background-color: #fbbf24 !important; }
+.text-blue-500, .text-blue-400, .text-blue-300 { color: #f59e0b !important; }
+.text-blue-200 { color: #fbbf24 !important; }
+.border-blue-500, .border-blue-400 { border-color: #f59e0b !important; }
+
+/* Indigo to accent */
+.bg-indigo-500, .bg-indigo-600 { background-color: #f59e0b !important; }
+.text-indigo-400 { color: #f59e0b !important; }
+.border-indigo-500 { border-color: #f59e0b !important; }
+
+/* Emerald to accent */
+.bg-emerald-500, .bg-emerald-600 { background-color: #f59e0b !important; }
+.text-emerald-400 { color: #f59e0b !important; }
+.border-emerald-500 { border-color: #f59e0b !important; }
+.bg-emerald-900 { background-color: #78350f !important; }
+
+/* Cyan to accent light */
+.text-cyan-400 { color: #fbbf24 !important; }
+.from-cyan-300 { --tw-gradient-from: #fbbf24 !important; }
+.to-cyan-300 { --tw-gradient-to: #fbbf24 !important; }
+
+/* Slate to warm */
+.text-slate-400 { color: #a8a29e !important; }
+.text-slate-300 { color: #d6d3d1 !important; }
+.text-slate-200 { color: #e7e5e4 !important; }
+.text-slate-100 { color: #faf5eb !important; }
+
+/* Yellow CTA buttons */
+.bg-yellow-400 { background-color: #f59e0b !important; }
+.bg-yellow-300 { background-color: #fbbf24 !important; }
+.text-yellow-400 { color: #0f0c0a !important; }
+.hover\:bg-yellow-300:hover { background-color: #d97706 !important; }
+
+/* Base body styles */
+body {
+  background-color: #0f0c0a;
+  color: #faf5eb;
+}
+
 /* View Transitions - Page Navigation */
 @keyframes pageFadeOut {
   from { opacity: 1; }
