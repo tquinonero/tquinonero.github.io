@@ -27,13 +27,13 @@ const tools = [
 const toolsActive = tools.some(t => t.code === currentPage);
 ---
 
-<nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-50">
+<nav class="bg-warm-900 text-warm-100 shadow-lg sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo/Brand -->
       <div class="flex-shrink-0">
         <a href="/" class="text-2xl font-bold hover:opacity-80 transition-opacity duration-300 flex items-baseline gap-0">
-            <span class="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">tquinonero</span><span class="text-blue-400 font-light">.dev</span>
+            <span class="bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">tquinonero</span><span class="text-accent font-light">.dev</span>
           </a>
       </div>
 
@@ -45,8 +45,8 @@ const toolsActive = tools.some(t => t.code === currentPage);
             href={link.href}
             class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
               link.active
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                ? 'bg-accent text-warm-950 shadow-md shadow-accent/20'
+                : 'text-warm-300 hover:bg-warm-800 hover:text-warm-100'
             }`}
           >
             {link.label}
@@ -58,8 +58,8 @@ const toolsActive = tools.some(t => t.code === currentPage);
           <button
             class={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-1 ${
               toolsActive
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                : 'text-gray-300 group-hover:bg-gray-800'
+                ? 'bg-accent text-warm-950 shadow-md shadow-accent/20'
+                : 'text-warm-300 group-hover:bg-warm-800'
             }`}
           >
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -72,15 +72,15 @@ const toolsActive = tools.some(t => t.code === currentPage);
           </button>
 
           <!-- Dropdown Menu -->
-          <div class="absolute right-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
+          <div class="absolute right-0 mt-2 w-64 bg-warm-800 rounded-lg shadow-xl border border-warm-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
             <div class="py-1">
               {tools.map(tool => (
                 <a
                   href={tool.href}
                   class={`block px-4 py-2.5 text-sm font-medium transition-colors duration-200 border-l-2 ${
                     tool.active
-                      ? 'bg-gray-700/50 text-blue-400 border-blue-500'
-                      : 'border-transparent text-gray-300 hover:bg-gray-700 hover:text-white'
+                      ? 'bg-warm-700/50 text-accent border-accent'
+                      : 'border-transparent text-warm-300 hover:bg-warm-700 hover:text-warm-100'
                   }`}
                 >
                   {tool.label}
@@ -93,7 +93,7 @@ const toolsActive = tools.some(t => t.code === currentPage);
 
       <!-- Mobile Menu Button -->
       <div class="md:hidden flex items-center">
-        <button id="mobile-menu-btn" class="text-gray-300 hover:text-white p-2 focus:outline-none" aria-label="Toggle menu">
+        <button id="mobile-menu-btn" class="text-warm-300 hover:text-warm-100 p-2 focus:outline-none" aria-label="Toggle menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
@@ -103,15 +103,15 @@ const toolsActive = tools.some(t => t.code === currentPage);
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-gray-900 border-t border-gray-800">
+  <div id="mobile-menu" class="hidden md:hidden bg-warm-900 border-t border-warm-800">
     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
       {links.map(link => (
         <a
           href={link.href}
           class={`block px-3 py-2 rounded-md text-base font-medium ${
             link.active
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              ? 'bg-accent text-warm-950'
+              : 'text-warm-300 hover:bg-warm-800 hover:text-warm-100'
           }`}
         >
           {link.label}
@@ -119,8 +119,8 @@ const toolsActive = tools.some(t => t.code === currentPage);
       ))}
       
       <!-- Mobile Tools Section -->
-      <div class="pt-2 pb-1 border-t border-gray-800 mt-2">
-        <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+      <div class="pt-2 pb-1 border-t border-warm-800 mt-2">
+        <div class="px-3 py-2 text-xs font-semibold text-warm-500 uppercase tracking-wider">
           Free Tools
         </div>
         {tools.map(tool => (
@@ -128,8 +128,8 @@ const toolsActive = tools.some(t => t.code === currentPage);
             href={tool.href}
             class={`block px-3 py-2 rounded-md text-sm font-medium ${
               tool.active
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                ? 'bg-accent text-warm-950'
+                : 'text-warm-400 hover:bg-warm-800 hover:text-warm-100'
             }`}
           >
             {tool.label}
