@@ -9,9 +9,9 @@ slug: how-to-manage-wordpress-user-roles-and-capabilities
 
 ## Introduction
 
-Managing who can do what on your WordPress site is one of the first things a site owner learns — and one of the most important. WordPress comes with a role‑capability system that lets you control everything from content creation to plugin installation. Getting it right means users have just enough access to do their jobs, and not enough to break or compromise the site.
+Managing who can do what on your WordPress site is one of the first things you as a site owner shoud learn. WordPress comes with a role‑capability system that lets you control everything from content creation to plugin installation. Getting it right means users have just enough access to do their jobs, and not enough to break or compromise your precious website.
 
-This guide walks through the built‑in roles, how the capability system works, when and how to create custom roles, and the safest ways to make changes — using UI plugins or code.
+This guide walks through the built‑in roles, how the capability system works, when and how to create custom roles, and the safest ways to make changes both using plugins or code.
 
 ---
 
@@ -51,7 +51,7 @@ WordPress uses **`map_meta_cap`** internally to translate high‑level capabilit
 
 ## Creating Custom Roles
 
-### Option A: UI plugin (recommended for non‑devs)
+### Option A: Use a plugin (recommended for non‑devs)
 
 Plugins such as **User Role Editor** or **Members** provide a dashboard UI to create new roles, add/remove capabilities, and assign roles to users — no code required.
 
@@ -200,36 +200,6 @@ wp user add-role 12 client_reviewer   # assign to user ID 12
 
 ---
 
-## Exercises / Takeaways
-
-1. **Identify a role on your site that needs tweaking.**  
-   *Example: “Our contributors can’t upload images – we need to give them `upload_files`.”*
-
-2. **Choose your method.**  
-   - *UI*: Install **User Role Editor**, add the capability, test as that user.  
-   - *Code*: Add the `add_role()` snippet to your theme’s `functions.php` (or a must‑plugin), then visit the site as that user to verify.
-
-3. **Test the change.**  
-   Log in as that role and perform the expected action (publish a post, upload an image, edit a page). Confirm the capability works as intended and that no unexpected capabilities were gained.
-
-4. **Document it.**  
-   Add a brief note in your site’s readme or repo: *“Role `contributor_plus` created on YYYY‑MM‑DD to allow upload_files. Managed via code in `functions.php`.”*
-
-5. **Repeat for another role** (or undo if the change wasn’t needed).
-
----
-
-## Wrapping Up
-
-WordPress’s role‑capability system is powerful precisely because it’s granular. By understanding the built‑in roles, how capabilities map to actions, and the safe ways to create or modify roles — via UI plugins for non‑devs or code for developers — you can give every user on your site exactly the access they need.
-
-**Next steps:**
-- Audit your current roles using the checklist above.
-- Pick one role to adjust this week (either via a plugin or a tiny `functions.php` snippet).
-- Test, document, and repeat.
-
----
-
 ## Further Reading
 
 - [WordPress Codex: Roles and Capabilities](https://wordpress.org/documentation/article/roles-and-capabilities/) – the definitive reference (the handbook you just read).
@@ -237,18 +207,5 @@ WordPress’s role‑capability system is powerful precisely because it’s gran
 - “Capability vs Role” deep‑dive on the WordPress developer blog – when to use each approach.
 - *User Role Editor* plugin page – UI‑based role management.
 - *Members* plugin page – advanced role control with front‑end UI.
-
----
-## Block Themes Note
-
-The WordPress user‑role and capability system is **independent of the theme style** — it works the same whether you are using a classic PHP theme or a block theme (Full Site Editing). The same default roles (Administrator, Editor, Author, Contributor, Subscriber) and all core functions (`add_role()`, `remove_cap()`, `current_user_can()`, etc.) apply regardless of theme type.
-
-That said, a couple of block‑theme‑specific touches are worth keeping in mind:
-
-- **Site Editor access** – capabilities like `edit_posts` still control whether a user can create or edit posts from the Site Editor (`Appearance → Editor`). Granting `edit_posts` to a role makes the editor available in the block theme’s interface.
-- **Global styles (`theme.json`)** – the `switch_themes` capability affects which `theme.json` files a user can select in the Site Editor’s Styles panel. If you want to limit style switching, remove that capability from the role.
-- **Front‑end role gating** – block themes often expose Site Editor patterns or template parts on the front end. You can protect these with `current_user_can()` checks in your template parts or block `viewScriptModule` code, just as you would hide admin menu items in a classic theme.
-
-Beyond those points, the tutorial’s checklists, WP‑CLI commands, and plugin recommendations (`User Role Editor`, `Members`) apply unchanged to block‑theme projects.
 
 ---
