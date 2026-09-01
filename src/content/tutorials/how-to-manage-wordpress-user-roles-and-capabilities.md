@@ -239,3 +239,16 @@ WordPress’s role‑capability system is powerful precisely because it’s gran
 - *Members* plugin page – advanced role control with front‑end UI.
 
 ---
+## Block Themes Note
+
+The WordPress user‑role and capability system is **independent of the theme style** — it works the same whether you are using a classic PHP theme or a block theme (Full Site Editing). The same default roles (Administrator, Editor, Author, Contributor, Subscriber) and all core functions (`add_role()`, `remove_cap()`, `current_user_can()`, etc.) apply regardless of theme type.
+
+That said, a couple of block‑theme‑specific touches are worth keeping in mind:
+
+- **Site Editor access** – capabilities like `edit_posts` still control whether a user can create or edit posts from the Site Editor (`Appearance → Editor`). Granting `edit_posts` to a role makes the editor available in the block theme’s interface.
+- **Global styles (`theme.json`)** – the `switch_themes` capability affects which `theme.json` files a user can select in the Site Editor’s Styles panel. If you want to limit style switching, remove that capability from the role.
+- **Front‑end role gating** – block themes often expose Site Editor patterns or template parts on the front end. You can protect these with `current_user_can()` checks in your template parts or block `viewScriptModule` code, just as you would hide admin menu items in a classic theme.
+
+Beyond those points, the tutorial’s checklists, WP‑CLI commands, and plugin recommendations (`User Role Editor`, `Members`) apply unchanged to block‑theme projects.
+
+---
