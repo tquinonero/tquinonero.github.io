@@ -202,9 +202,8 @@ wp user add-role 12 client_reviewer   # assign to user ID 12
 
 ## Further Reading
 
-- [WordPress Codex: Roles and Capabilities](https://wordpress.org/documentation/article/roles-and-capabilities/) – the definitive reference (the handbook you just read).
+- [WordPress Codex: Roles and Capabilities](https://wordpress.org/documentation/article/roles-and-capabilities/) – the definitive reference.
 - [WP-CLI role/commands handbook](https://developer.wordpress.org/cli/commands/role/) – command‑line role management.
-- “Capability vs Role” deep‑dive on the WordPress developer blog – when to use each approach.
 - *User Role Editor* plugin page – UI‑based role management.
 - *Members* plugin page – advanced role control with front‑end UI.
 
